@@ -1,44 +1,107 @@
 
 # IMPORTING DATA
 
-## This and the following scripts are based on the Labour Force Survey - all datasets from 2019 
+## UK LABOUR FORCE SURVEY
 
-
+## This and the following scripts are based on the Labour Force Survey - all datasets from 2005 to 2022 (quarters only) 
 # IMPORTANT: There is no need to run this script as the resulted database is made available for the analysis.
-
-# To run this script, the UK LFS datasets from 2019 onwards are needed. They are available at https://ukdataservice.ac.uk
-# You can also download the latest available datasets on the UK Data Service Website to continue tracking trends. 
+# To run this script, the UK LFS datasets (quarters only) from 2005 onwards are needed. They are available at https://ukdataservice.ac.uk
 
 ### Data files
-#### UPDATE: population weights have been updated with 2020 weights from January 2020 (changed ade on the 11 November 2021) 
 
-LFS19_JM <- read_spss("./Data/LFS_UKDS/a1-Jan-Mar19/UKDA-8485-spss/spss/spss24/lfsp_jm19_eul_pwt18.sav") # January to March (wave 1)
-LFS19_AJ <- read_spss("./Data/LFS_UKDS/a2-Apr-Jun19/UKDA-8563-spss/spss/spss24/lfsp_aj19_eul_pwt18.sav") # April to June (wave 2)
-LFS19_JS <- read_spss("./Data/LFS_UKDS/a3-Jul-Sep19/UKDA-8588-spss/spss/spss24/lfsp_js19_eul.sav") # July to September (wave 3)
-LFS19_OD <- read_spss("./Data/LFS_UKDS/a4-Oct-Dec19/UKDA-8614-spss/spss/spss25/lfsp_od19_eul.sav") # October to December (wave 4)
+#### UPDATE: population weights have been updated with 2020 weights from January 2020 (changed from the 11 November 2021) 
 
-LFS20_JM <- read_spss("./Data/LFS_UKDS/1-Jan-Mar-W1/UKDA-8639-spss/spss/spss25/lfsp_jm20_eul_pwt20.sav") # January to March (wave 1)
-LFS20_FA <- read_spss("./Data/LFS_UKDS/2-Feb-Apr-Corona/UKDA-8646-spss/spss/spss25/lfsp_fa20_eul_pwt20.sav") # February to April (covid)
-LFS20_MM <- read_spss("./Data/LFS_UKDS/3-Mar-May-Corona/UKDA-8659-spss/spss/spss25/lfsp_mm20_eul_pwt20.sav") # March to May (covid)
-LFS20_AJ <- read_spss("./Data/LFS_UKDS/4-Apr-Jun-W2/UKDA-8671-spss/spss/spss25/lfsp_aj20_eul_pwt20.sav") # April to June (wave 2)
-LFS20_MJ <- read_spss("./Data/LFS_UKDS/5-May-Jul-Corona/UKDA-8707-spss/spss/spss25/lfsp_mj20_eul_pwt20.sav") # May to July (covid)
-LFS20_JA <- read_spss("./Data/LFS_UKDS/6-Jun-Aug-Corona/UKDA-8706-spss/spss/spss25/lfsp_ja20_eul_pwt20.sav") # June to August (covid)
-LFS20_JS <- read_spss("./Data/LFS_UKDS/7-Jul-Sep-W3/UKDA-8720-spss/spss/spss25/lfsp_js20_eul_pwt20.sav") # July to September (wave 3)
-LFS20_AO <- read_spss("./Data/LFS_UKDS/8-Aug-Oct-Corona/UKDA-8738-spss/spss/spss25/lfsp_ao20_eul_pwt20.sav") # August to October (covid)
-LFS20_SN <- read_spss("./Data/LFS_UKDS/9-Sep-Nov-Corona/UKDA-8760-spss/spss/spss25/lfsp_sn20_eul_pwt20.sav") # September to November (covid)
-LFS20_OD <- read_spss("./Data/LFS_UKDS/10-Oct-Dec-W4/UKDA-8777-spss/spss/spss25/lfsp_od20_eul_pwt20.sav") # October to December (wave 4)
+jm05 <- read_spss("") # January to March (wave 1)
+aj05 <- read_spss("") # April to June (wave 2)
+js05 <- read_spss("") # July to September (wave 3)
+od05 <- read_spss("") # October to December (wave 4)
 
-LFS21_NJ <- read_spss("./Data/LFS_UKDS/11-Nov-Jan-Corona/UKDA-8788-spss/spss/spss25/lfsp_n20j_eul_pwt20.sav") # November 2020 to January 2021
-LFS21_DF <- read_spss("./Data/LFS_UKDS/12-Dec-Feb-Corona/UKDA-8794-spss/spss/spss25/lfsp_d20f_eul_pwt20.sav") # December 2020 to February 2021
-LFS21_JM <- read_spss("./Data/LFS_UKDS/13-Jan-Mar21/UKDA-8806-spss/spss/spss25/lfsp_jm21_eul_pwt20.sav") # January to March 2021 (wave 1)
-LFS21_FA <- read_spss("./Data/LFS_UKDS/14-Feb-Apr21/UKDA-8813-spss/spss/spss25/lfsp_fa21_eul_pwt20.sav") # February to April 2021
+jm06 <- read_spss("") # January to March (wave 1)
+aj06 <- read_spss("") # April to June (wave 2)
+js06 <- read_spss("") # July to September (wave 3)
+od06 <- read_spss("") # October to December (wave 4)
 
-# post project closure
+jm07 <- read_spss("") # January to March (wave 1)
+aj07 <- read_spss("") # April to June (wave 2)
+js07 <- read_spss("") # July to September (wave 3)
+od07 <- read_spss("") # October to December (wave 4)
 
-LFS21_MM <- read_spss("./Data/LFS_UKDS/15-Mar-May21/UKDA-8822-spss/spss/spss25/lfsp_mm21_eul_pwt20.sav") # March to May 2021
-LFS21_AJ <- read_spss("./Data/LFS_UKDS/16-Apr-Jun21/UKDA-8826-spss/spss/spss25/lfsp_aj21_eul_pwt20.sav") # April to June 2021 (wave 2)
-LFS21_MJ <- read_spss("./Data/LFS_UKDS/17-May-Jul21/UKDA-8845-spss/spss/spss25/lfsp_mj21_eul_pwt20.sav") # May to July 2021
-LFS21_JA <- read_spss("./Data/LFS_UKDS/18-Jun-Aug21/UKDA-8858-spss/spss/spss25/lfsp_ja21_eul_pwt20.sav") # June to August 2021
+jm08 <- read_spss("") # January to March (wave 1)
+aj08 <- read_spss("") # April to June (wave 2)
+js08 <- read_spss("") # July to September (wave 3)
+od08 <- read_spss("") # October to December (wave 4)
+
+jm08 <- read_spss("") # January to March (wave 1)
+aj09 <- read_spss("") # April to June (wave 2)
+js09 <- read_spss("") # July to September (wave 3)
+od09 <- read_spss("") # October to December (wave 4)
+
+jm10 <- read_spss("") # January to March (wave 1)
+aj10 <- read_spss("") # April to June (wave 2)
+js10 <- read_spss("") # July to September (wave 3)
+od10 <- read_spss("") # October to December (wave 4)
+
+jm11 <- read_spss("") # January to March (wave 1)
+aj11 <- read_spss("") # April to June (wave 2)
+js11 <- read_spss("") # July to September (wave 3)
+od11 <- read_spss("") # October to December (wave 4)
+
+jm12 <- read_spss("") # January to March (wave 1)
+aj12 <- read_spss("") # April to June (wave 2)
+js12 <- read_spss("") # July to September (wave 3)
+od12 <- read_spss("") # October to December (wave 4)
+
+jm13 <- read_spss("") # January to March (wave 1)
+aj13 <- read_spss("") # April to June (wave 2)
+js13 <- read_spss("") # July to September (wave 3)
+od13 <- read_spss("") # October to December (wave 4)
+
+jm14 <- read_spss("") # January to March (wave 1)
+aj14 <- read_spss("") # April to June (wave 2)
+js14 <- read_spss("") # July to September (wave 3)
+od14 <- read_spss("") # October to December (wave 4)
+
+jm15 <- read_spss("") # January to March (wave 1)
+aj15 <- read_spss("") # April to June (wave 2)
+js15 <- read_spss("") # July to September (wave 3)
+od15 <- read_spss("") # October to December (wave 4)
+
+jm16 <- read_spss("") # January to March (wave 1)
+aj16 <- read_spss("") # April to June (wave 2)
+js16 <- read_spss("") # July to September (wave 3)
+od16 <- read_spss("") # October to December (wave 4)
+
+jm17 <- read_spss("") # January to March (wave 1)
+aj17 <- read_spss("") # April to June (wave 2)
+js17 <- read_spss("") # July to September (wave 3)
+od17 <- read_spss("") # October to December (wave 4)
+
+jm18 <- read_spss("") # January to March (wave 1)
+aj18 <- read_spss("") # April to June (wave 2)
+js18 <- read_spss("") # July to September (wave 3)
+od18 <- read_spss("") # October to December (wave 4)
+
+jm19 <- read_spss("") # January to March (wave 1)
+aj19 <- read_spss("") # April to June (wave 2)
+js19 <- read_spss("") # July to September (wave 3)
+od19 <- read_spss("") # October to December (wave 4)
+
+jm20 <- read_spss("") # January to March (wave 1)
+aj20 <- read_spss("") # April to June (wave 2)
+js20 <- read_spss("") # July to September (wave 3)
+od20 <- read_spss("") # October to December (wave 4)
+
+jm21 <- read_spss("") # January to March 2021 (wave 1)
+aj21 <- read_spss("") # April to June 2021 (wave 2)
+js21 <- read_spss("") # July to September (wave 3)
+od21 <- read_spss("") # October to December (wave 4)
+
+jm22 <- read_spss("") # January to March (wave 1)
+aj22 <- read_spss("") # April to June (wave 2)
+js22 <- read_spss("") # July to September (wave 3)
+
+od22 <- read_spss("") # October to December (wave 4) - not yet available
+
 
 
 #### Extracting labels and questions for inspection
@@ -70,6 +133,7 @@ l_LFS21_MM <- get_labels(LFS21_MM, values = "n")
 l_LFS21_AJ <- get_labels(LFS21_AJ, values = "n")
 l_LFS21_MJ <- get_labels(LFS21_MJ, values = "n")
 l_LFS21_JA <- get_labels(LFS21_JA, values = "n")
+
 
 # Questions
 
