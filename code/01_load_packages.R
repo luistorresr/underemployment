@@ -4,6 +4,7 @@
 ### R version 4.2.2 (2022-10-31)
 
 #### packages needed
+if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
 if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
 if(!require(gridExtra)) install.packages("girdExtra", repos = "http://cran.us.r-project.org")
 if(!require(corrr)) install.packages("corrr", repos = "http://cran.us.r-project.org")
@@ -21,7 +22,7 @@ if(!require(ggalt)) install.packages("ggalt", repos = "http://cran.us.r-project.
 if(!require(janitor)) install.packages("janitor", repos = "http://cran.us.r-project.org")
 if(!require(sjPlot)) install.packages("sjPlot", repos = "http://cran.us.r-project.org")
 
-library(ggalt) # contingency table
+library(data.table) # faster and better at handling large objects
 library(tidyverse) # several tools for data manipulation
 library(haven) # read SPSS, Stata, and SAS data
 library(gridExtra) # arrange multiple grid-based plots on a page
@@ -36,6 +37,7 @@ library(doBy) # 'do' something to data stratified 'by' some variables
 library(plotly) # interactive plots
 library(flextable) # formatting tables 
 library(scales) # add scale symbols and colour to axis
+library(ggalt) # contingency table
 library(janitor) # add totals to tables
 library(sjPlot) # create a html with variable and value labels
 

@@ -3,70 +3,107 @@
 
 # Creating missing variables in the datasets
 
-## Creating the variable "quarter", "PIWT" for income weight, YEAR, and PWT for population weighs
+## Creating the variable "quarter", "PIWT" for income weight, YEAR, and PWT for population weighs among others
 
+jm05 <- jm05 %>% mutate(year = 2005, quarter = 1, PIWT = , PWT = )
+aj05 <- aj05 %>% mutate(year = 2005, quarter = 2, PIWT = , PWT = )
+js05 <- js05 %>% mutate(year = 2005, quarter = 3, PIWT = , PWT = )
+od05 <- od05 %>% mutate(year = 2005, quarter = 4, PIWT = , PWT = )
 
-LFS19_JM <- LFS19_JM %>% mutate(QUARTER = 1, YEAR = 2019, FLED10 = NA, PIWT = PIWT18, PWT = PWT18)
-LFS19_AJ <- LFS19_AJ %>% mutate(QUARTER = 2, YEAR = 2019, PIWT = PIWT18, PWT = PWT18)
-LFS19_JS <- LFS19_JS %>% mutate(QUARTER = 3, YEAR = 2019, FLED10 = NA, PIWT = PIWT18, PWT = PWT18)
-LFS19_OD <- LFS19_OD %>% mutate(QUARTER = 4, YEAR = 2019, PIWT = PIWT18, PWT = PWT18)
+jm06 <- jm06 %>% mutate(year = 2006, quarter = 1, PIWT = , PWT = )
+aj06 <- aj06 %>% mutate(year = 2006, quarter = 2, PIWT = , PWT = )
+js06 <- js06 %>% mutate(year = 2006, quarter = 3, PIWT = , PWT = )
+od06 <- od06 %>% mutate(year = 2006, quarter = 4, PIWT = , PWT = )
 
-LFS20_JM <- LFS20_JM %>% mutate(QUARTER = 5, YEAR = 2020, FLED10 = NA, PIWT = PIWT20, PWT = PWT20)
-LFS20_FA <- LFS20_FA %>% mutate(QUARTER = 6, YEAR = 2020, PIWT = NA, PWT = PWT20)
-LFS20_MM <- LFS20_MM %>% mutate(QUARTER = 7, YEAR = 2020, PIWT = NA, PWT = PWT20)
-LFS20_AJ <- LFS20_AJ %>% mutate(QUARTER = 8, YEAR = 2020, PIWT = PIWT20, PWT = PWT20)
-LFS20_MJ <- LFS20_MJ %>% mutate(QUARTER = 9, YEAR = 2020, PIWT = NA, PWT = PWT20)
-LFS20_JA <- LFS20_JA %>% mutate(QUARTER = 10, YEAR = 2020, PIWT = NA, PWT = PWT20)
-LFS20_JS <- LFS20_JS %>% mutate(QUARTER = 11, YEAR = 2020, FLED10 = NA, PIWT = PIWT20, PWT = PWT20)
-LFS20_AO <- LFS20_AO %>% mutate(QUARTER = 12, YEAR = 2020, PIWT = NA, PWT = PWT20)
-LFS20_SN <- LFS20_SN %>% mutate(QUARTER = 13, YEAR = 2020, PIWT = NA, PWT = PWT20)
-LFS20_OD <- LFS20_OD %>% mutate(QUARTER = 14, YEAR = 2020, PIWT = PIWT20, PWT = PWT20)
+jm07 <- jm07 %>% mutate(year = 2007, quarter = 1, PIWT = , PWT = )
+aj07 <- aj07 %>% mutate(year = 2007, quarter = 2, PIWT = , PWT = )
+js07 <- js07 %>% mutate(year = 2007, quarter = 3, PIWT = , PWT = )
+od07 <- od07 %>% mutate(year = 2007, quarter = 4, PIWT = , PWT = )
 
-LFS21_NJ <- LFS21_NJ %>% mutate(QUARTER = 15, YEAR = 2020-21, PIWT = NA, PWT = PWT20)
-LFS21_DF <- LFS21_DF %>% mutate(QUARTER = 16, YEAR = 2020-21, PIWT = NA, PWT = PWT20)
+jm08 <- jm08 %>% mutate(year = 2008, quarter = 1, PIWT = , PWT = )
+aj08 <- aj08 %>% mutate(year = 2008, quarter = 2, PIWT = , PWT = )
+js08 <- js08 %>% mutate(year = 2008, quarter = 3, PIWT = , PWT = )
+od08 <- od08 %>% mutate(year = 2008, quarter = 4, PIWT = , PWT = )
 
-LFS21_JM <- LFS21_JM %>% mutate(QUARTER = 17,YEAR = 2021, PIWT = PIWT20, PWT = PWT20,
-                                NSECMJ10 = NSECMJ20, # new variable to standardise to the old name
-                                SC10MMJ = SC20MMJ, # new variable to standardise to the old name
-                                SC10SMJ = SC20SMJ) # new variable to standardise to the old name
+jm09 <- jm09 %>% mutate(year = 2009, quarter = 1, PIWT = , PWT = )
+aj09 <- aj09 %>% mutate(year = 2009, quarter = 2, PIWT = , PWT = )
+js09 <- js09 %>% mutate(year = 2009, quarter = 3, PIWT = , PWT = )
+od09 <- od09 %>% mutate(year = 2009, quarter = 4, PIWT = , PWT = )
 
-LFS21_FA <- LFS21_FA %>% mutate(QUARTER = 18, YEAR = 2021, PIWT = NA, PWT = PWT20,
-                                NSECMJ10 = NSECMJ20, # new variable to standardise to the old name
-                                SC10MMJ = SC20MMJ, # new variable to standardise to the old name
-                                SC10SMJ = SC20SMJ) # new variable to standardise to the old name
+jm10 <- jm10 %>% mutate(year = 2010, quarter = 1, PIWT = , PWT = )
+aj10 <- aj10 %>% mutate(year = 2010, quarter = 2, PIWT = , PWT = )
+js10 <- js10 %>% mutate(year = 2010, quarter = 3, PIWT = , PWT = )
+od10 <- od10 %>% mutate(year = 2010, quarter = 4, PIWT = , PWT = )
 
-LFS21_MM <- LFS21_MM%>% mutate(QUARTER = 19, YEAR = 2021, PIWT = NA, PWT = PWT20,
-                                NSECMJ10 = NSECMJ20, # new variable to standardise to the old name
-                                SC10MMJ = SC20MMJ, # new variable to standardise to the old name
-                                SC10SMJ = SC20SMJ) # new variable to standardise to the old name
+jm11 <- jm11 %>% mutate(year = 2011, quarter = 1, PIWT = , PWT = )
+aj11 <- aj11 %>% mutate(year = 2011, quarter = 2, PIWT = , PWT = )
+js11 <- js11 %>% mutate(year = 2011, quarter = 3, PIWT = , PWT = )
+od11 <- od11 %>% mutate(year = 2011, quarter = 4, PIWT = , PWT = )
 
-LFS21_AJ <- LFS21_AJ %>% mutate(QUARTER = 20, YEAR = 2021, PIWT = PIWT20, PWT = PWT20,
-                                NSECMJ10 = NSECMJ20, # new variable to standardise to the old name
-                                SC10MMJ = SC20MMJ, # new variable to standardise to the old name
-                                SC10SMJ = SC20SMJ) # new variable to standardise to the old name
+jm12 <- jm12 %>% mutate(year = 2012, quarter = 1, PIWT = , PWT = )
+aj12 <- aj12 %>% mutate(year = 2012, quarter = 2, PIWT = , PWT = )
+js12 <- js12 %>% mutate(year = 2012, quarter = 3, PIWT = , PWT = )
+od12 <- od12 %>% mutate(year = 2012, quarter = 4, PIWT = , PWT = )
 
-LFS21_MJ <- LFS21_MJ %>% mutate(QUARTER = 21, YEAR = 2021, PIWT = NA, PWT = PWT20,
-                                NSECMJ10 = NSECMJ20, # new variable to standardise to the old name
-                                SC10MMJ = SC20MMJ, # new variable to standardise to the old name
-                                SC10SMJ = SC20SMJ) # new variable to standardise to the old name
+jm13 <- jm13 %>% mutate(year = 2013, quarter = 1, PIWT = , PWT = )
+aj13 <- aj13 %>% mutate(year = 2013, quarter = 2, PIWT = , PWT = )
+js13 <- js13 %>% mutate(year = 2013, quarter = 3, PIWT = , PWT = )
+od13 <- od13 %>% mutate(year = 2013, quarter = 4, PIWT = , PWT = )
 
-LFS21_JA <- LFS21_JA %>% mutate(QUARTER = 22, YEAR = 2021, PIWT = NA, PWT = PWT20,
-                                NSECMJ10 = NSECMJ20, # new variable to standardise to the old name
-                                SC10MMJ = SC20MMJ, # new variable to standardise to the old name
-                                SC10SMJ = SC20SMJ) # new variable to standardise to the old name
+jm14 <- jm14 %>% mutate(year = 2014, quarter = 1, PIWT = , PWT = )
+aj14 <- aj14 %>% mutate(year = 2014, quarter = 3, PIWT = , PWT = )
+js14 <- js14 %>% mutate(year = 2014, quarter = 4, PIWT = , PWT = )
+od14 <- od14 %>% mutate(year = 2014, quarter = 4, PIWT = , PWT = )
 
+jm15 <- jm15 %>% mutate(year = 2015, quarter = 1, PIWT = , PWT = )
+aj15 <- aj15 %>% mutate(year = 2015, quarter = 2, PIWT = , PWT = )
+js15 <- js15 %>% mutate(year = 2015, quarter = 3, PIWT = , PWT = )
+od15 <- od15 %>% mutate(year = 2015, quarter = 4, PIWT = , PWT = )
+
+jm16 <- jm16 %>% mutate(year = 2016, quarter = 1, PIWT = , PWT = )
+aj16 <- aj16 %>% mutate(year = 2016, quarter = 2, PIWT = , PWT = )
+js16 <- js16 %>% mutate(year = 2016, quarter = 3, PIWT = , PWT = )
+od16 <- od16 %>% mutate(year = 2016, quarter = 4, PIWT = , PWT = )
+
+jm17 <- jm17 %>% mutate(year = 2017, quarter = 1, PIWT = , PWT = )
+aj17 <- aj17 %>% mutate(year = 2017, quarter = 2, PIWT = , PWT = )
+js17 <- js17 %>% mutate(year = 2017, quarter = 3, PIWT = , PWT = )
+od17 <- od17 %>% mutate(year = 2017, quarter = 4, PIWT = , PWT = )
+
+jm18 <- jm18 %>% mutate(year = 2018, quarter = 1, PIWT = , PWT = )
+aj18 <- aj18 %>% mutate(year = 2018, quarter = 2, PIWT = , PWT = )
+js18 <- js18 %>% mutate(year = 2018, quarter = 3, PIWT = , PWT = )
+od18 <- od18 %>% mutate(year = 2018, quarter = 4, PIWT = , PWT = )
+
+jm19 <- jm19 %>% mutate(year = 2019, quarter = 1, PIWT = , PWT = )
+aj19 <- aj19 %>% mutate(year = 2019, quarter = 2, PIWT = , PWT = )
+js19 <- js19 %>% mutate(year = 2019, quarter = 3, PIWT = , PWT = )
+od19 <- od19 %>% mutate(year = 2019, quarter = 4, PIWT = , PWT = )
+
+jm20 <- jm20 %>% mutate(year = 2020, quarter = 1, PIWT = , PWT = )
+aj20 <- aj20 %>% mutate(year = 2020, quarter = 2, PIWT = , PWT = )
+js20 <- js20 %>% mutate(year = 2020, quarter = 3, PIWT = , PWT = )
+od20 <- od20 %>% mutate(year = 2020, quarter = 4, PIWT = , PWT = )
+
+jm21 <- jm21 %>% mutate(year = 2021, quarter = 1, PIWT = , PWT = )
+aj21 <- aj21 %>% mutate(year = 2021, quarter = 2, PIWT = , PWT = )
+js21 <- js21 %>% mutate(year = 2021, quarter = 3, PIWT = , PWT = )
+od21 <- od21 %>% mutate(year = 2021, quarter = 4, PIWT = , PWT = )
+
+jm22 <- jm22 %>% mutate(year = 2022, quarter = 1, PIWT = , PWT = )
+aj22 <- aj22 %>% mutate(year = 2022, quarter = 2, PIWT = , PWT = )
+js22 <- js22 %>% mutate(year = 2022, quarter = 3, PIWT = , PWT = )
 
 
 # Selecting variables
 
-# common to all datasets
-
 variables <- c(
        
-         # Case identifiers
-        "YEAR",
-        "QUARTER",
-        "IOUTCOME", # interview outcome
+         # SERIES
+       
+        "year",
+        "quarter",
+        "sequence", 
         
         # BASIC FILTERS
         
@@ -85,9 +122,6 @@ variables <- c(
         "AGE", # number
         "AGEEUL", # age bands
         "ETHUKEUL", # ethnic group
-        "DISEA", # Disability: equality act
-        "NSECMJ10", # NS-SEC major group (SOC2010 based) - National Statistics Socio-economic Classification   
-
 
         # MAIN JOB
         
@@ -95,32 +129,22 @@ variables <- c(
         "WRKING", # Whether in paid job in reference week, either as employee or as self-employed
         "JBAWAY", # Whether temporary away from paid job (if "no" in WRKING)
         "PUBLICR", # Whether working in public or private sector (reported)
-        "SECTOR", # Whether working for private firm or business
-        "SECTRO03", # Type of non-private organisation
         "INDE07M", # Industry section in main job 
         "SC10MMJ", # Major occupation group
         "MANAGER", # managerial status in current job (filter by STAT = 1)  
         "REGWKR", # Region of place of work (reported)
 
-        # MAIN JOB - PRECARIOUS WORK INDICATORS
+        # MAIN JOB - TIME
         
         ## full vs part time (complement with hours data)
         
         "FTPTWK", # Whether full or part time in main job (filter for the required economics activity)        
-        "YPTJOB", # Reason for part time job (filter by FTPTWK = 2) 
+        "YPTJOB", # Reason for part time job
 
-        ## Permanent/Temporary Employment
+        ## work arrangements
         
         "JOBTYP", # Whether job permanent (filter by Stat=1 AND EverWk<1)
         "AGWRK", # Whether agency worker (applies to JOBTYP = 1)
-        "WHYTMP6", # Reason for taking non-permanent job (filter by JOBTYP = 2) 
-        "RESTMR6", # Reason job is temporary - Way in which job was not permanent
-        "TEMLEN", # Length of non-permanent job
-        "EMPLEN", # Length of time continuously employed
-        "EMPMON", # Months continuously employed      
-        
-        ## work arrangements
-        
         "FLED10", # Type of agreed work arrangement
 
         # SECOND JOB
@@ -130,27 +154,18 @@ variables <- c(
         "STAT2", # Employment status for those in regular second jobs
         "INDS07S", # Industry section in second job - 21 categories
         "MANAG2", # Did you have any managerial duties?
-        "JOBTYP2", # Permanency of second job
         "REGWK2R", # Region of workplace for second job (reported)
         "SC10SMJ", # Major occupation group (second job)
         
         # HOURS
-
-        "EVEROT", # Whether ever work paid or unpaid overtime (filter use only)
-        "POTHR", # Usual hours of paid overtime (filter by EVEROT = 1)
-        "UOTHR", # Usual hours of unpaid overtime (filter by EVEROT = 1)
+        
+        ## overall 
         
         "SUMHRS", # Total hours worked in reference week in main and second jobs
-
         "VARYHR", # Whether weekly hours tend to vary
         
-        ## Main job 
         
-        "BUSHR", # Total usual hours excluding overtime
-        "TTUSHR", # Total usual hours including overtime
-        "PAIDHRU", # Paid hours - based on usual hours per week, including paid overtime only
-        "POTHR", # Usual hours of paid overtime
-        "UOTHR", # Usual hours of unpaid overtime
+        ## Main job 
         
         "BACTHR", # Basic actual hours in main job (per week)- It does not include overtime (paid or unpaid).
         "TTACHR", # Total actual hours worked in main job in reference week includes any paid or unpaid overtime
@@ -160,78 +175,132 @@ variables <- c(
         
         "ACTHR2", # Actual hours in second job including overtime (filter by Y2Job=2)
 
+        ## Work more hours (Seeking for work survey section)
+        "UNDEMP", # Whether would like to work longer hours, at current basic rate of pay, given the opportunity
+        "UNDHRS", # Number of extra hours would like to work
+        
+        
         # EARNINGS           
+       
         "GRSSWK", # Gross weekly pay in main job
         "GRSSWK2", # Gross weekly pay in second job
         
-        # REDUNDANCY WITHIN LAST 3 MONTHS
+        # SKILLS
         
-        "REDUND", #  Whether made redundant in last three months (filter for 1 in each of the next ones)
-        "REDPAID", # Have you left any paid job in the last three months?
-        "REDSTAT", # Status in job (made redundant from) - applies to (((REDYL13 = 2 OR 3) AND REDPAID = 1) OR (REDANY = 1)).
-        "REDYL13", # Could you tell me the reason you left your last job? (filter by REDPAID=Yes))
-        "REDANY", # Whether made redundant from any other job in last 3 months (filter by REDYL13 = 1, 4, 5, 6, 7, 8, 9, 10, 11 AND REDPAID = 1))
-        "REDCLOS",  # Reason for leaving job left in last three months (REDYL13 = 2 OR 3 AND REDPAID = 1) OR (REDANY = 1))     
-        "INDE07R", #  Industry sectors in job made redundant from
         
-        # self-employment
-        
-        ### NOTE: partime, redundancy, hours, income, seeking also applies
-        
-        "SELF1", # Other methods of payment aside from receiving a salary or wage direct from an employer
-        "SELF2", # Other methods of payment aside from receiving a salary or wage direct from an employer
-        "SELF3", # Other methods of payment aside from receiving a salary or wage direct from an employer
-        "SELF4", # Other methods of payment aside from receiving a salary or wage direct from an employer
-        "SOLOR", # Self-employed with or without employees (reported)
-        "ONETEN", # Number (1 – 10) of employees working for self employed person. Filter by "SOLOR" ==2
-        "CONSEY", # Year started as continuously self employed
-        "SOLO2", # Working alone or employees in second job (reported)
         
         ## Seeking for work
         "DIFJOB", # Whether looking for different or additional paid job or business
         "TYEMPS", # Type of employment sought (DIFJOB = 1)
         "LKSELA", # Whether looking for work as employee or self employed
         "ADDJOB", # Whether seeking replacement or additional job (DIFJOB = 1)
-        "UNDEMP", # Whether would like to work longer hours, at current basic rate of pay, given the opportunity
-        "UNDHRS", # Number of extra hours would like to work
+
         
         # weights
-        "PWT", "PIWT" # data for PIWT18 is not available for the new covid series
+        "PWT", "PIWT"
         ) 
 
 #### selecting the variables in all dataset and creating temporary datasets
 
-t1a <- LFS19_JM %>% select(variables) # FLED10 does not exist 
-t2a <- LFS19_AJ %>% select(variables) # `                     
-t3a <- LFS19_JS %>% select(variables) # FLED10 does not exist 
-t4a <- LFS19_OD %>% select(variables) #                       
+t1 <- jm05 %>% select(variables) 
+t2 <- aj05 %>% select(variables)
+t3 <- js05 %>% select(variables)
+t4 <- od05 %>% select(variables)
 
-t1 <- LFS20_JM %>% select(variables) # FLED10 does not exist t
-t2 <- LFS20_FA %>% select(variables)
-t3 <- LFS20_MM %>% select(variables)
-t4 <- LFS20_AJ %>% select(variables)
-t5 <- LFS20_MJ %>% select(variables) #                        
-t6 <- LFS20_JA %>% select(variables) #                        
-t7 <- LFS20_JS %>% select(variables) # FLED10 does not exist  
-t8 <- LFS20_AO %>% select(variables) #                        
-t9 <- LFS20_SN %>% select(variables) #                       
-t10 <- LFS20_OD %>% select(variables)#                        
+t5 <- jm06 %>% select(variables) 
+t6 <- aj06 %>% select(variables)
+t7 <- js06 %>% select(variables)
+t8 <- od06 %>% select(variables)
 
-t11 <- LFS21_NJ %>% select(variables)
-t12 <- LFS21_DF %>% select(variables)
+t9  <- jm07 %>% select(variables) 
+t10 <- aj07 %>% select(variables)
+t11 <- js07 %>% select(variables)
+t12 <- od07 %>% select(variables)
 
-t13 <- LFS21_JM %>% select(variables)
-t14 <- LFS21_FA %>% select(variables)
+t13 <- jm08 %>% select(variables) 
+t14 <- aj08 %>% select(variables)
+t15 <- js08 %>% select(variables)
+t16 <- od08 %>% select(variables)
 
-t15 <- LFS21_MM %>% select(variables)
-t16 <- LFS21_AJ %>% select(variables)
-t17 <- LFS21_MJ %>% select(variables)
-t18 <- LFS21_JA %>% select(variables)
+t17 <- jm09 %>% select(variables) 
+t18 <- aj09 %>% select(variables)
+t19 <- js09 %>% select(variables)
+t20 <- od09 %>% select(variables)
+
+t21 <- jm10 %>% select(variables) 
+t22 <- aj10 %>% select(variables)
+t23 <- js10 %>% select(variables)
+t24 <- od10 %>% select(variables)
+
+t25 <- jm11 %>% select(variables) 
+t26 <- aj11 %>% select(variables)
+t27 <- js11 %>% select(variables)
+t28 <- od11 %>% select(variables)
+
+t29 <- jm12 %>% select(variables) 
+t30 <- aj12 %>% select(variables)
+t31 <- js12 %>% select(variables)
+t32 <- od12 %>% select(variables)
+
+t33 <- jm13 %>% select(variables) 
+t34 <- aj13 %>% select(variables)
+t35 <- js13 %>% select(variables)
+t36 <- od13 %>% select(variables)
+
+t37 <- jm14 %>% select(variables) 
+t38 <- aj14 %>% select(variables)
+t39 <- js14 %>% select(variables)
+t40 <- od14 %>% select(variables)
+
+t41 <- jm15 %>% select(variables) 
+t42 <- aj15 %>% select(variables)
+t43 <- js15 %>% select(variables)
+t44 <- od15 %>% select(variables)
+
+t45 <- jm16 %>% select(variables) 
+t46 <- aj16 %>% select(variables)
+t47 <- js16 %>% select(variables)
+t48 <- od16 %>% select(variables)
+
+t49 <- jm17 %>% select(variables) 
+t50 <- aj17 %>% select(variables)
+t51 <- js17 %>% select(variables)
+t52 <- od17 %>% select(variables)
+
+t53 <- jm18 %>% select(variables) 
+t54 <- aj18 %>% select(variables)
+t55 <- js18 %>% select(variables)
+t56 <- od18 %>% select(variables)
+
+t57 <- jm19 %>% select(variables) 
+t58 <- aj19 %>% select(variables)
+t59 <- js19 %>% select(variables)
+t60 <- od19 %>% select(variables)
+
+t61 <- jm20 %>% select(variables) 
+t62 <- aj20 %>% select(variables)
+t63 <- js20 %>% select(variables)
+t64 <- od20 %>% select(variables)
+
+t65 <- jm21 %>% select(variables) 
+t66 <- aj21 %>% select(variables)
+t67 <- js21 %>% select(variables)
+t68 <- od21 %>% select(variables)
+
+t69 <- jm22 %>% select(variables) 
+t70 <- aj22 %>% select(variables)
+t71 <- js22 %>% select(variables)
+
 
 #### combine all temporary datasets
 
-LFS_all <- rbind(t1a, t2a, t3a, t4a, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10,
-                 t11, t12, t13, t14, t15, t16, t17, t18) # working database
+LFS_all <- rbind(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15,
+                 t16, t17, t18, t19, t20, t21, t22, t23, t24, t25, t26, t27, t28, t29, t30,
+                 t31, t32, t33, t34, t35, t36, t37, t38, t39, t40, t41, t42, t43, t44, t45,
+                 t46, t47, t48, t49, t50, t51, t52, t53, t54, t55, t56, t57, t58, t59, t60,
+                 t61, t62, t63, t64, t65, t66, t67, t68, t69, t70, t71) # combined database
+
+
 LFS_all <- as_tibble(LFS_all) # creating a tibble for data manipulation
 
 save(LFS_all, file = "./Data_clean/LFS_all.rda") # load the saved dataset for data manipulation
