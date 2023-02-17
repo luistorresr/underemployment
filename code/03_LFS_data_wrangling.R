@@ -1,98 +1,107 @@
 
 ##################### LFS Data wrangling ##############################
 
-# Creating missing variables in the datasets
+# Load LFS data
+
+load("imported_data/LFS.rda")
+
+# Explore variable names
+
+view_df(jm05, show.id = FALSE)  # reemplace the database name to check more
+
+
+# Standarising variable names across datasets
 
 ## Creating the variable "quarter", "PIWT" for income weight, YEAR, and PWT for population weighs among others
 
-jm05 <- jm05 %>% mutate(year = 2005, quarter = 1, sequence = 1, PIWT = , PWT = )
-aj05 <- aj05 %>% mutate(year = 2005, quarter = 2, sequence = 2, PIWT = , PWT = )
-js05 <- js05 %>% mutate(year = 2005, quarter = 3, sequence = 3, PIWT = , PWT = )
-od05 <- od05 %>% mutate(year = 2005, quarter = 4, sequence = 4, PIWT = , PWT = )
+jm05 <- jm05 %>% mutate(year = 2005, quarter = 1, sequence = 1, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
+aj05 <- aj05 %>% mutate(year = 2005, quarter = 2, sequence = 2, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
+js05 <- js05 %>% mutate(year = 2005, quarter = 3, sequence = 3, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
+od05 <- od05 %>% mutate(year = 2005, quarter = 4, sequence = 4, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
 
-jm06 <- jm06 %>% mutate(year = 2006, quarter = 1, sequence = 5,  PIWT = , PWT = )
-aj06 <- aj06 %>% mutate(year = 2006, quarter = 2, sequence = 6,  PIWT = , PWT = )
-js06 <- js06 %>% mutate(year = 2006, quarter = 3, sequence = 7,  PIWT = , PWT = )
-od06 <- od06 %>% mutate(year = 2006, quarter = 4, sequence = 8,  PIWT = , PWT = )
+jm06 <- jm06 %>% mutate(year = 2006, quarter = 1, sequence = 5, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
+aj06 <- aj06 %>% mutate(year = 2006, quarter = 2, sequence = 6, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
+js06 <- js06 %>% mutate(year = 2006, quarter = 3, sequence = 7, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
+od06 <- od06 %>% mutate(year = 2006, quarter = 4, sequence = 8, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
 
-jm07 <- jm07 %>% mutate(year = 2007, quarter = 1, sequence = 9,  PIWT = , PWT = )
-aj07 <- aj07 %>% mutate(year = 2007, quarter = 2, sequence = 10,  PIWT = , PWT = )
-js07 <- js07 %>% mutate(year = 2007, quarter = 3, sequence = 11,  PIWT = , PWT = )
-od07 <- od07 %>% mutate(year = 2007, quarter = 4, sequence = 12,  PIWT = , PWT = )
+jm07 <- jm07 %>% mutate(year = 2007, quarter = 1, sequence = 9, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+aj07 <- aj07 %>% mutate(year = 2007, quarter = 2, sequence = 10, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+js07 <- js07 %>% mutate(year = 2007, quarter = 3, sequence = 11, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+od07 <- od07 %>% mutate(year = 2007, quarter = 4, sequence = 12, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
 
-jm08 <- jm08 %>% mutate(year = 2008, quarter = 1, sequence = 13,  PIWT = , PWT = )
-aj08 <- aj08 %>% mutate(year = 2008, quarter = 2, sequence = 14,  PIWT = , PWT = )
-js08 <- js08 %>% mutate(year = 2008, quarter = 3, sequence = 15,  PIWT = , PWT = )
-od08 <- od08 %>% mutate(year = 2008, quarter = 4, sequence = 16,  PIWT = , PWT = )
+jm08 <- jm08 %>% mutate(year = 2008, quarter = 1, sequence = 13, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+aj08 <- aj08 %>% mutate(year = 2008, quarter = 2, sequence = 14, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+js08 <- js08 %>% mutate(year = 2008, quarter = 3, sequence = 15, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+od08 <- od08 %>% mutate(year = 2008, quarter = 4, sequence = 16, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
 
-jm09 <- jm09 %>% mutate(year = 2009, quarter = 1, sequence = 17,  PIWT = , PWT = )
-aj09 <- aj09 %>% mutate(year = 2009, quarter = 2, sequence = 18,  PIWT = , PWT = )
-js09 <- js09 %>% mutate(year = 2009, quarter = 3, sequence = 19,  PIWT = , PWT = )
-od09 <- od09 %>% mutate(year = 2009, quarter = 4, sequence = 20,  PIWT = , PWT = )
+jm09 <- jm09 %>% mutate(year = 2009, quarter = 1, sequence = 17, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+aj09 <- aj09 %>% mutate(year = 2009, quarter = 2, sequence = 18, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+js09 <- js09 %>% mutate(year = 2009, quarter = 3, sequence = 19, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+od09 <- od09 %>% mutate(year = 2009, quarter = 4, sequence = 20, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
 
-jm10 <- jm10 %>% mutate(year = 2010, quarter = 1, sequence = 21,  PIWT = , PWT = )
-aj10 <- aj10 %>% mutate(year = 2010, quarter = 2, sequence = 22,  PIWT = , PWT = )
-js10 <- js10 %>% mutate(year = 2010, quarter = 3, sequence = 23,  PIWT = , PWT = )
-od10 <- od10 %>% mutate(year = 2010, quarter = 4, sequence = 24,  PIWT = , PWT = )
+jm10 <- jm10 %>% mutate(year = 2010, quarter = 1, sequence = 21, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+aj10 <- aj10 %>% mutate(year = 2010, quarter = 2, sequence = 22, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+js10 <- js10 %>% mutate(year = 2010, quarter = 3, sequence = 23, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+od10 <- od10 %>% mutate(year = 2010, quarter = 4, sequence = 24, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
 
-jm11 <- jm11 %>% mutate(year = 2011, quarter = 1, sequence = 25,  PIWT = , PWT = )
-aj11 <- aj11 %>% mutate(year = 2011, quarter = 2, sequence = 26,  PIWT = , PWT = )
-js11 <- js11 %>% mutate(year = 2011, quarter = 3, sequence = 27,  PIWT = , PWT = )
-od11 <- od11 %>% mutate(year = 2011, quarter = 4, sequence = 28,  PIWT = , PWT = )
+jm11 <- jm11 %>% mutate(year = 2011, quarter = 1, sequence = 25, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+aj11 <- aj11 %>% mutate(year = 2011, quarter = 2, sequence = 26, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+js11 <- js11 %>% mutate(year = 2011, quarter = 3, sequence = 27, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+od11 <- od11 %>% mutate(year = 2011, quarter = 4, sequence = 28, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
 
-jm12 <- jm12 %>% mutate(year = 2012, quarter = 1, sequence = 29,  PIWT = , PWT = )
-aj12 <- aj12 %>% mutate(year = 2012, quarter = 2, sequence = 30,  PIWT = , PWT = )
-js12 <- js12 %>% mutate(year = 2012, quarter = 3, sequence = 31,  PIWT = , PWT = )
-od12 <- od12 %>% mutate(year = 2012, quarter = 4, sequence = 32,  PIWT = , PWT = )
+jm12 <- jm12 %>% mutate(year = 2012, quarter = 1, sequence = 29, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+aj12 <- aj12 %>% mutate(year = 2012, quarter = 2, sequence = 30, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+js12 <- js12 %>% mutate(year = 2012, quarter = 3, sequence = 31, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+od12 <- od12 %>% mutate(year = 2012, quarter = 4, sequence = 32, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
 
-jm13 <- jm13 %>% mutate(year = 2013, quarter = 1, sequence = 33,  PIWT = , PWT = )
-aj13 <- aj13 %>% mutate(year = 2013, quarter = 2, sequence = 34,  PIWT = , PWT = )
-js13 <- js13 %>% mutate(year = 2013, quarter = 3, sequence = 35,  PIWT = , PWT = )
-od13 <- od13 %>% mutate(year = 2013, quarter = 4, sequence = 36,  PIWT = , PWT = )
+jm13 <- jm13 %>% mutate(year = 2013, quarter = 1, sequence = 33, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+aj13 <- aj13 %>% mutate(year = 2013, quarter = 2, sequence = 34, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+js13 <- js13 %>% mutate(year = 2013, quarter = 3, sequence = 35, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+od13 <- od13 %>% mutate(year = 2013, quarter = 4, sequence = 36, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
 
-jm14 <- jm14 %>% mutate(year = 2014, quarter = 1, sequence = 37,  PIWT = , PWT = )
-aj14 <- aj14 %>% mutate(year = 2014, quarter = 3, sequence = 38,  PIWT = , PWT = )
-js14 <- js14 %>% mutate(year = 2014, quarter = 4, sequence = 39,  PIWT = , PWT = )
-od14 <- od14 %>% mutate(year = 2014, quarter = 4, sequence = 40,  PIWT = , PWT = )
+jm14 <- jm14 %>% mutate(year = 2014, quarter = 1, sequence = 37, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+aj14 <- aj14 %>% mutate(year = 2014, quarter = 3, sequence = 38, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+js14 <- js14 %>% mutate(year = 2014, quarter = 4, sequence = 39, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+od14 <- od14 %>% mutate(year = 2014, quarter = 4, sequence = 40, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
 
-jm15 <- jm15 %>% mutate(year = 2015, quarter = 1, sequence = 41,  PIWT = , PWT = )
-aj15 <- aj15 %>% mutate(year = 2015, quarter = 2, sequence = 42,  PIWT = , PWT = )
-js15 <- js15 %>% mutate(year = 2015, quarter = 3, sequence = 43,  PIWT = , PWT = )
-od15 <- od15 %>% mutate(year = 2015, quarter = 4, sequence = 44,  PIWT = , PWT = )
+jm15 <- jm15 %>% mutate(year = 2015, quarter = 1, sequence = 41, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+aj15 <- aj15 %>% mutate(year = 2015, quarter = 2, sequence = 42, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+js15 <- js15 %>% mutate(year = 2015, quarter = 3, sequence = 43, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+od15 <- od15 %>% mutate(year = 2015, quarter = 4, sequence = 44, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
 
-jm16 <- jm16 %>% mutate(year = 2016, quarter = 1, sequence = 45,  PIWT = , PWT = )
-aj16 <- aj16 %>% mutate(year = 2016, quarter = 2, sequence = 46,  PIWT = , PWT = )
-js16 <- js16 %>% mutate(year = 2016, quarter = 3, sequence = 47,  PIWT = , PWT = )
-od16 <- od16 %>% mutate(year = 2016, quarter = 4, sequence = 48,  PIWT = , PWT = )
+jm16 <- jm16 %>% mutate(year = 2016, quarter = 1, sequence = 45, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+aj16 <- aj16 %>% mutate(year = 2016, quarter = 2, sequence = 46, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+js16 <- js16 %>% mutate(year = 2016, quarter = 3, sequence = 47, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+od16 <- od16 %>% mutate(year = 2016, quarter = 4, sequence = 48, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
 
-jm17 <- jm17 %>% mutate(year = 2017, quarter = 1, sequence = 49,  PIWT = , PWT = )
-aj17 <- aj17 %>% mutate(year = 2017, quarter = 2, sequence = 50,  PIWT = , PWT = )
-js17 <- js17 %>% mutate(year = 2017, quarter = 3, sequence = 51,  PIWT = , PWT = )
-od17 <- od17 %>% mutate(year = 2017, quarter = 4, sequence = 52,  PIWT = , PWT = )
+jm17 <- jm17 %>% mutate(year = 2017, quarter = 1, sequence = 49, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+aj17 <- aj17 %>% mutate(year = 2017, quarter = 2, sequence = 50, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+js17 <- js17 %>% mutate(year = 2017, quarter = 3, sequence = 51, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+od17 <- od17 %>% mutate(year = 2017, quarter = 4, sequence = 52, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
 
-jm18 <- jm18 %>% mutate(year = 2018, quarter = 1, sequence = 53,  PIWT = , PWT = )
-aj18 <- aj18 %>% mutate(year = 2018, quarter = 2, sequence = 54,  PIWT = , PWT = )
-js18 <- js18 %>% mutate(year = 2018, quarter = 3, sequence = 55,  PIWT = , PWT = )
-od18 <- od18 %>% mutate(year = 2018, quarter = 4, sequence = 56,  PIWT = , PWT = )
+jm18 <- jm18 %>% mutate(year = 2018, quarter = 1, sequence = 53, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+aj18 <- aj18 %>% mutate(year = 2018, quarter = 2, sequence = 54, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+js18 <- js18 %>% mutate(year = 2018, quarter = 3, sequence = 55, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+od18 <- od18 %>% mutate(year = 2018, quarter = 4, sequence = 56, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
 
-jm19 <- jm19 %>% mutate(year = 2019, quarter = 1, sequence = 57,  PIWT = , PWT = )
-aj19 <- aj19 %>% mutate(year = 2019, quarter = 2, sequence = 58,  PIWT = , PWT = )
-js19 <- js19 %>% mutate(year = 2019, quarter = 3, sequence = 59,  PIWT = , PWT = )
-od19 <- od19 %>% mutate(year = 2019, quarter = 4, sequence = 60,  PIWT = , PWT = )
+jm19 <- jm19 %>% mutate(year = 2019, quarter = 1, sequence = 57, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+aj19 <- aj19 %>% mutate(year = 2019, quarter = 2, sequence = 58, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+js19 <- js19 %>% mutate(year = 2019, quarter = 3, sequence = 59, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+od19 <- od19 %>% mutate(year = 2019, quarter = 4, sequence = 60, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
 
-jm20 <- jm20 %>% mutate(year = 2020, quarter = 1, sequence = 61, PIWT = , PWT = )
-aj20 <- aj20 %>% mutate(year = 2020, quarter = 2, sequence = 62,  PIWT = , PWT = )
-js20 <- js20 %>% mutate(year = 2020, quarter = 3, sequence = 63,  PIWT = , PWT = )
-od20 <- od20 %>% mutate(year = 2020, quarter = 4, sequence = 64,  PIWT = , PWT = )
+jm20 <- jm20 %>% mutate(year = 2020, quarter = 1, sequence = 61, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
+aj20 <- aj20 %>% mutate(year = 2020, quarter = 2, sequence = 62, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
+js20 <- js20 %>% mutate(year = 2020, quarter = 3, sequence = 63, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
+od20 <- od20 %>% mutate(year = 2020, quarter = 4, sequence = 64, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
 
-jm21 <- jm21 %>% mutate(year = 2021, quarter = 1, sequence = 65,  PIWT = , PWT = )
-aj21 <- aj21 %>% mutate(year = 2021, quarter = 2, sequence = 66,  PIWT = , PWT = )
-js21 <- js21 %>% mutate(year = 2021, quarter = 3, sequence = 67,  PIWT = , PWT = )
-od21 <- od21 %>% mutate(year = 2021, quarter = 4, sequence = 68,  PIWT = , PWT = )
+jm21 <- jm21 %>% mutate(year = 2021, quarter = 1, sequence = 65, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
+aj21 <- aj21 %>% mutate(year = 2021, quarter = 2, sequence = 66, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
+js21 <- js21 %>% mutate(year = 2021, quarter = 3, sequence = 67, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
+od21 <- od21 %>% mutate(year = 2021, quarter = 4, sequence = 68, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
 
-jm22 <- jm22 %>% mutate(year = 2022, quarter = 1, sequence = 69,  PIWT = , PWT = )
-aj22 <- aj22 %>% mutate(year = 2022, quarter = 2, sequence = 70,  PIWT = , PWT = )
-js22 <- js22 %>% mutate(year = 2022, quarter = 3, sequence = 71,  PIWT = , PWT = )
+jm22 <- jm22 %>% mutate(year = 2022, quarter = 1, sequence = 69, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
+aj22 <- aj22 %>% mutate(year = 2022, quarter = 2, sequence = 70, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
+js22 <- js22 %>% mutate(year = 2022, quarter = 3, sequence = 71, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
 
 
 # Selecting variables
@@ -115,13 +124,11 @@ variables <- c(
         
         "COUNTRY",  # Country within UK
         "GOVTOF2", # gov region
-        
-        # Respondent characteristics
-        
         "SEX", # 1 male, 2 female
         "AGE", # number
         "AGEEUL", # age bands
         "ETHUKEUL", # ethnic group
+        "NSEC", # occupational category 
 
         # MAIN JOB
         
@@ -129,12 +136,11 @@ variables <- c(
         "WRKING", # Whether in paid job in reference week, either as employee or as self-employed
         "JBAWAY", # Whether temporary away from paid job (if "no" in WRKING)
         "PUBLICR", # Whether working in public or private sector (reported)
-        "INDE07M", # Industry section in main job 
-        "SC10MMJ", # Major occupation group
+        "industry1", # Industry section in main job 
         "MANAGER", # managerial status in current job (filter by STAT = 1)  
         "REGWKR", # Region of place of work (reported)
 
-        # MAIN JOB - TIME
+        # MAIN JOB - Hours
         
         ## full vs part time (complement with hours data)
         
@@ -152,10 +158,8 @@ variables <- c(
         "SECJOB", # Whether had second job in reference week
         "Y2JOB", # Whether had 2 jobs because of a change of job in reference week (this is mainly for filtering in some variables)
         "STAT2", # Employment status for those in regular second jobs
-        "INDS07S", # Industry section in second job - 21 categories
         "MANAG2", # Did you have any managerial duties?
         "REGWK2R", # Region of workplace for second job (reported)
-        "SC10SMJ", # Major occupation group (second job)
         
         # HOURS
         
@@ -164,21 +168,20 @@ variables <- c(
         "SUMHRS", # Total hours worked in reference week in main and second jobs
         "VARYHR", # Whether weekly hours tend to vary
         
-        
-        ## Main job 
+        ### Main job 
         
         "BACTHR", # Basic actual hours in main job (per week)- It does not include overtime (paid or unpaid).
         "TTACHR", # Total actual hours worked in main job in reference week includes any paid or unpaid overtime
         "PAIDHRA", # Paid Hours - based on actual hours per week
         
-        ## Second job
+        ### Second job
         
         "ACTHR2", # Actual hours in second job including overtime (filter by Y2Job=2)
 
-        ## Work more hours (Seeking for work survey section)
+        ### Work more hours (Seeking for work survey section)
+        
         "UNDEMP", # Whether would like to work longer hours, at current basic rate of pay, given the opportunity
         "UNDHRS", # Number of extra hours would like to work
-        
         
         # EARNINGS           
        
@@ -186,7 +189,6 @@ variables <- c(
         "GRSSWK2", # Gross weekly pay in second job
         
         # SKILLS
-        
         
         
         ## Seeking for work
@@ -197,7 +199,8 @@ variables <- c(
 
         
         # weights
-        "PWT", "PIWT"
+        "PWT", # Person weight
+        "PIWT" # Income weight 
         ) 
 
 #### selecting the variables in all dataset and creating temporary datasets
@@ -300,14 +303,14 @@ LFS_all <- rbind(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t1
                  t46, t47, t48, t49, t50, t51, t52, t53, t54, t55, t56, t57, t58, t59, t60,
                  t61, t62, t63, t64, t65, t66, t67, t68, t69, t70, t71) # combined database
 
-
 LFS_all <- as_tibble(LFS_all) # creating a tibble for data manipulation
 
-save(LFS_all, file = "./Data_clean/LFS_all.rda") # load the saved dataset for data manipulation
+save(LFS_all, file = "./outputs/data/LFS_all.rda") # load the saved dataset for data manipulation
 
 rm(list = ls()) # clean the global environment to save memory
 
-load("./Data_clean/LFS_all.rda") # this is the file for analysis
+load("./outputs/data/LFS_all.rda") # this is the base file for analysis
+
 
 #### Create a working dataset to clean
 
@@ -319,14 +322,14 @@ LFS_clean <- LFS_clean %>%
         set_na(na = c(-8, -9), drop.levels = TRUE, as.tag = FALSE) %>% 
         as_tibble(.) # NAs for: does not apply(-9), no answer(-8)
 
-l_LFS_clean <- get_labels(LFS_clean, values = "n") # check value labels 
+view_df(LFS_clean) # check value labels 
 
 LFS_clean <- LFS_clean %>% 
         set_na(na = c(POTHR = 99, UOTHR = 99, ACTHR2 = 99), 
                drop.levels = TRUE, as.tag = FALSE) %>% 
         as_tibble(.) # NAs for specific variable labels
 
-l_LFS_clean <- get_labels(LFS_clean, values = "n") # check value labels 
+view_df(LFS_clean) # check value labels 
 
 
 ### Recording and creating variables based on existing ones
@@ -337,7 +340,7 @@ LFS_clean$SEX <- replace_labels(LFS_clean$SEX, labels = c("Men" = 1, "Women" = 2
 
 LFS_clean$ILODEFR <- replace_labels(LFS_clean$ILODEFR, labels = c("Not employed" = 2)) # replace ILO unemployment
 
-l_LFS_clean <- get_labels(LFS_clean, values = "n") # check value labels 
+view_df(LFS_clean) # check value labels 
 
 
 ## recoding "Scotland North Caledonian Canal" for Scotland
