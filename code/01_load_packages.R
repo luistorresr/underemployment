@@ -4,41 +4,44 @@
 ### R version 4.2.2 (2022-10-31)
 
 #### packages needed
-if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
 if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(haven)) install.packages("haven", repos = "http://cran.us.r-project.org")
+if(!require(sjlabelled)) install.packages("sjlabelled", repos = "http://cran.us.r-project.org")
+if(!require(DT)) install.packages("DT", repos = "http://cran.us.r-project.org")
+if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
+
 if(!require(gridExtra)) install.packages("girdExtra", repos = "http://cran.us.r-project.org")
 if(!require(corrr)) install.packages("corrr", repos = "http://cran.us.r-project.org")
 if(!require(Hmisc)) install.packages("Hmisc", repos = "http://cran.us.r-project.org")
-if(!require(sjlabelled)) install.packages("sjlabelled", repos = "http://cran.us.r-project.org")
 if(!require(ggthemes)) install.packages("ggthemes", repos = "http://cran.us.r-project.org")
 if(!require(ggtext)) install.packages("ggtext", repos = "http://cran.us.r-project.org")
 if(!require(ggrepel)) install.packages("ggrepel", repos = "http://cran.us.r-project.org")
 if(!require(doBy)) install.packages("doBy", repos = "http://cran.us.r-project.org")
 if(!require(sjmisc)) install.packages("sjmisc", repos = "http://cran.us.r-project.org")
 if(!require(plotly)) install.packages("plotly", repos = "http://cran.us.r-project.org")
-if(!require(flextable)) install.packages("flextable", repos = "http://cran.us.r-project.org")
 if(!require(scales)) install.packages("scales", repos = "http://cran.us.r-project.org")
 if(!require(ggalt)) install.packages("ggalt", repos = "http://cran.us.r-project.org")
 if(!require(janitor)) install.packages("janitor", repos = "http://cran.us.r-project.org")
 if(!require(sjPlot)) install.packages("sjPlot", repos = "http://cran.us.r-project.org")
 
-library(data.table) # faster and better at handling large objects
 library(tidyverse) # several tools for data manipulation
 library(haven) # read SPSS, Stata, and SAS data
+library(sjlabelled) # get_labels function
+library(Hmisc) # many functions useful for data analysis
+library(DT) # formatting tables 
+library(sjPlot) # create a html with variable and value labels
+
+library(data.table) # faster and better at handling large objects
 library(gridExtra) # arrange multiple grid-based plots on a page
 library(corrr) # for correlations correlate()
-library(Hmisc) # many functions useful for data analysis
 library(sjmisc) # useful to set Na's
-library(sjlabelled) # get_labels function
 library(ggthemes) # themes for ggplot2
 library(ggtext) # fancy text
 library(ggrepel) # help with the position of the labels on ggplot2 graph
 library(doBy) # 'do' something to data stratified 'by' some variables
 library(plotly) # interactive plots
-library(flextable) # formatting tables 
 library(scales) # add scale symbols and colour to axis
 library(ggalt) # contingency table
 library(janitor) # add totals to tables
-library(sjPlot) # create a html with variable and value labels
 
 ########################### END  ##############################################
