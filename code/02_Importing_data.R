@@ -105,58 +105,22 @@ js22 <- read_spss("UKDA-9027-spss/spss/spss25/lfsp_js22_eul_pwt22.sav") # July t
 
 od22 <- read_spss("") # October to December (wave 4) - not yet available at 10 Feb 2023
 
-
-## (2) ANNUAL POPULATION SURVEY
-
-## Data files
-
-#### Temporarily set the working directory where the data files are located.
-
-setwd("replace for your directory path")
-
-aps05 <- read_spss("2005/UKDA-5395-spss/spss/spss19/apsp_jd05_eul.sav") # 2005
-gc() # free unused memory
-aps06 <- read_spss("2006/UKDA-5685-spss/spss/spss19/apsp_jd06_eul.sav") # 2006
-gc() # free unused memory
-aps07 <- read_spss("2007/UKDA-5989-spss/spss/spss19/apsp_jd07_eul.sav") # 2007
-gc() # free unused memory
-aps08 <- read_spss("2008/UKDA-6280-spss/spss/spss19/apsp_jd08_eul.sav") # 2008
-gc() # free unused memory
-aps09 <- read_spss("2009/UKDA-6514-spss/spss/spss19/apsp_jd09_eul.sav") # 2009
-gc() # free unused memory
-aps10 <- read_spss("2010/UKDA-6809-spss/spss/spss19/apsp_jd10_eul_inclu_smoking.sav") # 2010
-gc() # free unused memory
-aps11 <- read_spss("2011/UKDA-7059-spss/spss/spss25/apsp_jd11_eul_pwta14.sav") # 2011
-gc() # free unused memory
-aps12 <- read_spss("2012/UKDA-7274-spss/spss/spss25/apsp_jd12_eul_pwta18.sav") # 2012
-gc() # free unused memory
-aps13 <- read_spss("2013/UKDA-7536-spss/spss/spss24/apsp_jd13_eul.sav") # 2013
-gc() # free unused memory
-aps14 <- read_spss("2014/UKDA-7684-spss/spss/spss24/apsp_jd14_eul.sav") # 2014
-gc() # free unused memory
-aps15 <- read_spss("2015/UKDA-7928-spss/spss/spss24/apsp_jd15_eul.sav") # 2015
-gc() # free unused memory
-aps16 <- read_spss("2016/UKDA-8160-spss/spss/spss24/apsp_jd16_eul.sav") # 2016
-gc() # free unused memory
-aps17 <- read_spss("2017/UKDA-8331-spss/spss/spss24/apsp_jd17_eul.sav") # 2017
-gc() # free unused memory
-aps18 <- read_spss("2018/UKDA-8461-spss/spss/spss25/apsp_jd18_eul_pwta18.sav") # 2018
-gc() # free unused memory
-aps19 <- read_spss("2019/UKDA-8632-spss/spss/spss25/apsp_jan-dec19_eul_pwta18.sav") # 2019
-gc() # free unused memory
-aps20 <- read_spss("2020/UKDA-8789-spss/spss/spss25/apsp_jd20_eul_pwta22.sav") # 2020
-gc() # free unused memory
-aps21 <- read_spss("2021/UKDA-8928-spss/spss/spss25/apsp_jd21_eul_pwta22.sav") # 2021
-gc() # free unused memory
-
 ## Set the working directory back to where your computer folder where you created the R-Studio project
 
 setwd("replace for your directory path")
 
 ## Save imported databases
 
-save.image("~/imported_data.RData")
+save(jm05,aj05,js05,od05,jm06,aj06,js06,od06,jm07,aj07,js07,od07,jm08,aj08,js08,od08,jm09,aj09,js09,od09,jm10,aj10,
+     js10,od10,jm11,aj11,js11,od11,jm12,aj12,js12,od12,jm13,aj13,js13,od13,jm14,aj14,js14,od14,jm15,aj15,js15,od15,
+     jm16,aj16,js16,od16,jm17,aj17,js17,od17,jm18,aj18,js18,od18,jm19,aj19,js19,od19,jm20,aj20,js20,od20,jm21,aj21,
+     js21,od21,jm22,aj22,js22, file = "imported_data/LFS.rda")
 
-#### Extracting labels and questions for inspection
+##### delete data files to save memory
+
+rm(jm05,aj05,js05,od05,jm06,aj06,js06,od06,jm07,aj07,js07,od07,jm08,aj08,js08,od08,jm09,aj09,js09,od09,jm10,aj10,
+   js10,od10,jm11,aj11,js11,od11,jm12,aj12,js12,od12,jm13,aj13,js13,od13,jm14,aj14,js14,od14,jm15,aj15,js15,od15,
+   jm16,aj16,js16,od16,jm17,aj17,js17,od17,jm18,aj18,js18,od18,jm19,aj19,js19,od19,jm20,aj20,js20,od20,jm21,aj21,
+   js21,od21,jm22,aj22,js22) 
 
 ######################## END IMPORTING DATA ####################################

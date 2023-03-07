@@ -7,101 +7,234 @@ load("imported_data/LFS.rda")
 
 # Explore variable names
 
-view_df(jm05, show.id = FALSE)  # reemplace the database name to check more
+## Industry
+
+view_df(jm05, show.id = FALSE)  # No conversion variable for SIC 2007 # INDS92M (main) and INDS92S (second)
+table(jm05$INDS92M) # summary main job
+table(jm05$INDS92S) # summary second job
+get_labels(jm05$INDS92M, values = "n")
+
+view_df(jm06, show.id = FALSE)  # SIC 2007 conversion variable IN9207SM and IN9207SS
+view_df(jm07, show.id = FALSE)  # SIC 2007 conversion variable IN9207SM and IN9207SS
+view_df(aj08, show.id = FALSE)  # SIC 2007 conversion variable IN9207SM and IN9207SS
+
+table(jm06$IN9207SM) # summary main job
+table(jm08$IN9207SS) # summary second job
+get_labels(jm08$IN9207SM, values = "n")
+class(jm08$IN9207SM)
+
+view_df(od09, show.id = FALSE)  # reemplace the dataset name to check more
+view_df(jm22, show.id = FALSE)  # reemplace the dataset name to check more
+
+table(jm22$INDS07M)
+get_labels(jm22$INDS07M, values = "n")
+
+  #### NOTE ####
+  #### Industry section is INDS92M (main) and INDS92S (second) until 2008. From 2009 is INDS07M (main) and INDS07S (second).
+  #### This requires standardization before linking databases as the project will analyse in detail two industries (Health & Social Work, Wholesale & Retail Industries)
+
+## Occupation
+
+view_df(jm21, show.id = FALSE)
+
+### 2005 to 2010,  SC2KMMJ, Major occupation group (main job) and SC2KSMJ	Major occupation group (second job)
+### 2011 to 2020 SC10MMJ (main job) and  SC10SMJ (second job)
+### 2021 and beyong is NSECMJ20 (main job) and SC20SMJ (second job)
 
 
 # Standarising variable names across datasets
 
 ## Creating the variable "quarter", "PIWT" for income weight, YEAR, and PWT for population weighs among others
 
-jm05 <- jm05 %>% mutate(year = 2005, quarter = 1, sequence = 1, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
-aj05 <- aj05 %>% mutate(year = 2005, quarter = 2, sequence = 2, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
-js05 <- js05 %>% mutate(year = 2005, quarter = 3, sequence = 3, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
-od05 <- od05 %>% mutate(year = 2005, quarter = 4, sequence = 4, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
+jm05 <- jm05 %>% mutate(year = 2005, quarter = 1, sequence = 1, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = , 
+                        occu1 = SC2KMMJ, 
+                        ind2 = , 
+                        occu2 = SC2KSMJ,
+                        WHYTMP6 = ) # WHYTMP levels are different
 
-jm06 <- jm06 %>% mutate(year = 2006, quarter = 1, sequence = 5, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
-aj06 <- aj06 %>% mutate(year = 2006, quarter = 2, sequence = 6, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
-js06 <- js06 %>% mutate(year = 2006, quarter = 3, sequence = 7, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
-od06 <- od06 %>% mutate(year = 2006, quarter = 4, sequence = 8, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , )
+aj05 <- aj05 %>% mutate(year = 2005, quarter = 2, sequence = 2, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = , 
+                        occu1 = SC2KMMJ, 
+                        ind2 = , 
+                        occu2 =SC2KSMJ,
+                        WHYTMP6 = )
 
-jm07 <- jm07 %>% mutate(year = 2007, quarter = 1, sequence = 9, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-aj07 <- aj07 %>% mutate(year = 2007, quarter = 2, sequence = 10, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-js07 <- js07 %>% mutate(year = 2007, quarter = 3, sequence = 11, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-od07 <- od07 %>% mutate(year = 2007, quarter = 4, sequence = 12, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+js05 <- js05 %>% mutate(year = 2005, quarter = 3, sequence = 3, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = , 
+                        occu1 = SC2KMMJ, 
+                        ind2 = , 
+                        occu2 =SC2KSMJ,
+                        WHYTMP6 = )
 
-jm08 <- jm08 %>% mutate(year = 2008, quarter = 1, sequence = 13, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-aj08 <- aj08 %>% mutate(year = 2008, quarter = 2, sequence = 14, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-js08 <- js08 %>% mutate(year = 2008, quarter = 3, sequence = 15, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-od08 <- od08 %>% mutate(year = 2008, quarter = 4, sequence = 16, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+od05 <- od05 %>% mutate(year = 2005, quarter = 4, sequence = 4, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, # main job
+                        ind1 = , 
+                        occu1 = SC2KMMJ, 
+                        ind2 = , 
+                        occu2 =SC2KSMJ,
+                        WHYTMP6 = )
 
-jm09 <- jm09 %>% mutate(year = 2009, quarter = 1, sequence = 17, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-aj09 <- aj09 %>% mutate(year = 2009, quarter = 2, sequence = 18, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-js09 <- js09 %>% mutate(year = 2009, quarter = 3, sequence = 19, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-od09 <- od09 %>% mutate(year = 2009, quarter = 4, sequence = 20, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+jm06 <- jm06 %>% mutate(year = 2006, quarter = 1, sequence = 5, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm10 <- jm10 %>% mutate(year = 2010, quarter = 1, sequence = 21, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-aj10 <- aj10 %>% mutate(year = 2010, quarter = 2, sequence = 22, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-js10 <- js10 %>% mutate(year = 2010, quarter = 3, sequence = 23, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-od10 <- od10 %>% mutate(year = 2010, quarter = 4, sequence = 24, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
+aj06 <- aj06 %>% mutate(year = 2006, quarter = 2, sequence = 6, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm11 <- jm11 %>% mutate(year = 2011, quarter = 1, sequence = 25, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-aj11 <- aj11 %>% mutate(year = 2011, quarter = 2, sequence = 26, PIWT = PIWT14, PWT = PWT14, NSEC = , industry = , occupation = )
-js11 <- js11 %>% mutate(year = 2011, quarter = 3, sequence = 27, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-od11 <- od11 %>% mutate(year = 2011, quarter = 4, sequence = 28, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+js06 <- js06 %>% mutate(year = 2006, quarter = 3, sequence = 7, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm12 <- jm12 %>% mutate(year = 2012, quarter = 1, sequence = 29, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-aj12 <- aj12 %>% mutate(year = 2012, quarter = 2, sequence = 30, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-js12 <- js12 %>% mutate(year = 2012, quarter = 3, sequence = 31, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-od12 <- od12 %>% mutate(year = 2012, quarter = 4, sequence = 32, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+od06 <- od06 %>% mutate(year = 2006, quarter = 4, sequence = 8, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm13 <- jm13 %>% mutate(year = 2013, quarter = 1, sequence = 33, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-aj13 <- aj13 %>% mutate(year = 2013, quarter = 2, sequence = 34, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-js13 <- js13 %>% mutate(year = 2013, quarter = 3, sequence = 35, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-od13 <- od13 %>% mutate(year = 2013, quarter = 4, sequence = 36, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+jm07 <- jm07 %>% mutate(year = 2007, quarter = 1, sequence = 9, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm14 <- jm14 %>% mutate(year = 2014, quarter = 1, sequence = 37, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-aj14 <- aj14 %>% mutate(year = 2014, quarter = 3, sequence = 38, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-js14 <- js14 %>% mutate(year = 2014, quarter = 4, sequence = 39, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-od14 <- od14 %>% mutate(year = 2014, quarter = 4, sequence = 40, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+aj07 <- aj07 %>% mutate(year = 2007, quarter = 2, sequence = 10, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm15 <- jm15 %>% mutate(year = 2015, quarter = 1, sequence = 41, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-aj15 <- aj15 %>% mutate(year = 2015, quarter = 2, sequence = 42, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-js15 <- js15 %>% mutate(year = 2015, quarter = 3, sequence = 43, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-od15 <- od15 %>% mutate(year = 2015, quarter = 4, sequence = 44, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+js07 <- js07 %>% mutate(year = 2007, quarter = 3, sequence = 11, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm16 <- jm16 %>% mutate(year = 2016, quarter = 1, sequence = 45, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-aj16 <- aj16 %>% mutate(year = 2016, quarter = 2, sequence = 46, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-js16 <- js16 %>% mutate(year = 2016, quarter = 3, sequence = 47, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-od16 <- od16 %>% mutate(year = 2016, quarter = 4, sequence = 48, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+od07 <- od07 %>% mutate(year = 2007, quarter = 4, sequence = 12, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm17 <- jm17 %>% mutate(year = 2017, quarter = 1, sequence = 49, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-aj17 <- aj17 %>% mutate(year = 2017, quarter = 2, sequence = 50, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-js17 <- js17 %>% mutate(year = 2017, quarter = 3, sequence = 51, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-od17 <- od17 %>% mutate(year = 2017, quarter = 4, sequence = 52, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+jm08 <- jm08 %>% mutate(year = 2008, quarter = 1, sequence = 13, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm18 <- jm18 %>% mutate(year = 2018, quarter = 1, sequence = 53, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-aj18 <- aj18 %>% mutate(year = 2018, quarter = 2, sequence = 54, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-js18 <- js18 %>% mutate(year = 2018, quarter = 3, sequence = 55, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-od18 <- od18 %>% mutate(year = 2018, quarter = 4, sequence = 56, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+aj08 <- aj08 %>% mutate(year = 2008, quarter = 2, sequence = 14, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm19 <- jm19 %>% mutate(year = 2019, quarter = 1, sequence = 57, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-aj19 <- aj19 %>% mutate(year = 2019, quarter = 2, sequence = 58, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-js19 <- js19 %>% mutate(year = 2019, quarter = 3, sequence = 59, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
-od19 <- od19 %>% mutate(year = 2019, quarter = 4, sequence = 60, PIWT = PIWT18, PWT = PWT18, NSEC = , industry = , occupation = )
+js08 <- js08 %>% mutate(year = 2008, quarter = 3, sequence = 15, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm20 <- jm20 %>% mutate(year = 2020, quarter = 1, sequence = 61, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
-aj20 <- aj20 %>% mutate(year = 2020, quarter = 2, sequence = 62, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
-js20 <- js20 %>% mutate(year = 2020, quarter = 3, sequence = 63, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
-od20 <- od20 %>% mutate(year = 2020, quarter = 4, sequence = 64, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
+od08 <- od08 %>% mutate(year = 2008, quarter = 4, sequence = 16, PIWT = PIWT14, PWT = PWT14, 
+                        NSEC = NSECMMJ, 
+                        ind1 = case_match(IN9207SM, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu1 = SC2KMMJ, 
+                        ind2 = case_match(IN9207SS, "A"~1, "B"~2, "C"~3, "D"~4, "E"~5, "F"~6, "G"~7, "H"~8, "I"~9, "J"~10, "K"~11, "L"~12, "M"~13, "N"~14, "O"~15, "P"~16, "Q"~17, "R"~18, "S"~19, "T"~20, "U"~21), 
+                        occu2 = SC2KSMJ)
 
-jm21 <- jm21 %>% mutate(year = 2021, quarter = 1, sequence = 65, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
-aj21 <- aj21 %>% mutate(year = 2021, quarter = 2, sequence = 66, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
-js21 <- js21 %>% mutate(year = 2021, quarter = 3, sequence = 67, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
-od21 <- od21 %>% mutate(year = 2021, quarter = 4, sequence = 68, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
+jm09 <- jm09 %>% mutate(year = 2009, quarter = 1, sequence = 17, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ)
+aj09 <- aj09 %>% mutate(year = 2009, quarter = 2, sequence = 18, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ)
+js09 <- js09 %>% mutate(year = 2009, quarter = 3, sequence = 19, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ)
 
-jm22 <- jm22 %>% mutate(year = 2022, quarter = 1, sequence = 69, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
-aj22 <- aj22 %>% mutate(year = 2022, quarter = 2, sequence = 70, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
-js22 <- js22 %>% mutate(year = 2022, quarter = 3, sequence = 71, PIWT = PIWT22, PWT = PWT22, NSEC = , industry = , occupation = )
+od09 <- od09 %>% mutate(year = 2009, quarter = 4, sequence = 20, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, 
+                        ind1 = INDS07M, 
+                        occu1 = SC2KMMJ, 
+                        ind2 = NA, # error industry second job not found on data set
+                        occu2 = SC2KSMJ)
+
+jm10 <- jm10 %>% mutate(year = 2010, quarter = 1, sequence = 21, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ)
+aj10 <- aj10 %>% mutate(year = 2010, quarter = 2, sequence = 22, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ)
+js10 <- js10 %>% mutate(year = 2010, quarter = 3, sequence = 23, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ)
+od10 <- od10 %>% mutate(year = 2010, quarter = 4, sequence = 24, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ) 
+
+jm11 <- jm11 %>% mutate(year = 2011, quarter = 1, sequence = 25, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+aj11 <- aj11 %>% mutate(year = 2011, quarter = 2, sequence = 26, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+js11 <- js11 %>% mutate(year = 2011, quarter = 3, sequence = 27, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+od11 <- od11 %>% mutate(year = 2011, quarter = 4, sequence = 28, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+
+jm12 <- jm12 %>% mutate(year = 2012, quarter = 1, sequence = 29, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+aj12 <- aj12 %>% mutate(year = 2012, quarter = 2, sequence = 30, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+js12 <- js12 %>% mutate(year = 2012, quarter = 3, sequence = 31, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+od12 <- od12 %>% mutate(year = 2012, quarter = 4, sequence = 32, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+
+jm13 <- jm13 %>% mutate(year = 2013, quarter = 1, sequence = 33, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+aj13 <- aj13 %>% mutate(year = 2013, quarter = 2, sequence = 34, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+js13 <- js13 %>% mutate(year = 2013, quarter = 3, sequence = 35, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+od13 <- od13 %>% mutate(year = 2013, quarter = 4, sequence = 36, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+
+jm14 <- jm14 %>% mutate(year = 2014, quarter = 1, sequence = 37, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+aj14 <- aj14 %>% mutate(year = 2014, quarter = 3, sequence = 38, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+js14 <- js14 %>% mutate(year = 2014, quarter = 4, sequence = 39, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+od14 <- od14 %>% mutate(year = 2014, quarter = 4, sequence = 40, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+
+jm15 <- jm15 %>% mutate(year = 2015, quarter = 1, sequence = 41, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+aj15 <- aj15 %>% mutate(year = 2015, quarter = 2, sequence = 42, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+js15 <- js15 %>% mutate(year = 2015, quarter = 3, sequence = 43, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+od15 <- od15 %>% mutate(year = 2015, quarter = 4, sequence = 44, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+
+jm16 <- jm16 %>% mutate(year = 2016, quarter = 1, sequence = 45, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+aj16 <- aj16 %>% mutate(year = 2016, quarter = 2, sequence = 46, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+js16 <- js16 %>% mutate(year = 2016, quarter = 3, sequence = 47, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+od16 <- od16 %>% mutate(year = 2016, quarter = 4, sequence = 48, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+
+jm17 <- jm17 %>% mutate(year = 2017, quarter = 1, sequence = 49, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+aj17 <- aj17 %>% mutate(year = 2017, quarter = 2, sequence = 50, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+js17 <- js17 %>% mutate(year = 2017, quarter = 3, sequence = 51, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+od17 <- od17 %>% mutate(year = 2017, quarter = 4, sequence = 52, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+
+jm18 <- jm18 %>% mutate(year = 2018, quarter = 1, sequence = 53, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+aj18 <- aj18 %>% mutate(year = 2018, quarter = 2, sequence = 54, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+js18 <- js18 %>% mutate(year = 2018, quarter = 3, sequence = 55, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+od18 <- od18 %>% mutate(year = 2018, quarter = 4, sequence = 56, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+
+jm19 <- jm19 %>% mutate(year = 2019, quarter = 1, sequence = 57, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+aj19 <- aj19 %>% mutate(year = 2019, quarter = 2, sequence = 58, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+js19 <- js19 %>% mutate(year = 2019, quarter = 3, sequence = 59, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+od19 <- od19 %>% mutate(year = 2019, quarter = 4, sequence = 60, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+
+jm20 <- jm20 %>% mutate(year = 2020, quarter = 1, sequence = 61, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+aj20 <- aj20 %>% mutate(year = 2020, quarter = 2, sequence = 62, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+js20 <- js20 %>% mutate(year = 2020, quarter = 3, sequence = 63, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+od20 <- od20 %>% mutate(year = 2020, quarter = 4, sequence = 64, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ)
+
+jm21 <- jm21 %>% mutate(year = 2021, quarter = 1, sequence = 65, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ)
+aj21 <- aj21 %>% mutate(year = 2021, quarter = 2, sequence = 66, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ)
+js21 <- js21 %>% mutate(year = 2021, quarter = 3, sequence = 67, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ)
+od21 <- od21 %>% mutate(year = 2021, quarter = 4, sequence = 68, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ)
+
+jm22 <- jm22 %>% mutate(year = 2022, quarter = 1, sequence = 69, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ)
+aj22 <- aj22 %>% mutate(year = 2022, quarter = 2, sequence = 70, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ)
+js22 <- js22 %>% mutate(year = 2022, quarter = 3, sequence = 71, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ)
 
 
 # Selecting variables
@@ -126,40 +259,42 @@ variables <- c(
         "GOVTOF2", # gov region
         "SEX", # 1 male, 2 female
         "AGE", # number
-        "AGEEUL", # age bands
-        "ETHUKEUL", # ethnic group
         "NSEC", # occupational category 
 
         # MAIN JOB
         
         "STATR", # Employment status in main job (reported)
-        "WRKING", # Whether in paid job in reference week, either as employee or as self-employed
-        "JBAWAY", # Whether temporary away from paid job (if "no" in WRKING)
         "PUBLICR", # Whether working in public or private sector (reported)
-        "industry1", # Industry section in main job 
-        "MANAGER", # managerial status in current job (filter by STAT = 1)  
+        "ind1", # Industry section in main job 
+        "occu1", # occupation in main job
         "REGWKR", # Region of place of work (reported)
 
-        # MAIN JOB - Hours
+        ## MAIN JOB - overall work arrangements
         
-        ## full vs part time (complement with hours data)
+        ### full vs part time (complement with hours data)
         
-        "FTPTWK", # Whether full or part time in main job (filter for the required economics activity)        
-        "YPTJOB", # Reason for part time job
+        "FTPTWK", # Whether full or part time in main job (1 = full / 2 = part time)        
+        "YPTJOB", # Reason for part time job (1 = Student / 2 = Ill or disable / 3 = cound not find / 4 = did not want)
 
-        ## work arrangements
+        ### work arrangements
         
-        "JOBTYP", # Whether job permanent (filter by Stat=1 AND EverWk<1)
-        "AGWRK", # Whether agency worker (applies to JOBTYP = 1)
-        "FLED10", # Type of agreed work arrangement
+        "JOBTYP", # Whether job permanent (1 = permanent / 2 = Not permanent in some way)
+        "WHYTMP6", # Reason for the job to be temporary 
+        "FLED10", # Type of agreed work hours arrangement
 
         # SECOND JOB
         
         "SECJOB", # Whether had second job in reference week
-        "Y2JOB", # Whether had 2 jobs because of a change of job in reference week (this is mainly for filtering in some variables)
+        "Y2JOB", # Whether had 2 jobs because of a change of job in reference week 
         "STAT2", # Employment status for those in regular second jobs
-        "MANAG2", # Did you have any managerial duties?
+        "ind2", # Industry section in second job 
+        "occu2", # occupation in second job
         "REGWK2R", # Region of workplace for second job (reported)
+        
+        ## SECOND JOB - overall work arrangements
+        
+        "JOBTYP2", # Whether job permanent (1 = permanent / 2 = Not permanent in some way)
+        "JB2T10", # way in which job was not permanent (agency, casua, seasonal, fixed contract, other)
         
         # HOURS
         
@@ -178,11 +313,7 @@ variables <- c(
         
         "ACTHR2", # Actual hours in second job including overtime (filter by Y2Job=2)
 
-        ### Work more hours (Seeking for work survey section)
-        
-        "UNDEMP", # Whether would like to work longer hours, at current basic rate of pay, given the opportunity
-        "UNDHRS", # Number of extra hours would like to work
-        
+
         # EARNINGS           
        
         "GRSSWK", # Gross weekly pay in main job
@@ -190,13 +321,21 @@ variables <- c(
         
         # SKILLS
         
+        "JOBSKI", # Your skills in your own work (only from 2022)
+        
         
         ## Seeking for work
         "DIFJOB", # Whether looking for different or additional paid job or business
-        "TYEMPS", # Type of employment sought (DIFJOB = 1)
-        "LKSELA", # Whether looking for work as employee or self employed
-        "ADDJOB", # Whether seeking replacement or additional job (DIFJOB = 1)
-
+        "ADDJOB", # replace or add present job (filter DIFJOB =1)
+        "LOOKM11", # Reasons for another job (respondent can add up to 3) (filter by ADDJOB = 1)
+        "PREFHR", # Preferred working hours in new job being looked for (filer by LOOKM11 =/= 5 or 6)
+        
+        # UNDER-EMPLOYMENT section on the LFS survey
+        
+        "UNDEMP", # Whether would like to work longer hours, at current basic rate of pay (filter by DIFJOB = 2)
+        "UNDHRS", # Number of extra hours would like to work (filter by UNDEMP = 1)
+        "UNDY98", # you not looking for a job with longer hours or for an additional job (filter by UNDEMP = 1). Up to 9 options
+        "UNDST",  # Whether available to start working longer hours, or start a job with longer hours, within next two weeks (IF UNDEMP=1 AND STAT=1)
         
         # weights
         "PWT", # Person weight
