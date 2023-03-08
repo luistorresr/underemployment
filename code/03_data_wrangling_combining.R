@@ -26,10 +26,10 @@ get_labels(jm08$IN9207SM, values = "n")
 class(jm08$IN9207SM)
 
 view_df(od09, show.id = FALSE)  
-view_df(jm22, show.id = FALSE)  
+view_df(js22, show.id = FALSE)  
 
 table(jm22$INDS07M)
-get_labels(jm22$INDS07M, values = "n")
+get_labels(aj22$INDS07M, values = "n")
 
 
 ## Occupation
@@ -44,7 +44,6 @@ view_df(jm21, show.id = FALSE)
 ###"FLED10", # Type of agreed work hours arrangement 
 ###"JB2T10", # way in which job was not permanent (agency, casua, seasonal, fixed contract, other)
 ###"LOOKM11", # Reasons for another job (respondent can add up to 3) (filter by ADDJOB = 1)
-###"JOBSKI", # Your skills in your own work (only from 2022)
 ###"UNDY98", # you not looking for a job with longer hours or for an additional job (filter by UNDEMP = 1). Up to 9 options
 
 
