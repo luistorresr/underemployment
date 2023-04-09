@@ -5,19 +5,14 @@
 
 ## (1) UK LABOUR FORCE SURVEY
 
-### This and the following scripts are based on the Labour Force Survey - all datasets from 2005 to 2022 (quarters only) 
-### To run this script, the UK LFS datasets (quarters only) from 2005 onwards are needed. They are available at https://ukdataservice.ac.uk
+### This and the following scripts are based on the Labour Force Survey - all datasets from 2006 to 2022 (quarters only) 
+### To run this script, the UK LFS datasets (quarters only) from 2006 onwards are needed. They are available at https://ukdataservice.ac.uk
 
 ### Data files
 
 #### Temporarily set the working directory where the data files are located.
 
 setwd("replace for your directory path")
-
-jm05 <- read_spss("UKDA-5426-spss/spss/spss19/lfsp_jm05_end_user.sav") # January to March (wave 1)
-aj05 <- read_spss("UKDA-5427-spss/spss/spss19/lfsp_aj05_end_user.sav") # April to June (wave 2)
-js05 <- read_spss("UKDA-5428-spss/spss/spss19/lfsp_js05_end_user.sav") # July to September (wave 3)
-od05 <- read_spss("UKDA-5429-spss/spss/spss19/lfsp_od05_end_user.sav") # October to December (wave 4)
 
 jm06 <- read_spss("UKDA-5369-spss/spss/spss19/lfsp_jm06_end_user.sav") # January to March (wave 1)
 aj06 <- read_spss("UKDA-5466-spss/spss/spss19/lfsp_aj06_end_user.sav") # April to June (wave 2)
@@ -103,7 +98,7 @@ jm22 <- read_spss("UKDA-8957-spss/spss/spss25/lfsp_jm22_eul_pwt22.sav") # Januar
 aj22 <- read_spss("UKDA-8999-spss/spss/spss25/lfsp_aj22_eul_pwt22.sav") # April to June (wave 2)
 js22 <- read_spss("UKDA-9027-spss/spss/spss25/lfsp_js22_eul_pwt22.sav") # July to September (wave 3)
 
-od22 <- read_spss("") # October to December (wave 4) - not yet available at 10 Feb 2023
+od22 <- read_spss("UKDA-9052-spss/spss/spss25/lfsp_od22_eul_pwt22.sav") # October to December (wave 4) 
 
 ## Set the working directory back to where your computer folder where you created the R-Studio project
 
@@ -111,16 +106,16 @@ setwd("replace for your directory path")
 
 ## Save imported databases
 
-save(jm05,aj05,js05,od05,jm06,aj06,js06,od06,jm07,aj07,js07,od07,jm08,aj08,js08,od08,jm09,aj09,js09,od09,jm10,aj10,
+save(jm06,aj06,js06,od06,jm07,aj07,js07,od07,jm08,aj08,js08,od08,jm09,aj09,js09,od09,jm10,aj10,
      js10,od10,jm11,aj11,js11,od11,jm12,aj12,js12,od12,jm13,aj13,js13,od13,jm14,aj14,js14,od14,jm15,aj15,js15,od15,
      jm16,aj16,js16,od16,jm17,aj17,js17,od17,jm18,aj18,js18,od18,jm19,aj19,js19,od19,jm20,aj20,js20,od20,jm21,aj21,
-     js21,od21,jm22,aj22,js22, file = "imported_data/LFS.rda")
+     js21,od21,jm22,aj22,js22,od22, file = "data/LFS.rda")
 
 ##### delete data files to save memory
 
-rm(jm05,aj05,js05,od05,jm06,aj06,js06,od06,jm07,aj07,js07,od07,jm08,aj08,js08,od08,jm09,aj09,js09,od09,jm10,aj10,
+rm(jm06,aj06,js06,od06,jm07,aj07,js07,od07,jm08,aj08,js08,od08,jm09,aj09,js09,od09,jm10,aj10,
    js10,od10,jm11,aj11,js11,od11,jm12,aj12,js12,od12,jm13,aj13,js13,od13,jm14,aj14,js14,od14,jm15,aj15,js15,od15,
    jm16,aj16,js16,od16,jm17,aj17,js17,od17,jm18,aj18,js18,od18,jm19,aj19,js19,od19,jm20,aj20,js20,od20,jm21,aj21,
-   js21,od21,jm22,aj22,js22) 
+   js21,od21,jm22,aj22,js22,od22) 
 
 ######################## END IMPORTING DATA ####################################
