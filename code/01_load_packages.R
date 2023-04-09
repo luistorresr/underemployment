@@ -8,11 +8,13 @@ if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-
 if(!require(haven)) install.packages("haven", repos = "http://cran.us.r-project.org")
 if(!require(sjlabelled)) install.packages("sjlabelled", repos = "http://cran.us.r-project.org")
 if(!require(DT)) install.packages("DT", repos = "http://cran.us.r-project.org")
-if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
+if(!require(Hmisc)) install.packages("Hmisc", repos = "http://cran.us.r-project.org")
+if(!require(sjPlot)) install.packages("sjPlot", repos = "http://cran.us.r-project.org")
+if(!require(webshot)) install.packages("webshot", repos = "http://cran.us.r-project.org")
 
+if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
 if(!require(gridExtra)) install.packages("girdExtra", repos = "http://cran.us.r-project.org")
 if(!require(corrr)) install.packages("corrr", repos = "http://cran.us.r-project.org")
-if(!require(Hmisc)) install.packages("Hmisc", repos = "http://cran.us.r-project.org")
 if(!require(ggthemes)) install.packages("ggthemes", repos = "http://cran.us.r-project.org")
 if(!require(ggtext)) install.packages("ggtext", repos = "http://cran.us.r-project.org")
 if(!require(ggrepel)) install.packages("ggrepel", repos = "http://cran.us.r-project.org")
@@ -22,7 +24,6 @@ if(!require(plotly)) install.packages("plotly", repos = "http://cran.us.r-projec
 if(!require(scales)) install.packages("scales", repos = "http://cran.us.r-project.org")
 if(!require(ggalt)) install.packages("ggalt", repos = "http://cran.us.r-project.org")
 if(!require(janitor)) install.packages("janitor", repos = "http://cran.us.r-project.org")
-if(!require(sjPlot)) install.packages("sjPlot", repos = "http://cran.us.r-project.org")
 
 library(tidyverse) # several tools for data manipulation
 library(haven) # read SPSS, Stata, and SAS data
@@ -30,7 +31,7 @@ library(sjlabelled) # get_labels function
 library(Hmisc) # many functions useful for data analysis
 library(DT) # formatting tables 
 library(sjPlot) # create a html with variable and value labels
-
+library(webshot) # 
 
 library(data.table) # faster and better at handling large objects
 library(gridExtra) # arrange multiple grid-based plots on a page

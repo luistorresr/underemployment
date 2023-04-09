@@ -492,10 +492,10 @@ LFS_clean$LESPAY3 <- set_labels(LFS_clean$LESPAY3, labels = c(
 
 get_labels(LFS_clean$LESPAY3, values = "n") # check value labels 
 
-
 # check variables and labels
 
-view_df(LFS_clean, show.id = FALSE)  
+view_df(LFS_clean, show.id = FALSE, file = "./data/variable_view.html") 
+
 
 ### saving the clean dataset
 
