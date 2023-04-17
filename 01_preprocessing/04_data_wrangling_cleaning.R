@@ -334,7 +334,7 @@ get_labels(LFS_clean$JOBTYP2, values = "n") # check value labels
 ## adding value labels to WHYTMP6
 
 LFS_clean$WHYTMP6 <- remove_all_labels(LFS_clean$WHYTMP6)
-set_label(LFS_clean$WHYTMP6) <- "Reason for part time job" # add variable label
+set_label(LFS_clean$WHYTMP6) <- "Reason for temporary job" # add variable label
 LFS_clean$WHYTMP6 <- set_labels(LFS_clean$WHYTMP6, labels = c(
   "Contract which includes period of training" = 1,
   "Had a contract for probationary period" = 2,
