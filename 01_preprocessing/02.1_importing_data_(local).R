@@ -12,7 +12,7 @@
 
 #### Temporarily set the working directory where the data files are located.
 
-setwd("C:/Users/luist/The University of Nottingham/Underemployment - General/raw_datasets/LFS")
+setwd("C:/Users/destt/The University of Nottingham/Underemployment_quants - General/raw_datasets/LFS")
 
 jm06 <- read_spss("5369/UKDA-5369-spss/spss/spss19/lfsp_jm06_end_user.sav") # January to March (wave 1)
 aj06 <- read_spss("5466/UKDA-5466-spss/spss/spss19/lfsp_aj06_end_user.sav") # April to June (wave 2)
@@ -101,9 +101,9 @@ od22 <- read_spss("9052/UKDA-9052-spss/spss/spss25/lfsp_od22_eul_pwt22.sav") # O
 
 ##### Set the working directory back to where your computer folder where you created the R-Studio project
 
-#setwd("C:/Users/luist/OneDrive - The University of Nottingham/NUBS UK/4 - Research/Projects/ESRC - Underemployment/Analysis/underemployment")
+#setwd("C:/Users/destt/OneDrive/Documentos/GitHub/underemployment")
 
-setwd("C:/Users/luist/The University of Nottingham/Underemployment - General/raw_datasets")
+setwd("C:/Users/destt/The University of Nottingham/Underemployment_quants - General/raw_datasets/LFS")
 
 ##### Save LFS imported datasets
 
@@ -121,10 +121,10 @@ rm(jm06,aj06,js06,od06,jm07,aj07,js07,od07,jm08,aj08,js08,od08,jm09,aj09,js09,od
 
 ##### Back to the working directory back to where you created the R-Studio project
 
-setwd("C:/Users/luist/OneDrive - The University of Nottingham/NUBS UK/4 - Research/Projects/ESRC - Underemployment/Analysis/underemployment")
+setwd("C:/Users/destt/OneDrive/Documentos/GitHub/underemployment")
 
 # Load LFS data for next step
 
-load("C:/Users/luist/The University of Nottingham/Underemployment - General/raw_datasets/imported_data/LFS_base.rda")
+load("C:/Users/destt/The University of Nottingham/Underemployment_quants - General/raw_datasets/imported_data/LFS_base.rda")
 
 ######################## END IMPORTING DATA ####################################
