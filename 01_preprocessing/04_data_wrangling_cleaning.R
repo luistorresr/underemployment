@@ -45,6 +45,7 @@ set_label(LFS_clean$SEX) <- "Sex" # set variable label
 
 get_labels(LFS_clean$SEX, values = "n")
 
+
 ## changing ILO value labels 
 LFS_clean$ILODEFR <- replace_labels(LFS_clean$ILODEFR, 
                                     labels = c("In employment" = 1, "Not employed" = 2, "Inactive" = 3, "Under 16" = 4)) 
