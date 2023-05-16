@@ -2,7 +2,8 @@
 
 # Load LFS data
 
-load("replace for your directory path")
+load("C:/Users/destt/The University of Nottingham/Underemployment_quants - General/raw_datasets/imported_data/LFS_base.rda")
+
 
 # Explore variable names
 
