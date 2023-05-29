@@ -6,6 +6,8 @@ load("data/LFS_clean.rda")
 
 table(LFS_clean$quali)
 attr(LFS_clean$quali, "labels")
+table(LFS_clean$quali2)
+attr(LFS_clean$quali2, "labels")
 table(LFS_clean$degree)
 attr(LFS_clean$degree, "labels")
 table(LFS_clean$higher)
@@ -18,121 +20,138 @@ table(LFS_clean$quali, LFS_clean$higher)
 table(LFS_clean$higher, LFS_clean$degree)
 table(LFS_clean$quali, LFS_clean$quali2)
 
+table(LFS_clean$quali2, LFS_clean$degree)
+table(LFS_clean$quali2, LFS_clean$higher)
+table(LFS_clean$higher, LFS_clean$degree)
+
 ###Creating and labeling unified skills variable
 
 LFS_clean <- LFS_clean %>% mutate(education = case_when(
   #Doctorate
-  higher == 1 & degree == 1 & quali == 1 ~ 1,
-  higher == 1 & degree == 2 & quali == 1 ~ 1,
-  higher == 1 & degree == 3 & quali == 1 ~ 1,
-  higher == 1 & degree == 4 & quali == 1 ~ 1,
-  higher == 1 & degree == 5 & quali == 1 ~ 1,
+  higher == 1 & degree %in% 1:5 & quali %in% 1:7 & quali2 %in% 0:6 ~ 1,
   #Masters
-  higher == 2 & degree == 1 & quali == 1 ~ 2,
-  higher == 2 & degree == 2 & quali == 1 ~ 2,
-  higher == 2 & degree == 3 & quali == 1 ~ 2,
-  higher == 2 & degree == 4 & quali == 1 ~ 2,
-  higher == 2 & degree == 5 & quali == 1 ~ 2,
-  higher == 2 & degree == 1 & quali == 3 ~ 2,
-  #PG Certificate
-  higher == 3 & degree == 1 & quali == 1 ~ 3,
-  higher == 3 & degree == 2 & quali == 1 ~ 3,
-  higher == 3 & degree == 3 & quali == 1 ~ 3,
-  higher == 3 & degree == 4 & quali == 1 ~ 3,
-  higher == 3 & degree == 5 & quali == 1 ~ 3,
-  higher == 3 & degree == 1 & quali == 2 ~ 3,
-  higher == 3 & degree == 1 & quali == 3 ~ 3,
-  higher == 4 & degree == 1 & quali == 1 ~ 3,
-  higher == 4 & degree == 2 & quali == 1 ~ 3,
-  higher == 4 & degree == 3 & quali == 1 ~ 3,
-  higher == 4 & degree == 4 & quali == 1 ~ 3,
-  higher == 4 & degree == 5 & quali == 1 ~ 3,
-  higher == 4 & degree == 1 & quali == 3 ~ 3,
+  higher == 2 & degree %in% 1:5 & quali %in% 1:7 & quali2 %in% 0:6 ~ 2,
+  #PG Diploma
+  higher %in% 3:4 & degree %in% 1:5 & quali %in% 1:7 & quali2 %in% 0:6 ~ 3,
   #DK HE
-  higher == 5 & degree == 1 & quali == 1 ~ 4,
-  higher == 5 & degree == 2 & quali == 1 ~ 4,
-  higher == 5 & degree == 3 & quali == 1 ~ 4,
-  higher == 5 & degree == 4 & quali == 1 ~ 4,
-  higher == 5 & degree == 5 & quali == 1 ~ 4,
-  is.na(higher) & degree == 1 & quali == 1 ~ 4,
-  is.na(higher) & degree == 1 & quali == 2 ~ 4,
-  is.na(higher) & degree == 1 & quali == 4 ~ 4,
-  is.na(higher) & degree == 1 & quali == 3 ~ 4,
-  is.na(higher) & degree == 1 & quali == 5 ~ 4,
-  is.na(higher) & degree == 1 & quali == 6 ~ 4,
-  is.na(higher) & degree == 1 & quali == 7 ~ 4,
+  higher == 5 & degree %in% 1:5 & quali %in% 1:7 & quali2 %in% 0:6 ~ 4,
+  is.na(higher) & degree == 1 & quali %in% 1:7 & quali2 %in% 0:6 ~ 4,
   #First degree
-  is.na(higher) & degree == 2 & quali == 1 ~ 5,
-  is.na(higher) & degree == 2 & quali == 2 ~ 5,
-  is.na(higher) & degree == 2 & quali == 4 ~ 5,
-  is.na(higher) & degree == 2 & quali == 3 ~ 5,
-  is.na(higher) & degree == 2 & quali == 5 ~ 5,
-  is.na(higher) & degree == 2 & quali == 6 ~ 5,
-  is.na(higher) & degree == 2 & quali == 7 ~ 5,
+  is.na(higher) & degree == 2 & quali %in% 1:7 & quali2 %in% 0:6 ~ 5,
   #Foundation degree
-  is.na(higher) & degree == 3 & quali == 1 ~ 6,
-  is.na(higher) & degree == 3 & quali == 2 ~ 6,
-  is.na(higher) & degree == 3 & quali == 4 ~ 6,
-  is.na(higher) & degree == 3 & quali == 3 ~ 6,
-  is.na(higher) & degree == 3 & quali == 5 ~ 6,
-  is.na(higher) & degree == 3 & quali == 6 ~ 6,
-  is.na(higher) & degree == 3 & quali == 7 ~ 6,
+  is.na(higher) & degree == 3 & quali %in% 1:7 & quali2 %in% 0:6 ~ 6,
   #Graduate membership of a professional institution
-  is.na(higher) & degree == 4 & quali == 1 ~ 7,
-  is.na(higher) & degree == 4 & quali == 2 ~ 7,
-  is.na(higher) & degree == 4 & quali == 4 ~ 7,
-  is.na(higher) & degree == 4 & quali == 3 ~ 7,
-  is.na(higher) & degree == 4 & quali == 5 ~ 7,
-  is.na(higher) & degree == 4 & quali == 6 ~ 7,
-  is.na(higher) & degree == 4 & quali == 7 ~ 7,
+  is.na(higher) & degree == 4 & quali %in% 1:7 & quali2 %in% 0:6 ~ 7,
   #Other degree
-  is.na(higher) & degree == 5 & quali == 1 ~ 8,
-  is.na(higher) & degree == 5 & quali == 2 ~ 8,
-  is.na(higher) & degree == 5 & quali == 4 ~ 8,
-  is.na(higher) & degree == 5 & quali == 3 ~ 8,
-  is.na(higher) & degree == 5 & quali == 5 ~ 8,
-  is.na(higher) & degree == 5 & quali == 6 ~ 8,
-  is.na(higher) & degree == 5 & quali == 7 ~ 8,
+  is.na(higher) & degree == 5 & quali %in% 1:7 & quali2 %in% 0:6 ~ 8,
   #DK degree
-  is.na(higher) & degree == 6 & quali == 1 ~ 9,
-  is.na(higher) & degree == 6 & quali == 2 ~ 9,
-  is.na(higher) & degree == 6 & quali == 4 ~ 9,
-  is.na(higher) & degree == 6 & quali == 3 ~ 9,
-  is.na(higher) & degree == 6 & quali == 5 ~ 9,
-  is.na(higher) & degree == 6 & quali == 6 ~ 9,
-  is.na(higher) & degree == 6 & quali == 7 ~ 9,
-  is.na(higher) & is.na(degree) & quali == 1 ~ 9,
+  is.na(higher) & degree == 6 & quali %in% 1:7 & quali2 %in% 0:6 ~ 9,
+  is.na(higher) & is.na(degree) & quali == 1 & quali2 %in% 0:6 ~ 9,
+  is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 4 ~ 9,
   #HE
-  is.na(higher) & is.na(degree) & quali == 2 ~ 10,
-  #GCE, A-level or equivalent 
-  is.na(higher) & is.na(degree) & quali == 3 ~ 11,
-  #GCSE grades A*-C or equivalent 
-  is.na(higher) & is.na(degree) & quali == 4 ~ 12,
-  #Other qual 
-  is.na(higher) & is.na(degree) & quali == 5 ~ 13,
+  is.na(higher) & is.na(degree) & quali == 2 & quali2 %in% 0:6 ~ 10,
+  is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 5 ~ 10,
+  # GCE, A-level or equivalent
+  is.na(higher) & is.na(degree) & quali == 3 & quali2 %in% 0:6 ~ 11,
+  is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 3 ~ 11,
+  # GCSE grades A*-C or equivalent
+  is.na(higher) & is.na(degree) & quali == 4 & quali2 %in% 0:6 ~ 12,
+  is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 2 ~ 12,
+  # Other qualification
+  is.na(higher) & is.na(degree) & quali == 5 & quali2 %in% 0:6 ~ 13,
+  is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 6 ~ 13,
   #No qual
-  is.na(higher) & is.na(degree) & quali == 6 ~ 14,
+  is.na(higher) & is.na(degree) & quali == 6 & quali2 %in% 0:6 ~ 14,
+  is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 1 ~ 14,
   #DK qual
-  is.na(higher) & is.na(degree) & quali == 7 ~ 15,
+  is.na(higher) & is.na(degree) & quali == 7 & quali2 %in% 0:6 ~ 15,
+  is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 0 ~ 15,
   #NA
-  is.na(higher) & is.na(degree) & is.na(quali) ~ NA,
+  is.na(higher) & is.na(degree) & is.na(quali) & is.na(quali) ~ NA,
 ))
 
 LFS_clean$education <- set_labels(LFS_clean$education, labels = c("Doctorate","Masters","PG Certificate","Don't know higher degree",
-                                                                            "First degree","Foundation degree", "Graduate membership of a professional institution","Other degree","Don't know degree",
-                                                                            "Higher education", "GCE, A-level or equivalent","GCSE grades A*-C or equivalent","Other qualification","No qualification","Don't know qualification")) 
- 
+                                                                   "First degree","Foundation degree", "Graduate membership of a professional institution","Other degree","Don't know degree",
+                                                                   "Higher education", "GCE, A-level or equivalent","GCSE grades A*-C or equivalent","Other qualification","No qualification","Don't know qualification")) 
+
+
+###Clustering skills and occupations
+
+#Transforming skills into ISCED-97
+
 table(LFS_clean$education)
+attr(LFS_clean$education, "labels")
 
-###Clustering skills levels
+LFS_clean <- LFS_clean %>% mutate(ISCED = case_when(education == 1 ~ 8,
+                                                    education %in% 2:4 ~ 7,
+                                                    education == 5 ~ 6,
+                                                    education %in% 6:9 ~ 5,
+                                                    education %in% 10:11 ~ 3,
+                                                    education %in% 12:13 ~ 2,
+                                                    education == 15 ~ 2,
+                                                    education == 14 ~ 0,
+                                                    is.na(education) ~ NA
+))         
 
+#Clustering ISCED-97 into skill levels
 
+table(LFS_clean$ISCED)
+
+LFS_clean <- LFS_clean %>% mutate(ISCED_cat = case_when(
+  ISCED %in% 6:8 ~ 3,
+  ISCED %in% 3:5 ~ 2,
+  ISCED %in% 0:2 ~ 1,
+  is.na(ISCED)  ~ NA
+))
+
+LFS_clean$ISCED_cat <- set_labels(LFS_clean$ISCED_cat, 
+                             labels = c("Low-skilled","Intermediate","High-skilled"))
+
+table(LFS_clean$ISCED_cat)
+attr(LFS_clean$ISCED_cat, "labels")
+
+#Clustering ISCO-88 into skill levels
+
+table(LFS_clean$occu1)
+table(LFS_clean$occu2)
+table(LFS_clean$occu1,LFS_clean$occu2)
+
+LFS_clean <- LFS_clean %>% mutate(ISCO = case_when(
+  occu1 %in% 1:3 | occu2 %in% 1:3 ~ 1,
+  occu1 %in% 4:8 | occu2 %in% 4:8~ 2,
+  occu1 == 9 | occu2 == 9 ~ 3,
+  is.na(occu1) & is.na(occu2) ~ NA
+))
+
+LFS_clean$ISCO <- set_labels(LFS_clean$ISCO, 
+                                 labels = c("Low-skilled","Intermediate","High-skilled"))
+
+table(LFS_clean$ISCO)
+attr(LFS_clean$ISCO, "labels")
 
 ###Matching skills with occupations levels
+
+LFS_clean <- LFS_clean %>% mutate(sk_mm = case_when(
+  #Overeducated
+  ISCED_cat > ISCO ~ 1, 
+  #Matched
+  ISCED_cat == ISCO ~ 2,
+  #Undereducated
+  ISCED_cat < ISCO ~ 3,
+))
+  
+LFS_clean$sk_mm <- set_labels(LFS_clean$sk_mm, 
+                             labels = c("Overeducated","Matched","Undereducated"))
+
+table(LFS_clean$sk_mm)
+attr(LFS_clean$sk_mm, "labels")
+
+glimpse(LFS_clean)
 
 ### saving the clean dataset
 
 save(LFS_clean, file = "./data/LFS_clean.rda")
 
 rm(list = ls()) # clean the global environment
+
 
