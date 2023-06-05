@@ -88,7 +88,7 @@ LFS_clean <- LFS_clean %>% mutate(ISCED = case_when(education == 1 ~ 6,
                                                     education == 11 ~ 3,
                                                     education %in% 12:13 ~ 2,
                                                     education == 15 ~ 2,
-                                                    education == 14 ~ 0,
+                                                    education == 14 ~ 1,
                                                     is.na(education) ~ NA
 ))         
 
@@ -99,7 +99,7 @@ table(LFS_clean$ISCED)
 LFS_clean <- LFS_clean %>% mutate(ISCED_cat = case_when(
   ISCED %in% 5:6 ~ 1,
   ISCED %in% 3:4 ~ 2,
-  ISCED %in% 0:2 ~ 3,
+  ISCED %in% 1:2 ~ 3,
   is.na(ISCED)  ~ NA
 ))
 
