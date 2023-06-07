@@ -71,8 +71,8 @@ LFS_clean <- LFS_clean %>% mutate(education = case_when(
 ))
 
 LFS_clean$education <- set_labels(LFS_clean$education, labels = c("Doctorate","Masters","PG Certificate","Don't know higher degree",
-                                                                   "First degree","Foundation degree", "Graduate membership of a professional institution","Other degree","Don't know degree",
-                                                                   "Higher education", "GCE, A-level or equivalent","GCSE grades A*-C or equivalent","Other qualification","No qualification","Don't know qualification")) 
+                                                                  "First degree","Foundation degree", "Graduate membership of a professional institution","Other degree","Don't know degree",
+                                                                  "Higher education", "GCE, A-level or equivalent","GCSE grades A*-C or equivalent","Other qualification","No qualification","Don't know qualification")) 
 
 
 ###Clustering skills and occupations through normative approach 
@@ -97,14 +97,14 @@ LFS_clean <- LFS_clean %>% mutate(ISCED = case_when(education == 1 ~ 6,
 table(LFS_clean$ISCED)
 
 LFS_clean <- LFS_clean %>% mutate(ISCED_cat = case_when(
-  ISCED %in% 5:6 ~ 1,
+  ISCED %in% 5:6 ~ 3,
   ISCED %in% 3:4 ~ 2,
-  ISCED %in% 1:2 ~ 3,
+  ISCED %in% 1:2 ~ 1,
   is.na(ISCED)  ~ NA
 ))
 
 LFS_clean$ISCED_cat <- set_labels(LFS_clean$ISCED_cat, 
-                             labels = c("High-skilled","Intermediate","Low-skilled"))
+                                  labels = c("Low-skilled","Intermediate","High-skilled"))
 
 table(LFS_clean$ISCED_cat)
 attr(LFS_clean$ISCED_cat, "labels")
@@ -116,14 +116,14 @@ table(LFS_clean$occu2)
 table(LFS_clean$occu1,LFS_clean$occu2)
 
 LFS_clean <- LFS_clean %>% mutate(ISCO = case_when(
-  occu1 %in% 1:3 | occu2 %in% 1:3 ~ 1,
+  occu1 %in% 1:3 | occu2 %in% 1:3 ~ 3,
   occu1 %in% 4:8 | occu2 %in% 4:8 ~ 2,
-  occu1 == 9 | occu2 == 9 ~ 3,
+  occu1 == 9 | occu2 == 9 ~ 1,
   is.na(occu1) & is.na(occu2) ~ NA
 ))
 
 LFS_clean$ISCO <- set_labels(LFS_clean$ISCO, 
-                                 labels = c("High-skilled","Intermediate","Low-skilled"))
+                             labels = c("Low-skilled","Intermediate","High-skilled"))
 
 table(LFS_clean$ISCO)
 attr(LFS_clean$ISCO, "labels")
@@ -138,9 +138,9 @@ LFS_clean <- LFS_clean %>% mutate(sk_mm = case_when(
   #Undereducated
   ISCED_cat < ISCO ~ 3,
 ))
-  
+
 LFS_clean$sk_mm <- set_labels(LFS_clean$sk_mm, 
-                             labels = c("Overeducated","Matched","Undereducated"))
+                              labels = c("Overeducated","Matched","Undereducated"))
 
 table(LFS_clean$ISCED_cat, LFS_clean$ISCO)
 table(LFS_clean$sk_mm)
