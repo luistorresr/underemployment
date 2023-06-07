@@ -313,7 +313,7 @@ p_nskills_lvl <- n_skills_lvl %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 1: Overeducated workers",
+       title ="Figure 2: Overeducated workers",
        subtitle  = "By educational level",
        caption = ""
        ) +
