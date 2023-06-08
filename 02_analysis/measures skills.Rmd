@@ -99,7 +99,6 @@ N_total <- LFS_clean %>%
             Workers = sum(PWT[ILODEFR == 1 & INECAC05 <= 2 & AGE >= 18 & AGE <= 64])) %>% # employee and self-employees between 18 to 64
   rename(Year = `as_factor(year)`,
          Quarter = `as_label(quarter)`) # Total population estimates
-  
 
 ```
 
@@ -113,7 +112,6 @@ N_total <- LFS_clean %>%
 ### Normative approach to skills mismatch by gender
 
 ```{r normative approach to skills mismatch table, echo=FALSE}
-
 
 options(digits = 3)
 
@@ -168,8 +166,8 @@ p_nskills <- n_skills %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 1: Overeducated workers",
-       subtitle  = "",
+       title ="Figure 1: Overeducated workers by gender",
+       subtitle  = "By gender",
        caption = ""
        ) +
 
@@ -248,9 +246,7 @@ nskills_total <- n_skills %>%
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
   guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 5)))
 
-
 p_nskills / nskills_total
-
 
 
 ```
@@ -264,6 +260,7 @@ options(digits = 3)
 
 n_skills_age <- LFS_clean %>% # summary table
   filter(AGE >= 18 & AGE <= 64) %>% 
+  #creating age categories
   mutate(AGE_cat = case_when(AGE %in% 18:24 ~ "Between 18 and 24",
                              AGE %in% 25:34 ~ "Between 25 and 34",
                              AGE %in% 35:44 ~ "Between 35 and 44",
@@ -281,7 +278,6 @@ n_skills_age <- LFS_clean %>% # summary table
   as_label(.)
 
 ```
-
 
 ```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
 
@@ -319,8 +315,8 @@ p_nskills_age <- n_skills_age %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 2: Overeducated workers by age",
-       subtitle  = "",
+       title ="Figure 3: Overeducated workers",
+       subtitle  = "By age",
        caption = ""
        ) +
 
@@ -375,7 +371,7 @@ nskills_age_total <- n_skills_age %>%
   # annotation
   labs(x = "Year", 
        y = "Total", 
-       title = "Figure 3: Overeducated workers (total)",
+       title = "Figure 4: Overeducated workers (total)",
        #subtitle  = "Totals based on people in employment between 2006 and 2022",
        #caption = c("Note: People in employment (employees and self-employed) between 2006 and 2022")
        ) +
@@ -402,14 +398,11 @@ nskills_age_total <- n_skills_age %>%
 
 p_nskills_age / nskills_age_total
 
-
-
 ```
 
 ### Normative approach to skills mismatch by educational level
 
 ```{r normative approach to skills mismatch table, echo=FALSE}
-
 
 options(digits = 3)
 
@@ -417,7 +410,7 @@ n_skills_lvl <- LFS_clean %>% # summary table
   filter(AGE >= 18 & AGE <= 64) %>% 
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
-  group_by(year, sequence, quarter, sk_mm, ISCED_cat) %>% 
+  group_by(year, sequence, quarter, ISCED_cat, sk_mm) %>% 
   summarise(count = sum(PWT)) %>% 
   group_by(year, sequence, quarter, ISCED_cat) %>% 
   # percentage per quarter
@@ -464,7 +457,7 @@ p_nskills_lvl <- n_skills_lvl %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 3: Overeducated workers",
+       title ="Figure 5: Overeducated workers",
        subtitle  = "By educational level",
        caption = ""
        ) +
@@ -508,7 +501,6 @@ nskills_total_lvl <- n_skills_lvl %>%
   geom_vline(xintercept = 60.5, color = "#c9c9c9") + # gridline 2020
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
-
   # scale and colour
   scale_fill_discrete_qualitative(palette = "Dark 3") +
   scale_x_continuous(breaks=c(1:68),
@@ -522,7 +514,7 @@ nskills_total_lvl <- n_skills_lvl %>%
   # annotation
   labs(x = "Year", 
        y = "Total", 
-       title = "Figure 3: Overeducated workers (total)",
+       title = "Figure 6: Overeducated workers (total)",
        #subtitle  = "Totals based on people in employment between 2006 and 2022",
        #caption = c("Note: People in employment (employees and self-employed) between 2006 and 2022")
        ) +
@@ -546,12 +538,95 @@ nskills_total_lvl <- n_skills_lvl %>%
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
   guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 5)))
 
-
 p_nskills_lvl / nskills_total_lvl
 
+```
+#### by occupational category
+
+
+```{r overeducation by occupational category table by nsec, echo=FALSE}
+
+options(digits = 3)
+
+n_skills_occ <- LFS_clean %>% # summary table
+  filter(AGE >= 18 & AGE <= 64) %>% 
+  filter(ILODEFR == 1) %>% # only people in employment
+  filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
+  group_by(year, sequence, quarter, NSEC2,sk_mm) %>% 
+  summarise(count = sum(PWT)) %>% 
+  group_by(year, sequence, quarter, NSEC2) %>% 
+  # percentage per quarter
+  mutate(percentage = count/sum(count)) %>% 
+  filter(!is.na(NSEC2) & !NSEC2 == 6) %>%  # omit no answers and no apply
+  filter(sk_mm == 1) %>%  #filtering by overeducated
+  as_label(.)
 
 ```
 
+
+```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+
+p_nskills_occ <- n_skills_occ %>% 
+  ggplot() + 
+  geom_line(aes(x = sequence, y = percentage, colour = factor(NSEC2)), size = 0.5, show.legend = FALSE) +  
+  geom_point(aes(x = sequence, y = percentage, colour = factor(NSEC2)), shape = 15, show.legend = TRUE) +
+  geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
+  geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
+  geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
+  geom_vline(xintercept = 16.5, color = "#c9c9c9") + # gridline 2009
+  geom_vline(xintercept = 20.5, color = "#c9c9c9") + # gridline 2010
+  geom_vline(xintercept = 24.5, color = "#c9c9c9") + # gridline 2011
+  geom_vline(xintercept = 28.5, color = "#c9c9c9") + # gridline 2012
+  geom_vline(xintercept = 32.5, color = "#c9c9c9") + # gridline 2013
+  geom_vline(xintercept = 36.5, color = "#c9c9c9") + # gridline 2014
+  geom_vline(xintercept = 40.5, color = "#c9c9c9") + # gridline 2015
+  geom_vline(xintercept = 44.5, color = "#c9c9c9") + # gridline 2016
+  geom_vline(xintercept = 48.5, color = "#c9c9c9") + # gridline 2017
+  geom_vline(xintercept = 52.5, color = "#c9c9c9") + # gridline 2018
+  geom_vline(xintercept = 56.5, color = "#c9c9c9") + # gridline 2019
+  geom_vline(xintercept = 60.5, color = "#c9c9c9") + # gridline 2020
+  geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
+
+  # scale and colour
+  scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_y_continuous(breaks = seq(0,0.3,0.05), limits = c(0, 0.3), labels =
+                       scales::percent_format(accuracy = 1L), expand = c(0,0), sec.axis = dup_axis()) +
+  scale_x_continuous(breaks=c(1:68), position = "top",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
+                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
+                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
+                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  # annotation
+  labs(x = "Year", 
+       y = "Percentage", 
+       title ="Figure 7: Overeducated workers",
+       subtitle  = "By occupational level",
+       caption = ""
+       ) +
+
+  # theme
+  theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "lines"),
+        plot.title = element_text(size = 14, margin = ggplot2::margin(5, 0, 0, 0)),
+        plot.subtitle = element_text(size = 12, hjust = 0, margin = ggplot2::margin(5, 0, 15, 0)),
+        plot.caption = element_text(size = 10, hjust = 1, margin = ggplot2::margin(2, 0, 2, 0)),
+        axis.title.x = element_text(margin = ggplot2::margin(t = 8), size = 12),
+        axis.title.y = element_text(margin = ggplot2::margin(r = 5), size = 12),
+        axis.text.x = element_text(size = 12, margin = margin(t = 2)),
+        axis.text.y = element_text(size = 12),
+        axis.text.y.right =  element_text(margin = margin(l = 4)),
+        axis.title.y.right = element_blank(),
+        axis.ticks.length.x = unit(0.1, "cm"), 
+        legend.position = "top", 
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
+  guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 5)))
+
+p_nskills_occ
+
+```
 
 ## Feedback PG
 
