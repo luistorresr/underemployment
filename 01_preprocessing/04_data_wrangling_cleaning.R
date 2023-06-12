@@ -387,6 +387,8 @@ set_label(LFS_clean$ACTHR2) <- "Actual hours in second job including overtime" #
 set_label(LFS_clean$SUMHRS) <- "Total hours worked in reference week in main and second jobs"
 
 
+
+
 ## adding labels to education variables
 
 LFS_clean$higher <- remove_all_labels(LFS_clean$higher) # higher education 
@@ -415,7 +417,7 @@ get_labels(LFS_clean$degree, values = "n") # check value labels
 LFS_clean$quali <- remove_all_labels(LFS_clean$quali) # any general qualifications  
 set_label(LFS_clean$quali) <- "Highest qualification" # add variable label
 LFS_clean$quali <- set_labels(LFS_clean$quali, labels = c(
-  "Degree or equivalent)" = 1,
+  "Degree or equivalent" = 1,
   "Higher education" = 2,
   "GCE, A-level or equivalent" = 3,
   "GCSE grades A*-C or equivalent" = 4,
@@ -497,6 +499,68 @@ get_labels(LFS_clean$LESPAY3, values = "n") # check value labels
 
 view_df(LFS_clean, show.id = FALSE, file = "./data/variable_view.html", max.len = 40) 
 
+
+## adding labels to education variables
+
+LFS_clean$higher <- remove_all_labels(LFS_clean$higher) # higher education 
+set_label(LFS_clean$higher) <- "Type of higher degree" # add variable label
+LFS_clean$higher <- set_labels(LFS_clean$higher, labels = c(
+  "Doctorate" = 1,
+  "Masters" = 2,
+  "Postgraduate Certificate in Education" = 3,
+  "Other postgraduate degree or professional qualification" = 4,
+  "Don’t know" = 5))
+
+get_labels(LFS_clean$higher, values = "n") # check value labels 
+table(LFS_clean$higher)
+
+LFS_clean$degree <- remove_all_labels(LFS_clean$degree) # first degree education
+set_label(LFS_clean$degree) <- "Type of degree already held" # add variable label
+LFS_clean$degree <- set_labels(LFS_clean$degree, labels = c(
+  "A higher degree (including PGCE)" = 1,
+  "A first degree" = 2,
+  "A foundation degree" = 3,
+  "A graduate membership of a professional institution" = 4,
+  "Other" = 5,
+  "Don’t know" = 6))
+
+table(LFS_clean$degree)
+get_labels(LFS_clean$degree, values = "n") # check value labels 
+
+LFS_clean$quali <- remove_all_labels(LFS_clean$quali) # any general qualifications  
+set_label(LFS_clean$quali) <- "Highest qualification" # add variable label
+LFS_clean$quali <- set_labels(LFS_clean$quali, labels = c(
+  "Degree or equivalent" = 1,
+  "Higher education" = 2,
+  "GCE, A-level or equivalent (level " = 3,
+  "GCSE grades A*-C or equivalent" = 4,
+  "Other qualifications" = 5,
+  "No qualification" = 6,
+  "Don’t know" = 7))
+
+table(as_label(LFS_clean$quali))
+get_labels(LFS_clean$quali, values = "n") # check value labels 
+
+LFS_clean <- LFS_clean %>% 
+  mutate(quali2 = 
+           case_when(quali == 1 ~ 4, 
+                     quali == 2 ~ 5,
+                     quali == 3 ~ 3,
+                     quali == 4 ~ 2,
+                     quali == 5 ~ 6,
+                     quali == 6 ~ 1, 
+                     quali == 7 ~ 0))
+
+LFS_clean$quali2 <- set_labels(LFS_clean$quali2, labels = c(
+  "Don’t know" = 0,
+  "No qualification" = 1,
+  "GCSE grades A*-C or equivalent" = 2, 
+  "GCE, A-level or equivalent" = 3, 
+  "Degree or equivalent" = 4, 
+  "Higher education" = 5, 
+  "Other qualifications" = 6))
+
+table(as_label(LFS_clean$quali2))
 
 ### saving the clean dataset
 

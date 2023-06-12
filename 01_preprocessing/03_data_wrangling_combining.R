@@ -530,6 +530,7 @@ variables <- c(
        
         "GRSSWK", # Gross weekly pay in main job
         "GRSSWK2", # Gross weekly pay in second job
+        "HOURPAY", # Average gross hourly pay
         
         # SKILLS
         
