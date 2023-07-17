@@ -1,0 +1,630 @@
+---
+title: "Measuring Underemployment"
+subtitle: 'Trends from 2006 to 2022'
+author: "The Underemployment Project"
+date: '`r Sys.Date()`'
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+	warning = FALSE,
+  embed_fonts = TRUE,
+  fig.align = "center",
+  fig_caption= TRUE,
+  use_bookdown= TRUE,
+  toc= FALSE,
+  toc_depth= 3
+)
+```
+
+```{r libraries, include=FALSE}
+
+#### packages needed
+if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(gridExtra)) install.packages("girdExtra", repos = "http://cran.us.r-project.org")
+if(!require(Hmisc)) install.packages("Hmisc", repos = "http://cran.us.r-project.org")
+if(!require(sjlabelled)) install.packages("sjlabelled", repos = "http://cran.us.r-project.org")
+if(!require(ggthemes)) install.packages("ggthemes", repos = "http://cran.us.r-project.org")
+if(!require(ggtext)) install.packages("ggtext", repos = "http://cran.us.r-project.org")
+if(!require(ggrepel)) install.packages("ggrepel", repos = "http://cran.us.r-project.org")
+if(!require(doBy)) install.packages("doBy", repos = "http://cran.us.r-project.org")
+if(!require(sjmisc)) install.packages("sjmisc", repos = "http://cran.us.r-project.org")
+if(!require(plotly)) install.packages("plotly", repos = "http://cran.us.r-project.org")
+if(!require(flextable)) install.packages("flextable", repos = "http://cran.us.r-project.org")
+if(!require(scales)) install.packages("scales", repos = "http://cran.us.r-project.org")
+if(!require(ggalt)) install.packages("ggalt", repos = "http://cran.us.r-project.org")
+if(!require(janitor)) install.packages("janitor", repos = "http://cran.us.r-project.org")
+if(!require(bookdown)) install.packages("bookdown", repos = "http://cran.us.r-project.org")
+if(!require(rmdformats)) install.packages("rmdformats", repos = "http://cran.us.r-project.org")
+if(!require(htmlwidgets)) install.packages("htmlwidgets", repos = "http://cran.us.r-project.org")
+if(!require(widgetframe)) install.packages("widgetframe", repos = "http://cran.us.r-project.org")
+if(!require(officer)) install.packages("officer", repos = "http://cran.us.r-project.org")
+if(!require(showtext)) install.packages("showtext", repos = "http://cran.us.r-project.org")
+if(!require(colorspace)) install.packages("colorspace", repos = "http://cran.us.r-project.org")
+if(!require(patchwork)) install.packages("patchwork", repos = "http://cran.us.r-project.org")
+if(!require(ggpubr)) install.packages("ggpubr", repos = "http://cran.us.r-project.org")
+
+library(ggalt) # contingency table
+library(tidyverse) # several tools for data manipulation
+library(haven) # read SPSS, Stata, and SAS data
+library(gridExtra) # arrange multiple grid-based plots on a page
+library(Hmisc) # many functions useful for data analysis
+library(sjmisc) # useful to set Na's
+library(sjlabelled) # get_labels function
+library(ggthemes) # themes for ggplot2
+library(ggtext) # fancy text
+library(ggrepel) # help with the position of the labels on ggplot2 graph
+library(doBy) # 'do' something to data stratified 'by' some variables
+library(plotly) # interactive plots
+library(flextable) # formatting tables 
+library(scales) # add scale symbols and colour to axis
+library(janitor) # add totals to tables
+library(rmdformats)
+library(htmlwidgets)
+library(widgetframe)
+library(colorspace) # colour blind friendly pallettes 
+library(officer) # to add additional formatting to tables 
+library(patchwork) # to put graphs side by side
+library(ggpubr)
+library(showtext)
+  font_add_google("Lato")
+  showtext_auto()
+
+
+```
+
+```{r load data, include=FALSE}
+
+load("../data/LFS_clean.rda")
+
+```
+
+
+
+## Background
+
+<p align="justify">This report aims at mapping underemployment trends for employees and self-employed workers in the UK. We use the UK’s largest study on employment circumstances, the Labour Force Survey (LFS), drawing on analysis from the 2006 to 2022 releases (calendar quarters). Our analyses consider only those in employment  between 18 and 64 years old.</p>
+
+
+```{r sample, echo=FALSE}
+
+N_total <- LFS_clean %>% 
+  group_by(as_factor(year), 
+           as_label(quarter)) %>%
+  summarise(Population = sum(na.omit(PWT[AGE >= 18 & AGE <= 64])), # everyone between 18 to 64
+            Active = sum(PWT[ILODEFR <=2 & AGE >= 18 & AGE <= 64]), # in employment and unemployed between 18 to 64
+            Workers = sum(PWT[ILODEFR == 1 & INECAC05 <= 2 & AGE >= 18 & AGE <= 64])) %>% # employee and self-employees between 18 to 64
+  rename(Year = `as_factor(year)`,
+         Quarter = `as_label(quarter)`) # Total population estimates
+
+```
+
+## Skills mismatch
+
+<p align="justify"> We follow definitions the normative and statistical approaches of skills mismatch established by ILO and ONS to calculate:
+■ people who are overeducated for their occupation. This, based on the normative approach of matching an individual's higher qualification (ISCDE) and occupation (ISCO) first-digit indicator.
+■ people who are overeducated for their occupation. This, based on the statistical approach of matching an individual's higher qualification dispersion (ISCDE) and occupation (ISCO) three-digit indicator.</p>
+
+
+### Normative approach to skills mismatch by gender
+
+```{r normative approach to skills mismatch table, echo=FALSE}
+
+options(digits = 3)
+
+n_skills <- LFS_clean %>% # summary table
+  filter(AGE >= 18 & AGE <= 64) %>% 
+  filter(ILODEFR == 1) %>% # only people in employment
+  filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
+  group_by(year, sequence, quarter, SEX, sk_mm) %>% 
+  summarise(count = sum(PWT)) %>% 
+  group_by(year, sequence, quarter, SEX) %>% 
+  # percentage per quarter
+  mutate(percentage = count/sum(count)) %>% 
+  filter(sk_mm == 1) %>%  #filtering by overeducated
+  as_label(.)
+
+```
+
+
+```{r plot skills overeducated employees, fig.width=7, fig.height=3, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+
+p_nskills <- n_skills %>% 
+  ggplot() + 
+  geom_line(aes(x = sequence, y = percentage, colour = factor(SEX)), size = 0.5, show.legend = FALSE) +  
+  geom_point(aes(x = sequence, y = percentage, colour = factor(SEX)), shape = 15, show.legend = TRUE) +
+  geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
+  geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
+  geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
+  geom_vline(xintercept = 16.5, color = "#c9c9c9") + # gridline 2009
+  geom_vline(xintercept = 20.5, color = "#c9c9c9") + # gridline 2010
+  geom_vline(xintercept = 24.5, color = "#c9c9c9") + # gridline 2011
+  geom_vline(xintercept = 28.5, color = "#c9c9c9") + # gridline 2012
+  geom_vline(xintercept = 32.5, color = "#c9c9c9") + # gridline 2013
+  geom_vline(xintercept = 36.5, color = "#c9c9c9") + # gridline 2014
+  geom_vline(xintercept = 40.5, color = "#c9c9c9") + # gridline 2015
+  geom_vline(xintercept = 44.5, color = "#c9c9c9") + # gridline 2016
+  geom_vline(xintercept = 48.5, color = "#c9c9c9") + # gridline 2017
+  geom_vline(xintercept = 52.5, color = "#c9c9c9") + # gridline 2018
+  geom_vline(xintercept = 56.5, color = "#c9c9c9") + # gridline 2019
+  geom_vline(xintercept = 60.5, color = "#c9c9c9") + # gridline 2020
+  geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
+
+  # scale and colour
+  scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_y_continuous(breaks = seq(0,0.3, 0.05), limits = c(0, 0.3), labels =
+                       scales::percent_format(accuracy = 1L), expand = c(0,0), sec.axis = dup_axis()) +
+  scale_x_continuous(breaks=c(1:68), position = "top",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
+                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
+                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
+                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  # annotation
+  labs(x = "Year", 
+       y = "Percentage", 
+       title ="Figure 1: Overeducated workers by gender",
+       subtitle  = "By gender",
+       caption = ""
+       ) +
+
+  # theme
+  theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "lines"),
+        plot.title = element_text(size = 14, margin = ggplot2::margin(5, 0, 0, 0)),
+        plot.subtitle = element_text(size = 12, hjust = 0, margin = ggplot2::margin(5, 0, 15, 0)),
+        plot.caption = element_text(size = 10, hjust = 1, margin = ggplot2::margin(2, 0, 2, 0)),
+        axis.title.x = element_text(margin = ggplot2::margin(t = 8), size = 12),
+        axis.title.y = element_text(margin = ggplot2::margin(r = 5), size = 12),
+        axis.text.x = element_text(size = 12, margin = margin(t = 2)),
+        axis.text.y = element_text(size = 12),
+        axis.text.y.right =  element_text(margin = margin(l = 4)),
+        axis.title.y.right = element_blank(),
+        axis.ticks.length.x = unit(0.1, "cm"), 
+        legend.position = "top", 
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
+  guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 5)))
+
+nskills_total <- n_skills %>% 
+  ggplot() + 
+  geom_bar(aes(x = sequence, y = count, fill = factor(SEX)), stat = "identity", position = "dodge", width=0.9) +   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
+  geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
+  geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
+  geom_vline(xintercept = 16.5, color = "#c9c9c9") + # gridline 2009
+  geom_vline(xintercept = 20.5, color = "#c9c9c9") + # gridline 2010
+  geom_vline(xintercept = 24.5, color = "#c9c9c9") + # gridline 2011
+  geom_vline(xintercept = 28.5, color = "#c9c9c9") + # gridline 2012
+  geom_vline(xintercept = 32.5, color = "#c9c9c9") + # gridline 2013
+  geom_vline(xintercept = 36.5, color = "#c9c9c9") + # gridline 2014
+  geom_vline(xintercept = 40.5, color = "#c9c9c9") + # gridline 2015
+  geom_vline(xintercept = 44.5, color = "#c9c9c9") + # gridline 2016
+  geom_vline(xintercept = 48.5, color = "#c9c9c9") + # gridline 2017
+  geom_vline(xintercept = 52.5, color = "#c9c9c9") + # gridline 2018
+  geom_vline(xintercept = 56.5, color = "#c9c9c9") + # gridline 2019
+  geom_vline(xintercept = 60.5, color = "#c9c9c9") + # gridline 2020
+  geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
+
+  # scale and colour
+  scale_fill_discrete_qualitative(palette = "Dark 3") +
+  scale_x_continuous(breaks=c(1:68),
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
+                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
+                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
+                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_y_continuous(breaks = seq(0,3000000,500000), limits = c(0,3000000), labels = comma, expand = c(0,0), sec.axis = dup_axis()) +
+  
+  # annotation
+  labs(x = "Year", 
+       y = "Total", 
+       title = "Overeducated workers (total)",
+       #subtitle  = "Totals based on people in employment between 2006 and 2022",
+       #caption = c("Note: People in employment (employees and self-employed) between 2006 and 2022")
+       ) +
+
+  # theme
+  theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "lines"),
+        plot.title = element_text(size = 14, margin = ggplot2::margin(5, 0, 5, 15)),
+        plot.subtitle = element_text(size = 12, hjust = 0, margin = ggplot2::margin(5, 0, 15, 0)),
+        plot.caption = element_text(size = 10, hjust = 1, margin = ggplot2::margin(2, 0, 2, 0)),
+        axis.title.x = element_text(margin = ggplot2::margin(t = 8), size = 12),
+        axis.title.y = element_text(margin = ggplot2::margin(r = 2), size = 12),
+        axis.text.x = element_text(size = 12, margin = margin(t = 2)),
+        axis.text.y = element_text(size = 12),
+        axis.ticks.length.x = unit(0.1, "cm"), 
+        axis.text.y.right =  element_text(margin = margin(l = 4)),
+        axis.title.y.right = element_blank(),
+        legend.position = "top", 
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
+  guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 5)))
+
+nskills_total
+
+
+```
+
+
+### Normative approach to skills mismatch by age
+
+```{r normative approach to skills mismatch table, echo=FALSE}
+
+options(digits = 3)
+
+n_skills_age <- LFS_clean %>% # summary table
+  filter(AGE >= 18 & AGE <= 64) %>% 
+  #creating age categories
+  mutate(AGE_cat = case_when(AGE %in% 18:24 ~ "Between 18 and 24",
+                             AGE %in% 25:34 ~ "Between 25 and 34",
+                             AGE %in% 35:44 ~ "Between 35 and 44",
+                             AGE %in% 45:54 ~ "Between 45 and 54",
+                             AGE %in% 55:64 ~ "Between 55 and 64",
+                             is.na(AGE) ~ NA)) %>%
+  filter(ILODEFR == 1) %>% # only people in employment
+  filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
+  group_by(year, sequence, quarter, AGE_cat, sk_mm) %>% 
+  summarise(count = sum(PWT)) %>% 
+  group_by(year, sequence, quarter, AGE_cat) %>% 
+  # percentage per quarter
+  mutate(percentage = count/sum(count)) %>% 
+  filter(sk_mm == 1) %>%  #filtering by overeducated
+  as_label(.)
+
+```
+
+```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+
+p_nskills_age <- n_skills_age %>% 
+  ggplot() + 
+  geom_line(aes(x = sequence, y = percentage, colour = factor(AGE_cat)), size = 0.5, show.legend = FALSE) +  
+  geom_point(aes(x = sequence, y = percentage, colour = factor(AGE_cat)), shape = 15, show.legend = TRUE) +
+  geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
+  geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
+  geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
+  geom_vline(xintercept = 16.5, color = "#c9c9c9") + # gridline 2009
+  geom_vline(xintercept = 20.5, color = "#c9c9c9") + # gridline 2010
+  geom_vline(xintercept = 24.5, color = "#c9c9c9") + # gridline 2011
+  geom_vline(xintercept = 28.5, color = "#c9c9c9") + # gridline 2012
+  geom_vline(xintercept = 32.5, color = "#c9c9c9") + # gridline 2013
+  geom_vline(xintercept = 36.5, color = "#c9c9c9") + # gridline 2014
+  geom_vline(xintercept = 40.5, color = "#c9c9c9") + # gridline 2015
+  geom_vline(xintercept = 44.5, color = "#c9c9c9") + # gridline 2016
+  geom_vline(xintercept = 48.5, color = "#c9c9c9") + # gridline 2017
+  geom_vline(xintercept = 52.5, color = "#c9c9c9") + # gridline 2018
+  geom_vline(xintercept = 56.5, color = "#c9c9c9") + # gridline 2019
+  geom_vline(xintercept = 60.5, color = "#c9c9c9") + # gridline 2020
+  geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
+
+  # scale and colour
+  scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_y_continuous(breaks = seq(0,0.3, 0.05), limits = c(0, 0.3), labels =
+                       scales::percent_format(accuracy = 1L), expand = c(0,0), sec.axis = dup_axis()) +
+  scale_x_continuous(breaks=c(1:68), position = "top",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
+                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
+                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
+                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  # annotation
+  labs(x = "Year", 
+       y = "Percentage", 
+       title ="Figure 3: Overeducated workers",
+       subtitle  = "By age",
+       caption = ""
+       ) +
+
+  # theme
+  theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "lines"),
+        plot.title = element_text(size = 14, margin = ggplot2::margin(5, 0, 0, 0)),
+        plot.subtitle = element_text(size = 12, hjust = 0, margin = ggplot2::margin(5, 0, 15, 0)),
+        plot.caption = element_text(size = 10, hjust = 1, margin = ggplot2::margin(2, 0, 2, 0)),
+        axis.title.x = element_text(margin = ggplot2::margin(t = 8), size = 12),
+        axis.title.y = element_text(margin = ggplot2::margin(r = 5), size = 12),
+        axis.text.x = element_text(size = 12, margin = margin(t = 2)),
+        axis.text.y = element_text(size = 12),
+        axis.text.y.right =  element_text(margin = margin(l = 4)),
+        axis.title.y.right = element_blank(),
+        axis.ticks.length.x = unit(0.1, "cm"), 
+        legend.position = "top", 
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
+  guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 5)))
+
+nskills_age_total <- n_skills_age %>% 
+  ggplot() + 
+  geom_bar(aes(x = sequence, y = count, fill = factor(AGE_cat)), stat = "identity", position = "dodge", width=0.9) +   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
+  geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
+  geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
+  geom_vline(xintercept = 16.5, color = "#c9c9c9") + # gridline 2009
+  geom_vline(xintercept = 20.5, color = "#c9c9c9") + # gridline 2010
+  geom_vline(xintercept = 24.5, color = "#c9c9c9") + # gridline 2011
+  geom_vline(xintercept = 28.5, color = "#c9c9c9") + # gridline 2012
+  geom_vline(xintercept = 32.5, color = "#c9c9c9") + # gridline 2013
+  geom_vline(xintercept = 36.5, color = "#c9c9c9") + # gridline 2014
+  geom_vline(xintercept = 40.5, color = "#c9c9c9") + # gridline 2015
+  geom_vline(xintercept = 44.5, color = "#c9c9c9") + # gridline 2016
+  geom_vline(xintercept = 48.5, color = "#c9c9c9") + # gridline 2017
+  geom_vline(xintercept = 52.5, color = "#c9c9c9") + # gridline 2018
+  geom_vline(xintercept = 56.5, color = "#c9c9c9") + # gridline 2019
+  geom_vline(xintercept = 60.5, color = "#c9c9c9") + # gridline 2020
+  geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
+
+  # scale and colour
+  scale_fill_discrete_qualitative(palette = "Dark 3") +
+  scale_x_continuous(breaks=c(1:68),
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
+                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
+                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
+                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_y_continuous(breaks = seq(0,2000000,500000), limits = c(0,2000000), labels = comma, expand = c(0,0), sec.axis = dup_axis()) +
+  
+  # annotation
+  labs(x = "Year", 
+       y = "Total", 
+       title = "Figure 4: Overeducated workers (total)",
+       #subtitle  = "Totals based on people in employment between 2006 and 2022",
+       #caption = c("Note: People in employment (employees and self-employed) between 2006 and 2022")
+       ) +
+
+  # theme
+  theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "lines"),
+        plot.title = element_text(size = 14, margin = ggplot2::margin(5, 0, 0, 0)),
+        plot.subtitle = element_text(size = 12, hjust = 0, margin = ggplot2::margin(5, 0, 2, 0)),
+        plot.caption = element_text(size = 10, hjust = 1, margin = ggplot2::margin(2, 0, 2, 0)),
+        axis.title.x = element_text(margin = ggplot2::margin(t = 8), size = 12),
+        axis.title.y = element_text(margin = ggplot2::margin(r = 2), size = 12),
+        axis.text.x = element_text(size = 12, margin = margin(t = 2)),
+        axis.text.y = element_text(size = 12),
+        axis.ticks.length.x = unit(0.1, "cm"), 
+        axis.text.y.right =  element_text(margin = margin(l = 4)),
+        axis.title.y.right = element_blank(),
+        legend.position = "none", 
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
+  guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 5)))
+
+
+p_nskills_age / nskills_age_total
+
+```
+
+### Normative approach to skills mismatch by educational level
+
+```{r normative approach to skills mismatch table, echo=FALSE}
+
+options(digits = 3)
+
+n_skills_lvl <- LFS_clean %>% # summary table
+  filter(AGE >= 18 & AGE <= 64) %>% 
+  filter(ILODEFR == 1) %>% # only people in employment
+  filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
+  group_by(year, sequence, quarter, ISCED_cat, sk_mm) %>% 
+  summarise(count = sum(PWT)) %>% 
+  group_by(year, sequence, quarter, ISCED_cat) %>% 
+  # percentage per quarter
+  mutate(percentage = count/sum(count)) %>% 
+  filter(sk_mm == 1) %>%  #filtering by overeducated
+  as_label(.)
+
+```
+
+
+```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+
+p_nskills_lvl <- n_skills_lvl %>% 
+  ggplot() + 
+  geom_line(aes(x = sequence, y = percentage, colour = factor(ISCED_cat)), size = 0.5, show.legend = FALSE) +  
+  geom_point(aes(x = sequence, y = percentage, colour = factor(ISCED_cat)), shape = 15, show.legend = TRUE) +
+  geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
+  geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
+  geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
+  geom_vline(xintercept = 16.5, color = "#c9c9c9") + # gridline 2009
+  geom_vline(xintercept = 20.5, color = "#c9c9c9") + # gridline 2010
+  geom_vline(xintercept = 24.5, color = "#c9c9c9") + # gridline 2011
+  geom_vline(xintercept = 28.5, color = "#c9c9c9") + # gridline 2012
+  geom_vline(xintercept = 32.5, color = "#c9c9c9") + # gridline 2013
+  geom_vline(xintercept = 36.5, color = "#c9c9c9") + # gridline 2014
+  geom_vline(xintercept = 40.5, color = "#c9c9c9") + # gridline 2015
+  geom_vline(xintercept = 44.5, color = "#c9c9c9") + # gridline 2016
+  geom_vline(xintercept = 48.5, color = "#c9c9c9") + # gridline 2017
+  geom_vline(xintercept = 52.5, color = "#c9c9c9") + # gridline 2018
+  geom_vline(xintercept = 56.5, color = "#c9c9c9") + # gridline 2019
+  geom_vline(xintercept = 60.5, color = "#c9c9c9") + # gridline 2020
+  geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
+
+  # scale and colour
+  scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_y_continuous(breaks = seq(0,0.3,0.05), limits = c(0, 0.3), labels =
+                       scales::percent_format(accuracy = 1L), expand = c(0,0), sec.axis = dup_axis()) +
+  scale_x_continuous(breaks=c(1:68), position = "top",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
+                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
+                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
+                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  # annotation
+  labs(x = "Year", 
+       y = "Percentage", 
+       title ="Figure 5: Overeducated workers",
+       subtitle  = "By educational level",
+       caption = ""
+       ) +
+
+  # theme
+  theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "lines"),
+        plot.title = element_text(size = 14, margin = ggplot2::margin(5, 0, 0, 0)),
+        plot.subtitle = element_text(size = 12, hjust = 0, margin = ggplot2::margin(5, 0, 15, 0)),
+        plot.caption = element_text(size = 10, hjust = 1, margin = ggplot2::margin(2, 0, 2, 0)),
+        axis.title.x = element_text(margin = ggplot2::margin(t = 8), size = 12),
+        axis.title.y = element_text(margin = ggplot2::margin(r = 5), size = 12),
+        axis.text.x = element_text(size = 12, margin = margin(t = 2)),
+        axis.text.y = element_text(size = 12),
+        axis.text.y.right =  element_text(margin = margin(l = 4)),
+        axis.title.y.right = element_blank(),
+        axis.ticks.length.x = unit(0.1, "cm"), 
+        legend.position = "top", 
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
+  guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 5)))
+
+nskills_total_lvl <- n_skills_lvl %>% 
+  ggplot() + 
+  geom_bar(aes(x = sequence, y = count, fill = factor(ISCED_cat)), stat = "identity", position = "dodge", width=0.9) +   
+  geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
+  geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
+  geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
+  geom_vline(xintercept = 16.5, color = "#c9c9c9") + # gridline 2009
+  geom_vline(xintercept = 20.5, color = "#c9c9c9") + # gridline 2010
+  geom_vline(xintercept = 24.5, color = "#c9c9c9") + # gridline 2011
+  geom_vline(xintercept = 28.5, color = "#c9c9c9") + # gridline 2012
+  geom_vline(xintercept = 32.5, color = "#c9c9c9") + # gridline 2013
+  geom_vline(xintercept = 36.5, color = "#c9c9c9") + # gridline 2014
+  geom_vline(xintercept = 40.5, color = "#c9c9c9") + # gridline 2015
+  geom_vline(xintercept = 44.5, color = "#c9c9c9") + # gridline 2016
+  geom_vline(xintercept = 48.5, color = "#c9c9c9") + # gridline 2017
+  geom_vline(xintercept = 52.5, color = "#c9c9c9") + # gridline 2018
+  geom_vline(xintercept = 56.5, color = "#c9c9c9") + # gridline 2019
+  geom_vline(xintercept = 60.5, color = "#c9c9c9") + # gridline 2020
+  geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
+
+  # scale and colour
+  scale_fill_discrete_qualitative(palette = "Dark 3") +
+  scale_x_continuous(breaks=c(1:68),
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
+                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
+                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
+                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_y_continuous(breaks = seq(0,3000000,500000), limits = c(0,3000000), labels = comma, expand = c(0,0), sec.axis = dup_axis()) +
+  
+  # annotation
+  labs(x = "Year", 
+       y = "Total", 
+       title = "Figure 6: Overeducated workers (total)",
+       #subtitle  = "Totals based on people in employment between 2006 and 2022",
+       #caption = c("Note: People in employment (employees and self-employed) between 2006 and 2022")
+       ) +
+
+  # theme
+  theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "lines"),
+        plot.title = element_text(size = 14, margin = ggplot2::margin(5, 0, 0, 0)),
+        plot.subtitle = element_text(size = 12, hjust = 0, margin = ggplot2::margin(5, 0, 2, 0)),
+        plot.caption = element_text(size = 10, hjust = 1, margin = ggplot2::margin(2, 0, 2, 0)),
+        axis.title.x = element_text(margin = ggplot2::margin(t = 8), size = 12),
+        axis.title.y = element_text(margin = ggplot2::margin(r = 2), size = 12),
+        axis.text.x = element_text(size = 12, margin = margin(t = 2)),
+        axis.text.y = element_text(size = 12),
+        axis.ticks.length.x = unit(0.1, "cm"), 
+        axis.text.y.right =  element_text(margin = margin(l = 4)),
+        axis.title.y.right = element_blank(),
+        legend.position = "none", 
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
+  guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 5)))
+
+p_nskills_lvl / nskills_total_lvl
+
+```
+#### by occupational category
+
+
+```{r overeducation by occupational category table by nsec, echo=FALSE}
+
+options(digits = 3)
+
+n_skills_occ <- LFS_clean %>% # summary table
+  filter(AGE >= 18 & AGE <= 64) %>% 
+  filter(ILODEFR == 1) %>% # only people in employment
+  filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
+  group_by(year, sequence, quarter, NSEC2,sk_mm) %>% 
+  summarise(count = sum(PWT)) %>% 
+  group_by(year, sequence, quarter, NSEC2) %>% 
+  # percentage per quarter
+  mutate(percentage = count/sum(count)) %>% 
+  filter(!is.na(NSEC2) & !NSEC2 == 6) %>%  # omit no answers and no apply
+  filter(sk_mm == 1) %>%  #filtering by overeducated
+  as_label(.)
+
+```
+
+
+```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+
+p_nskills_occ <- n_skills_occ %>% 
+  ggplot() + 
+  geom_line(aes(x = sequence, y = percentage, colour = factor(NSEC2)), size = 0.5, show.legend = FALSE) +  
+  geom_point(aes(x = sequence, y = percentage, colour = factor(NSEC2)), shape = 15, show.legend = TRUE) +
+  geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
+  geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
+  geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
+  geom_vline(xintercept = 16.5, color = "#c9c9c9") + # gridline 2009
+  geom_vline(xintercept = 20.5, color = "#c9c9c9") + # gridline 2010
+  geom_vline(xintercept = 24.5, color = "#c9c9c9") + # gridline 2011
+  geom_vline(xintercept = 28.5, color = "#c9c9c9") + # gridline 2012
+  geom_vline(xintercept = 32.5, color = "#c9c9c9") + # gridline 2013
+  geom_vline(xintercept = 36.5, color = "#c9c9c9") + # gridline 2014
+  geom_vline(xintercept = 40.5, color = "#c9c9c9") + # gridline 2015
+  geom_vline(xintercept = 44.5, color = "#c9c9c9") + # gridline 2016
+  geom_vline(xintercept = 48.5, color = "#c9c9c9") + # gridline 2017
+  geom_vline(xintercept = 52.5, color = "#c9c9c9") + # gridline 2018
+  geom_vline(xintercept = 56.5, color = "#c9c9c9") + # gridline 2019
+  geom_vline(xintercept = 60.5, color = "#c9c9c9") + # gridline 2020
+  geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
+
+  # scale and colour
+  scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_y_continuous(breaks = seq(0,0.3,0.05), limits = c(0, 0.3), labels =
+                       scales::percent_format(accuracy = 1L), expand = c(0,0), sec.axis = dup_axis()) +
+  scale_x_continuous(breaks=c(1:68), position = "top",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
+                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
+                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
+                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  # annotation
+  labs(x = "Year", 
+       y = "Percentage", 
+       title ="Figure 7: Overeducated workers",
+       subtitle  = "By occupational level",
+       caption = ""
+       ) +
+
+  # theme
+  theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "lines"),
+        plot.title = element_text(size = 14, margin = ggplot2::margin(5, 0, 0, 0)),
+        plot.subtitle = element_text(size = 12, hjust = 0, margin = ggplot2::margin(5, 0, 15, 0)),
+        plot.caption = element_text(size = 10, hjust = 1, margin = ggplot2::margin(2, 0, 2, 0)),
+        axis.title.x = element_text(margin = ggplot2::margin(t = 8), size = 12),
+        axis.title.y = element_text(margin = ggplot2::margin(r = 5), size = 12),
+        axis.text.x = element_text(size = 12, margin = margin(t = 2)),
+        axis.text.y = element_text(size = 12),
+        axis.text.y.right =  element_text(margin = margin(l = 4)),
+        axis.title.y.right = element_blank(),
+        axis.ticks.length.x = unit(0.1, "cm"), 
+        legend.position = "top", 
+        legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
+  guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 5)))
+
+p_nskills_occ
+
+```
+
