@@ -672,7 +672,7 @@ p_nskills_grid <- n_skills %>%
   labs(x = "Year", 
        y = "Percentage", 
        title ="Figure 8: Overeducated workers by gender",
-       subtitle  = "By country",
+       subtitle  = "By nation",
        caption = ""
        ) +
 
