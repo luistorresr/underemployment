@@ -13,7 +13,7 @@ load("C:/Users/destt/The University of Nottingham/Underemployment_quants - Gener
 
 view_df(jm06, show.id = FALSE)  # SIC 2007 conversion variable IN9207SM and IN9207SS
 view_df(jm07, show.id = FALSE)  # SIC 2007 conversion variable IN9207SM and IN9207SS
-view_df(aj08, show.id = FALSE)  # SIC 2007 conversion variable IN9207SM and IN9207SS
+view_df(aj22, show.id = FALSE)  # SIC 2007 conversion variable IN9207SM and IN9207SS
 
 table(jm06$IN9207SM) # summary main job
 table(jm08$IN9207SS) # summary second job
@@ -531,6 +531,7 @@ variables <- c(
        
         "GRSSWK", # Gross weekly pay in main job
         "GRSSWK2", # Gross weekly pay in second job
+        "HOURPAY", # Average gross hourly pay
         
         # SKILLS
         
@@ -548,11 +549,12 @@ variables <- c(
         
         "UNDEMP", # Whether would like to work longer hours, at current basic rate of pay (filter by DIFJOB = 2)
         "UNDHRS", # Number of extra hours would like to work (filter by UNDEMP = 1)
+        "UNDST", # Whether available to start working longer hours, or start a job with longer hours, within next two weeks
+        
         "LESPAY2", # Whether prefer to work shorter hours than at present in current job
         "LESPAY3", # Whether would work shorter hours for less pay (LESPAY2 = 1).
         "OVHRS", # How many fewer hours would you like to work (LESPAY = 1 OR LESPAY3 = 1).
        
-        
          # weights
         "PWT", # Person weight
         "PIWT" # Income weight 
