@@ -51,9 +51,9 @@ LFS_clean$ETH <- replace_labels(LFS_clean$ETH,
                                 labels = c("White" = 1, "Mixed ethnicity" = 2, "Asian / Asian British" = 3, 
                                            "Black/African/Caribean/British Black" = 4, "Chinese" = 5, "Other ethnic group" = 6)) 
 
-set_label(LFS_clean$SEX) <- "Ethnicity" # set variable label
+set_label(LFS_clean$ETH) <- "Ethnicity" # set variable label
 
-get_labels(LFS_clean$SEX, values = "n")
+get_labels(LFS_clean$ETH, values = "n")
 
 ## changing ILO value labels 
 LFS_clean$ILODEFR <- replace_labels(LFS_clean$ILODEFR, 
