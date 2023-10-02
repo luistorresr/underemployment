@@ -104,12 +104,14 @@ N_total <- LFS_clean %>%
 
 ## Skills mismatch
 
-<p align="justify"> We follow definitions the normative approach of skills mismatch established by ILO and ONS to calculate:
-■ people who are overeducated for their occupation. This, based on the normative approach of matching an individual's higher qualification (ISCDE) and occupation (ISCO) first-digit indicator.
+<p align="justify"> We follow definitions for the normative approach of skills mismatch established by ILO and ONS to calculate:
+■ people who are overeducated for their occupation. This, by matching an individual's higher qualification (ISCDE) and occupation (ISCO) first-digit indicator.
 </p>
 
 
-### Skills mismatch by gender
+### Trends by personal characteristics 
+
+#### Men and women
 
 ```{r normative approach to skills mismatch table, echo=FALSE}
 
@@ -134,7 +136,7 @@ n_skills <- LFS_clean %>% # summary table
 
 p_nskills <- n_skills %>% 
   ggplot() + 
-  geom_line(aes(x = sequence, y = percentage, colour = factor(SEX)), size = 0.5, show.legend = FALSE) +  
+  geom_line(aes(x = sequence, y = percentage, colour = factor(SEX)), linewidth = 0.5, show.legend = FALSE) +  
   geom_point(aes(x = sequence, y = percentage, colour = factor(SEX)), shape = 15, show.legend = TRUE) +
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
   geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
@@ -166,7 +168,7 @@ p_nskills <- n_skills %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 1: Overeducated workers",
+       title ="Figure 1: Overeducated workers (percentage)",
        subtitle  = "By gender",
        caption = ""
        ) +
@@ -184,7 +186,7 @@ p_nskills <- n_skills %>%
         axis.text.y.right =  element_text(margin = margin(l = 4)),
         axis.title.y.right = element_blank(),
         axis.ticks.length.x = unit(0.1, "cm"), 
-        legend.position = "top", 
+        legend.position = "none", 
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
@@ -217,7 +219,7 @@ pskills_total <- n_skills %>%
                             "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
                             "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
                             "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
-  scale_y_continuous(breaks = seq(0,2000000,500000), limits = c(0,2000000), labels = comma, expand = c(0,0), sec.axis = dup_axis()) +
+  scale_y_continuous(breaks = seq(0,2500000,500000), limits = c(0,2500000), labels = comma, expand = c(0,0), sec.axis = dup_axis()) +
   
   # annotation
   labs(x = "Year", 
@@ -230,7 +232,7 @@ pskills_total <- n_skills %>%
   # theme
   theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
   theme(plot.margin = unit(c(0, 0, 0, 0), "lines"),
-        plot.title = element_text(size = 14, margin = ggplot2::margin(5, 0, 0, 0)),
+        plot.title = element_text(size = 14, margin = ggplot2::margin(5, 5, 0, 0)),
         plot.subtitle = element_text(size = 12, hjust = 0, margin = ggplot2::margin(5, 0, 2, 0)),
         plot.caption = element_text(size = 10, hjust = 1, margin = ggplot2::margin(2, 0, 2, 0)),
         axis.title.x = element_text(margin = ggplot2::margin(t = 8), size = 12),
@@ -240,7 +242,7 @@ pskills_total <- n_skills %>%
         axis.ticks.length.x = unit(0.1, "cm"), 
         axis.text.y.right =  element_text(margin = margin(l = 4)),
         axis.title.y.right = element_blank(),
-        legend.position = "none", 
+        legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
@@ -253,7 +255,7 @@ p_nskills / pskills_total
 ```
 
 
-### Skills mismatch by age
+#### Age
 
 ```{r normative approach to skills mismatch table, echo=FALSE}
 
@@ -305,7 +307,7 @@ p_nskills_age <- n_skills_age %>%
 
   # scale and colour
   scale_color_discrete_qualitative(palette = "Dark 3") +
-  scale_y_continuous(breaks = seq(0,0.3, 0.05), limits = c(0, 0.3), labels =
+  scale_y_continuous(breaks = seq(0,0.25, 0.05), limits = c(0, 0.25), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0), sec.axis = dup_axis()) +
   scale_x_continuous(breaks=c(1:68), position = "top",
                      labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
@@ -334,7 +336,7 @@ p_nskills_age <- n_skills_age %>%
         axis.text.y.right =  element_text(margin = margin(l = 4)),
         axis.title.y.right = element_blank(),
         axis.ticks.length.x = unit(0.1, "cm"), 
-        legend.position = "top", 
+        legend.position = "none", 
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
@@ -390,7 +392,7 @@ pskills_age_total <- n_skills_age %>%
         axis.ticks.length.x = unit(0.1, "cm"), 
         axis.text.y.right =  element_text(margin = margin(l = 4)),
         axis.title.y.right = element_blank(),
-        legend.position = "none", 
+        legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
@@ -403,7 +405,7 @@ p_nskills_age / pskills_age_total
 
 
 
-### skills mismatch by ethnicity
+#### Ethnicity
 
 ```{r normative approach to skills mismatch table, echo=FALSE}
 
@@ -546,8 +548,8 @@ p_nskills_eth / pskills_total_eth
 ```
 
 
+#### Education
 
-### Skills mismatch by educational level
 
 ```{r normative approach to skills mismatch table, echo=FALSE}
 
@@ -557,11 +559,12 @@ n_skills_lvl <- LFS_clean %>% # summary table
   filter(AGE >= 18 & AGE <= 64) %>% 
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
-  group_by(year, sequence, quarter, ISCED_cat, sk_mm) %>% 
+  group_by(year, sequence, quarter, quali, sk_mm) %>% 
   summarise(count = sum(PWT)) %>% 
-  group_by(year, sequence, quarter, ISCED_cat) %>% 
+  group_by(year, sequence, quarter, quali) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
+  filter(!is.na(quali) & !quali %in% c("7")) %>% 
   filter(sk_mm == 1) %>%  #filtering by overeducated
   as_label(.)
 
@@ -572,8 +575,8 @@ n_skills_lvl <- LFS_clean %>% # summary table
 
 p_nskills_lvl <- n_skills_lvl %>% 
   ggplot() + 
-  geom_line(aes(x = sequence, y = percentage, colour = factor(ISCED_cat)), size = 0.5, show.legend = FALSE) +  
-  geom_point(aes(x = sequence, y = percentage, colour = factor(ISCED_cat)), shape = 15, show.legend = TRUE) +
+  geom_line(aes(x = sequence, y = percentage, colour = factor(quali)), size = 0.5, show.legend = FALSE) +  
+  geom_point(aes(x = sequence, y = percentage, colour = factor(quali)), shape = 15, show.legend = TRUE) +
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
   geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
   geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
@@ -622,7 +625,7 @@ p_nskills_lvl <- n_skills_lvl %>%
         axis.text.y.right =  element_text(margin = margin(l = 4)),
         axis.title.y.right = element_blank(),
         axis.ticks.length.x = unit(0.1, "cm"), 
-        legend.position = "top", 
+        legend.position = "none", 
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
@@ -630,7 +633,7 @@ p_nskills_lvl <- n_skills_lvl %>%
 
 pskills_total_lvl <- n_skills_lvl %>% 
   ggplot() + 
-  geom_bar(aes(x = sequence, y = count, fill = factor(ISCED_cat)), stat = "identity", position = "dodge", width=0.9) +   
+  geom_bar(aes(x = sequence, y = count, fill = factor(quali)), stat = "identity", position = "dodge", width=0.9) +   
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
   geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
   geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
@@ -679,7 +682,7 @@ pskills_total_lvl <- n_skills_lvl %>%
         axis.ticks.length.x = unit(0.1, "cm"), 
         axis.text.y.right =  element_text(margin = margin(l = 4)),
         axis.title.y.right = element_blank(),
-        legend.position = "none", 
+        legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
@@ -689,7 +692,10 @@ p_nskills_lvl / pskills_total_lvl
 
 ```
 
-#### Skills mismatch by occupational category
+### Trends by job characteristics 
+
+
+#### Occupational category
 
 
 ```{r overeducation by occupational category table by nsec, echo=FALSE}
@@ -766,7 +772,7 @@ p_nskills_occ <- n_skills_occ %>%
         axis.text.y.right =  element_text(margin = margin(l = 4)),
         axis.title.y.right = element_blank(),
         axis.ticks.length.x = unit(0.1, "cm"), 
-        legend.position = "top", 
+        legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
@@ -777,7 +783,7 @@ p_nskills_occ
 ```
 
 
-#### Skills mismatch by work arrangement
+####  Work arrangements
 
 
 ```{r overeducation by work arrangement table by STAT, echo=FALSE}
@@ -854,7 +860,7 @@ p_nskills_wa <- n_skills_wa %>%
         axis.text.y.right =  element_text(margin = margin(l = 4)),
         axis.title.y.right = element_blank(),
         axis.ticks.length.x = unit(0.1, "cm"), 
-        legend.position = "top", 
+        legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
@@ -865,10 +871,11 @@ p_nskills_wa
 ```
 
 
-#### Skills mismatch by region
+### Sectoral division 
 
+#### Region
 
-```{r overeducation by nation table by country2, echo=FALSE}
+```{r overeducation by nation table by REGWKR, echo=FALSE}
 
 options(digits = 3)
 
@@ -913,7 +920,7 @@ p_nskills_reg <- n_skills_reg %>%
 
   # scale and colour
   scale_color_discrete_qualitative(palette = "Dark 3") +
-  scale_y_continuous(breaks = seq(0,0.25,0.03), limits = c(0, 0.25), labels =
+  scale_y_continuous(breaks = seq(0,0.18,0.03), limits = c(0, 0.18), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0), sec.axis = dup_axis()) +
   scale_x_continuous(breaks=c(1:68), position = "bottom",
                      labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
@@ -942,7 +949,7 @@ p_nskills_reg <- n_skills_reg %>%
         axis.text.y.right =  element_text(margin = margin(l = 4)),
         axis.title.y.right = element_blank(),
         axis.ticks.length.x = unit(0.1, "cm"), 
-        legend.position = "top", 
+        legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
@@ -952,7 +959,7 @@ p_nskills_reg
 
 ```
 
-#### Skills mismatch by nation
+#### Nation
 
 
 ```{r overeducation by nation table by country2, echo=FALSE}
@@ -1000,7 +1007,7 @@ p_nskills_con <- n_skills_con %>%
 
   # scale and colour
   scale_color_discrete_qualitative(palette = "Dark 3") +
-  scale_y_continuous(breaks = seq(0,0.25,0.03), limits = c(0, 0.25), labels =
+  scale_y_continuous(breaks = seq(0,0.15,0.03), limits = c(0, 0.15), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0), sec.axis = dup_axis()) +
   scale_x_continuous(breaks=c(1:68), position = "bottom",
                      labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
@@ -1029,7 +1036,7 @@ p_nskills_con <- n_skills_con %>%
         axis.text.y.right =  element_text(margin = margin(l = 4)),
         axis.title.y.right = element_blank(),
         axis.ticks.length.x = unit(0.1, "cm"), 
-        legend.position = "top", 
+        legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
@@ -1040,7 +1047,7 @@ p_nskills_con
 ```
 
 
-#### Skills mismatch by industry
+#### Industry 
 
 
 ```{r overeducation by industry sector table by ind1, echo=FALSE}
@@ -1089,7 +1096,7 @@ p_nskills_ind <- n_skills_ind %>%
 
   # scale and colour
   scale_color_discrete_qualitative(palette = "Dark 3") +
-  scale_y_continuous(breaks = seq(0,0.3,0.05), limits = c(0, 0.3), labels =
+  scale_y_continuous(breaks = seq(0,0.18,0.03), limits = c(0, 0.18), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0), sec.axis = dup_axis()) +
   scale_x_continuous(breaks=c(1:68), position = "bottom",
                      labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
@@ -1118,7 +1125,7 @@ p_nskills_ind <- n_skills_ind %>%
         axis.text.y.right =  element_text(margin = margin(l = 4)),
         axis.title.y.right = element_blank(),
         axis.ticks.length.x = unit(0.1, "cm"), 
-        legend.position = "top", 
+        legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
         panel.grid.major = element_line(color = "gray90", linewidth = .5)) +
