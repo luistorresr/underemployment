@@ -2,7 +2,7 @@
 
 # Load LFS data
 
-load("data/LFS_base.rda")
+load("data/LFS.rda")
 
 
 # Explore variable names
