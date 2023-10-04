@@ -285,7 +285,7 @@ jm12 <- jm12 %>% mutate(year = 2012, quarter = 1, sequence = 25, PIWT = PIWT18, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
                         FLED = NA)
 
 aj12 <- aj12 %>% mutate(year = 2012, quarter = 2, sequence = 26, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
@@ -634,6 +634,7 @@ variables <- c(
         
         "JOBTYP", # Whether job permanent (1 = permanent / 2 = Not permanent in some way)
         "WHYTMP6", # Reason for the job to be temporary 
+        "FLED", # type of work arrangement 
 
         # SECOND JOB
         
