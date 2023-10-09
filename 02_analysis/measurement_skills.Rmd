@@ -3,7 +3,6 @@ title: "Measuring Underemployment"
 subtitle: 'Trends from 2006 to 2022'
 author: "The Underemployment Project"
 date: '`r Sys.Date()`'
-
 ---
 
 ```{r setup, include=FALSE}
@@ -100,8 +99,8 @@ N_total <- LFS_clean %>%
 
 # Skills-related underemployment
 
-Skills-related underemployment, skills underutilisation or overqualification is defined as a situation of mismatch between the skills needed and the skills offered in the labour market, in which the skills from individuals surpasses the requirements of a job (Rafferty, 2020). Furthemore, skills-related underemployment is a relevant issue for nations and companies alike, in which the full potential and productive capability of employees is not being used (ILO, 2014).
-According to ILO (2008), skills-related underemployment is measured through a proxy that compares the relation between the highest qualification held by an employee and their current occupation. In national surveys such as the LFS, this can measured through a normative approach or a statistical approach. For this report it is used a normative approach because according to the literature (Sutherland, 2012; Tarvid, 2012), it allows to standardized the categories of "Overqualified", "Matched" and "Underqualified" through time.
+<p align="justify">Skills-related underemployment, skills underutilisation or overqualification is defined as a situation of mismatch between the skills needed and the skills offered in the labour market, in which the skills from individuals surpasses the requirements of a job (Rafferty, 2020). Furthemore, skills-related underemployment is a relevant issue for nations and companies alike, in which the full potential and productive capability of employees is not being used (ILO, 2014).
+According to ILO (2008), skills-related underemployment is measured through a proxy that compares the relation between the highest qualification held by an employee and their current occupation. In national surveys such as the LFS, this can be measured through a normative approach or a statistical approach. For this report it is used a normative approach because according to the literature (Sutherland, 2012; Tarvid, 2012), it allows to standardized the categories of "Overqualified", "Matched" and "Underqualified" through time.
 Based on the definitions provided by ILO and ONS, skills-related underemployment has been operationalized as follows:
 
 - Employees' highest qualification is categorised according to the first digit of the International Standard Classification of Education (ISCED-97) and then classified into thee categories. Later, ISCED levels 1 and 2 are assigned as "Low-skilled", levels 3 and 4 are considered "Intermediate", and levels 5 and 6 as "High-skilled".
@@ -114,17 +113,17 @@ In addition, for this report it is important to consider the following:
 - As stated by the ONS (2022), between wave 2 (April-June) of 2020 and wave 1 (January-March) of 2022 LFS sample size was significantly affected due to the effects of the coronavirus pandemic social distancing measures and this organisation has been noted this can affect results from this period.
 - Since wave 2 (April-June) of 2011 of the LFS, the ethnicity variables are modified in accordance to census data. Therefore, in this report, this variable was recoded on datasets from wave 2 of 2011 onward to the format previously used between wave 1 of 2006 and wave 1 of 2011 for analysis purposes.
 
-For this report, skills-related underemployment is depicted by personal characteristics, job arrangements, and sector division (geographic and industrial). 
+For this report, skills-related underemployment is depicted by personal characteristics, job arrangements, and sectoral division (geographic and industrial).</p> 
 
 ## Trends by personal characteristics 
 
-This section indicates the development of skill-related underemployment between 2006 and 2022 in the UK in terms of gender (men and women), age segments, ethnicity and educational level.
+<p align="justify">This section indicates the development of skill-related underemployment between 2006 and 2022 in the UK in terms of gender (men and women), age segments, ethnicity and educational level.</p>
 
 ### Men and women
 
-As figure 1 illustrates, the number of individuals from both groups categorised as skills-related underemployed has steadily increased between 2006 to 2022. Nonetheless, although between 2006 and 2008 the number of men and women under this condition was similar, since 2009 to 2022 the gap between women and men has widened by 2,89%.   
+<p align="justify"> Figure 1 illustrates that the proportion of individuals categorised as skills-related underemployed has steadily increased between 2006 to 2022. Nonetheless, although between 2006 and 2008 the percentage of overqualified male and female workers was similar, since 2009 to 2022 the gap between women and men has widened, in which by 2022 the percentage of female workers under this condition was 2,89% higher than male workers.</p>   
 
-```{r normative approach to skills mismatch table, echo=FALSE}
+```{r overqualification by men and women table by SEX, echo=FALSE}
 
 options(digits = 3)
 
@@ -137,13 +136,13 @@ n_skills <- LFS_clean %>% # summary table
   group_by(year, sequence, quarter, SEX) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
-  filter(sk_mm == 1) %>%  #filtering by overeducated
+  filter(sk_mm == 1) %>%  #filtering by overqualified
   as_label(.)
 
 ```
 
 
-```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+```{r plot overqualified employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
 
 p_nskills <- n_skills %>% 
   ggplot() + 
@@ -179,7 +178,7 @@ p_nskills <- n_skills %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 1. Overeducated workers by gender (percentages and totals)",
+       title ="Figure 1. Overqualified workers by gender (percentages and totals)",
        subtitle  = "",
        caption = ""
        ) +
@@ -267,10 +266,10 @@ p_nskills / pskills_total
 
 #### Age
 
-In terms of age groups, although it is possible to identify the age group of "Between 18 and 24 years old" as the one with the largest percentage of its members are skills-related underemployment, the majority of individuals under this conditions are part of the "Between 25 and 34 years old" group.  
+<p align="justify"> Figure 2 shows that although it is possible to identify the age group of "Between 18 and 24 years old" as the one with the largest percentage of its members are skills-related underemployment, the majority of individuals under this conditions are part of the "Between 25 and 34 years old" group.</p>  
 
 
-```{r normative approach to skills mismatch table, echo=FALSE}
+```{r overqualification by age table by AGE, echo=FALSE}
 
 options(digits = 3)
 
@@ -290,12 +289,12 @@ n_skills_age <- LFS_clean %>% # summary table
   group_by(year, sequence, quarter, AGE_cat) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
-  filter(sk_mm == 1) %>%  #filtering by overeducated
+  filter(sk_mm == 1) %>%  #filtering by overqualified
   as_label(.)
 
 ```
 
-```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+```{r plot overqualified employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
 
 p_nskills_age <- n_skills_age %>% 
   ggplot() + 
@@ -331,7 +330,7 @@ p_nskills_age <- n_skills_age %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 2. Overeducated workers by age (percentages and totals)",
+       title ="Figure 2. Overqualified workers by age (percentages and totals)",
        subtitle  = "",
        caption = ""
        ) +
@@ -420,7 +419,7 @@ p_nskills_age / pskills_age_total
 
 
 
-```{r normative approach to skills mismatch table, echo=FALSE}
+```{r overqualification by ethnicity table by ETH, echo=FALSE}
 
 options(digits = 3)
 
@@ -433,13 +432,13 @@ n_skills_eth <- LFS_clean %>% # summary table
   group_by(year, sequence, quarter, ETH) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
-  filter(sk_mm == 1) %>%  #filtering by overeducated
+  filter(sk_mm == 1) %>%  #filtering by overqualified
   as_label(.)
 
 ```
 
 
-```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+```{r plot overqualified employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
 
 p_nskills_eth <- n_skills_eth %>% 
   ggplot() + 
@@ -475,7 +474,7 @@ p_nskills_eth <- n_skills_eth %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 3. Overeducated workers by ethnic groups (percentages and totals)",
+       title ="Figure 3. Overqualified workers by ethnic groups (percentages and totals)",
        subtitle  = "",
        caption = ""
        ) +
@@ -563,9 +562,9 @@ p_nskills_eth / pskills_total_eth
 
 #### Education
 
-Figure 4 highlights the educational level of "Degree or above" as the group with the highest number of individuals categorised as skills-related underemployed throughout 2006 to 2022. Furthermore, although the number of individuals that hold "Higher education" and "GCE, A-level or equivalent" that are overeducated for their jobs has remained steady in this period, the percentage of overeducated employees with a "Degree or above" has increased by 5,99% in this period.
+<p align="justify">Figure 4 highlights the educational level of "Degree or above" as the group with the highest number of individuals categorised as skills-related underemployed throughout 2006 to 2022. Furthermore, although the number of overqualified workers that hold a "Higher education" and "GCE, A-level or equivalent" has not experienced relevant changes in this period, the percentage of overqualified employees with a "Degree or above" has increased by 5,99%.</p>
 
-```{r normative approach to skills mismatch table, echo=FALSE}
+```{r overqualification by educational level table by quali, echo=FALSE}
 
 options(digits = 3)
 
@@ -579,13 +578,13 @@ n_skills_lvl <- LFS_clean %>% # summary table
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(!is.na(quali) & !quali %in% c("7")) %>% 
-  filter(sk_mm == 1) %>%  #filtering by overeducated
+  filter(sk_mm == 1) %>%  #filtering by overqualified
   as_label(.)
 
 ```
 
 
-```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+```{r plot overqualified employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
 
 p_nskills_lvl <- n_skills_lvl %>% 
   ggplot() + 
@@ -621,7 +620,7 @@ p_nskills_lvl <- n_skills_lvl %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 4. Overeducated workers by educational level (percentages and totals)",
+       title ="Figure 4. Overqualified workers by educational level (percentages and totals)",
        subtitle  = "",
        caption = ""
        ) +
@@ -708,15 +707,14 @@ p_nskills_lvl / pskills_total_lvl
 
 ## Trends by job characteristics 
 
-Meanwhile, this depicts the distribution of skill-related underemployed individuals in terms of occupational category, work arrangement and flexible employment.
-
+<p align="justify">Meanwhile, this section depicts the distribution of skill-related underemployed individuals in terms of occupational category, work arrangement and flexible employment.</p>
 
 ### Occupational category
 
-As for occupational categories, although the group "Intermediate" has the largest proportion of overeducated employees, the majority of individuals under this conditions are related to "routine and semi-routine" occupations. In addition, figure 5 evidences that in this period only managerial positions have not experienced a relevant increase of employees that have higher qualifications than those required for their roles.
+<p align="justify">Figure 5 shows the "Intermediate" occupational category as the group with the largest proportion of overqualified employees. Nonetheless, the majority of skill-related underemployed are related to "routine and semi-routine" occupations. In addition, figure 5 indicates that between 2006 and 2022 only managerial positions have not experienced a relevant increase of employees that have higher qualifications than those required for their roles.</p>
 
 
-```{r overeducation by occupational category table by nsec, echo=FALSE}
+```{r overqualification by occupational category table by nsec2, echo=FALSE}
 
 options(digits = 3)
 
@@ -730,13 +728,13 @@ n_skills_occ <- LFS_clean %>% # summary table
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(!is.na(NSEC2) & !NSEC2 == 6) %>%  # omit no answers and no apply
-  filter(sk_mm == 1) %>%  #filtering by overeducated
+  filter(sk_mm == 1) %>%  #filtering by overqualified
   as_label(.)
 
 ```
 
 
-```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+```{r plot overqualified employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
 
 p_nskills_occ <- n_skills_occ %>% 
   ggplot() + 
@@ -772,7 +770,7 @@ p_nskills_occ <- n_skills_occ %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 5. Overeducated workers by occupational category (percentages and totals)",
+       title ="Figure 5. Overqualified workers by occupational category (percentages and totals)",
        subtitle  = "",
        caption = ""
        ) +
@@ -860,9 +858,9 @@ p_nskills_occ / pskills_total_occ
 
 ###  Work arrangement
 
-A larger proportion of employees under a "non-permanent" work arrangement are overeducated than those with a "permanent" contract. Nonetheless, figure 6 exhibits that the former experiences variations throughout each year whereas the latter has had a steady increase between 2006 and 2022.   
+<p align="justify">Figure 6 shows that the proportion of overqualified employees is larger among those in a "non-permanent" work arrangement than those with a "permanent" contract. In addition, this figure illustrates that the number of employees in a non-permanent work arrangement has relevant variations throughout each year.</p>   
 
-```{r overeducation by work arrangement table by STAT, echo=FALSE}
+```{r overqualification by work arrangement table by JOBTYP, echo=FALSE}
 
 options(digits = 3)
 
@@ -876,13 +874,13 @@ n_skills_wa <- LFS_clean %>% # summary table
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(!is.na(JOBTYP)) %>%  # omit no answers and no apply
-  filter(sk_mm == 1) %>%  #filtering by overeducated
+  filter(sk_mm == 1) %>%  #filtering by overqualified
   as_label(.)
 
 ```
 
 
-```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+```{r plot overqualified employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
 
 p_nskills_wa <- n_skills_wa %>% 
   ggplot() + 
@@ -918,7 +916,7 @@ p_nskills_wa <- n_skills_wa %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 6. Overeducated workers by work arrangement (percentages and totals)",
+       title ="Figure 6. Overqualified workers by work arrangement (percentages and totals)",
        subtitle  = "",
        caption = ""
        ) +
@@ -1006,7 +1004,7 @@ p_nskills_wa / pskills_total_wa
 ###  Flexible employment
 
 
-```{r overeducation by work arrangement table by STAT, echo=FALSE}
+```{r overqualification by flexible employment type table by FLED, echo=FALSE}
 
 options(digits = 3)
 
@@ -1020,13 +1018,13 @@ n_skills_fled <- LFS_clean %>% # summary table
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(!is.na(JOBTYP)) %>%  # omit no answers and no apply
-  filter(sk_mm == 1) %>%  #filtering by overeducated
+  filter(sk_mm == 1) %>%  #filtering by overqualified
   as_label(.)
 
 ```
 
 
-```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+```{r plot skills overqualified employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
 
 p_nskills_fled <- n_skills_fled %>% 
   ggplot() + 
@@ -1062,7 +1060,7 @@ p_nskills_fled <- n_skills_fled %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 7. Overeducated workers in flexible employment (percentages and totals)",
+       title ="Figure 7. Overqualified workers in flexible employment (percentages and totals)",
        subtitle  = "",
        caption = ""
        ) +
@@ -1150,13 +1148,13 @@ p_nskills_fled / pskills_total_fled
 
 ## Sectoral division 
 
-Lastly, the sectoral division illustrates the distribution of skill-related underemployment by UK's nations and regions as well as its industry sectors. It is important to note that this report focuses on the industry sectors and regions that contain the cities related to the current research project. 
+<p align="justify">Lastly, this section illustrates the distribution of skills-related underemployment by UK's nations and regions as well as its industry sectors. It is important to note that this report focuses on the industry sectors and regions that contain the cities related to the current research project.</p> 
 
 ### Region
 
-In terms of region, it is possible to observe that the four regions from the cities involved in the current research have experienced between 2006 and 2022 a steady increase of the proportion of their population that has higher qualifications than those required by their jobs. Futhermore, currently 13% of the population of the "Greater Manchester" and "Strathclyde" and "South West" is categorised as skills-related undermployed while 11% of the population from the "East Midlands" region is in this condition.   
+<p align="justify">Figure 7 shows that the four regions in which the cities involved in the current research are located have experienced between 2006 and 2022 a steady increase of overqualified workers. Furthermore, currently 13% of the population of the "Greater Manchester" and "Strathclyde" and "South West" is categorised as skills-related underemployed while 11% of the population from the "East Midlands" region is in this condition.</p>   
 
-```{r overeducation by region table by REGWKR, echo=FALSE}
+```{r overqualification by region table by REGWKR, echo=FALSE}
 
 options(digits = 3)
 
@@ -1170,13 +1168,13 @@ n_skills_reg <- LFS_clean %>% # summary table
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(REGWKR %in% c(6,13,16,20) &!is.na(REGWKR)) %>%  # omit no answers and no apply
-  filter(sk_mm == 1) %>%  #filtering by overeducated
+  filter(sk_mm == 1) %>%  #filtering by overqualified
   as_label(.)
 
 ```
 
 
-```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+```{r plot skills overqualified employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
 
 p_nskills_reg <- n_skills_reg %>% 
   ggplot() + 
@@ -1212,7 +1210,7 @@ p_nskills_reg <- n_skills_reg %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 8. Overeducated workers by region (percentages and totals)",
+       title ="Figure 8. Overqualified workers by region (percentages and totals)",
        subtitle  = "",
        caption = "Nottingham = East Midlands, Bristol = South West, Manchaster = Greater Manchester, Glasgow = Strathclyde"
        ) +
@@ -1299,9 +1297,9 @@ p_nskills_reg / pskills_total_reg
 
 ### Nation
 
-Likewise, between 2006 and 2022 the four nations from the UK have experienced a steady increase of skills-related underemployees. In this regard, Scotland is currently the country from the UK with largest percentage of overeducated employees, with a 2% above the other three nations.
+<p align="justify">Likewise, between 2006 and 2022 the four nations from the UK have experienced a steady increase of employees that have higher qualifications than the one required in their jobs. In this regard, Scotland is currently the country with largest percentage of overqualified employees, with a 2% above the other three nations.</p>
 
-```{r overeducation by nation table by country2, echo=FALSE}
+```{r overqualification by nation table by country2, echo=FALSE}
 
 options(digits = 3)
 
@@ -1315,13 +1313,13 @@ n_skills_con <- LFS_clean %>% # summary table
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(!is.na(COUNTRY2)) %>%  # omit no answers and no apply
-  filter(sk_mm == 1) %>%  #filtering by overeducated
+  filter(sk_mm == 1) %>%  #filtering by overqualified
   as_label(.)
 
 ```
 
 
-```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+```{r plot skills overqualified employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
 
 p_nskills_con <- n_skills_con %>% 
   ggplot() + 
@@ -1357,7 +1355,7 @@ p_nskills_con <- n_skills_con %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 9. Overeducated workers by nation",
+       title ="Figure 9. Overqualified workers by nation",
        subtitle  = "",
        caption = ""
        ) +
@@ -1388,10 +1386,10 @@ p_nskills_con
 
 ### Industry 
 
-Finally, figure 10 shows that between 2006 and 2022 the percentage of overeducated employees has been higher in the retail industry than the human health. Nonetheless, it is also possible observed that both activities have experienced a similar development during this period. 
+<p align="justify">Finally, figure 10 shows that between 2006 and 2022 the percentage of overqualified employees has been higher in the retail industry than the human health. In addition, although it is also possible to observe that both activities have experienced a similar development until 2021, in 2022 only in the human health sector the number of overqualified employees has decreased in comparison to the previous year.</p> 
 
 
-```{r overeducation by industry sector table by ind1, echo=FALSE}
+```{r overqualification by industry sector table by ind1, echo=FALSE}
 
 options(digits = 3)
 
@@ -1405,14 +1403,13 @@ n_skills_ind <- LFS_clean %>% # summary table
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(ind1 %in% c(7, 17) & !is.na(ind1)) %>%  # omit no answers and no apply
-  filter(sk_mm == 1) %>%  #filtering by overeducated
+  filter(sk_mm == 1) %>%  #filtering by overqualified
   as_label(.)
-
 
 ```
 
 
-```{r plot skills overeducated employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
+```{r plot skills overqualified employees, fig.width=9, fig.height=6, fig.fullwidth=TRUE, fig.cap= "workers who have a qualification above the required for their occupation"}
 
 p_nskills_ind <- n_skills_ind %>% 
   ggplot() + 
@@ -1448,7 +1445,7 @@ p_nskills_ind <- n_skills_ind %>%
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
-       title ="Figure 10. Overeducated workers by industry (percentages and totals)",
+       title ="Figure 10. Overqualified workers by industry (percentages and totals)",
        subtitle  = "",
        caption = "Filtered by retail and human health economic activities"
        ) +
