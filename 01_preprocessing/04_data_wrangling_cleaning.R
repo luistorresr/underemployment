@@ -355,6 +355,24 @@ LFS_clean$WHYTMP6 <- set_labels(LFS_clean$WHYTMP6, labels = c(
 get_labels(LFS_clean$WHYTMP6, values = "n") # check value labels 
 
 
+## adding value labels to FLED
+
+
+LFS_clean$FLED <- remove_all_labels(LFS_clean$FLED)
+set_label(LFS_clean$FLED) <- "Type of work arrangement" # add variable label
+LFS_clean$FLED <- set_labels(LFS_clean$FLED, labels = c(
+  "Flexi-time" = 1,
+  "Annualised hours contract" = 2,
+  "Term-time working" = 3,
+  "Job sharing" = 4,
+  "Condensed or compressed hours" = 5,
+  "Zero hours contract" = 6, 
+  "On call working" = 7,
+  "None of these" = 8))
+
+get_labels(LFS_clean$WHYTMP6, values = "n") # check value labels 
+
+
 ## adding value labels to SECJOB
 
 LFS_clean$SECJOB <- remove_all_labels(LFS_clean$SECJOB)
@@ -539,7 +557,7 @@ attr(LFS_clean$degree, "labels")
 table(LFS_clean$higher)
 attr(LFS_clean$higher, "labels")
 
-### Reviewing skills variables
+###Reviewing skills variables
 
 table(LFS_clean$quali, LFS_clean$degree)
 table(LFS_clean$quali, LFS_clean$higher)
@@ -554,43 +572,43 @@ table(LFS_clean$higher, LFS_clean$degree)
 
 LFS_clean <- LFS_clean %>% mutate(education = case_when(
   #Doctorate
-  higher == 1 & degree %in% 1:6 & quali %in% 1:7 ~ 1,
+  higher == 1 & degree %in% 1:6 & quali %in% 1:7 & quali2 %in% 0:6 ~ 1,
   #Masters
-  higher == 2 & degree %in% 1:6 & quali %in% 1:7 ~ 2,
+  higher == 2 & degree %in% 1:6 & quali %in% 1:7 & quali2 %in% 0:6 ~ 2,
   #PG Diploma
-  higher %in% 3:4 & degree %in% 1:6 & quali %in% 1:7 ~ 3,
+  higher %in% 3:4 & degree %in% 1:6 & quali %in% 1:7 & quali2 %in% 0:6 ~ 3,
   #DK HE
-  higher == 5 & degree %in% 1:6 & quali %in% 1:7 ~ 4,
-  is.na(higher) & degree == 1 & quali %in% 1:7 ~ 4,
+  higher == 5 & degree %in% 1:6 & quali %in% 1:7 & quali2 %in% 0:6 ~ 4,
+  is.na(higher) & degree == 1 & quali %in% 1:7 & quali2 %in% 0:6 ~ 4,
   #First degree
-  is.na(higher) & degree == 2 & quali %in% 1:7 ~ 5,
+  is.na(higher) & degree == 2 & quali %in% 1:7 & quali2 %in% 0:6 ~ 5,
   #Foundation degree
-  is.na(higher) & degree == 3 & quali %in% 1:7 ~ 6,
+  is.na(higher) & degree == 3 & quali %in% 1:7 & quali2 %in% 0:6 ~ 6,
   #Graduate membership of a professional institution
-  is.na(higher) & degree == 4 & quali %in% 1:7 ~ 7,
+  is.na(higher) & degree == 4 & quali %in% 1:7 & quali2 %in% 0:6 ~ 7,
   #Other degree
-  is.na(higher) & degree == 5 & quali %in% 1:7 ~ 8,
+  is.na(higher) & degree == 5 & quali %in% 1:7 & quali2 %in% 0:6 ~ 8,
   #DK degree
-  is.na(higher) & degree == 6 & quali %in% 1:7 ~ 9,
-  is.na(higher) & is.na(degree) & quali == 1 ~ 9,
+  is.na(higher) & degree == 6 & quali %in% 1:7 & quali2 %in% 0:6 ~ 9,
+  is.na(higher) & is.na(degree) & quali == 1 & quali2 %in% 0:6 ~ 9,
   is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 4 ~ 9,
   #HE
-  is.na(higher) & is.na(degree) & quali == 2 ~ 10,
+  is.na(higher) & is.na(degree) & quali == 2 & quali2 %in% 0:6 ~ 10,
   is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 5 ~ 10,
   # GCE, A-level or equivalent
-  is.na(higher) & is.na(degree) & quali == 3 ~ 11,
+  is.na(higher) & is.na(degree) & quali == 3 & quali2 %in% 0:6 ~ 11,
   is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 3 ~ 11,
   # GCSE grades A*-C or equivalent
-  is.na(higher) & is.na(degree) & quali == 4 ~ 12,
+  is.na(higher) & is.na(degree) & quali == 4 & quali2 %in% 0:6 ~ 12,
   is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 2 ~ 12,
   # Other qualification
-  is.na(higher) & is.na(degree) & quali == 5 ~ 13,
+  is.na(higher) & is.na(degree) & quali == 5 & quali2 %in% 0:6 ~ 13,
   is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 6 ~ 13,
   #No qual
-  is.na(higher) & is.na(degree) & quali == 6 ~ 14,
+  is.na(higher) & is.na(degree) & quali == 6 & quali2 %in% 0:6 ~ 14,
   is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 1 ~ 14,
   #DK qual
-  is.na(higher) & is.na(degree) & quali == 7 ~ 15,
+  is.na(higher) & is.na(degree) & quali == 7 & quali2 %in% 0:6 ~ 15,
   is.na(higher) & is.na(degree) & is.na(quali) & quali2 == 0 ~ 15,
   #NA
   is.na(higher) & is.na(degree) & is.na(quali) & is.na(quali) ~ NA,

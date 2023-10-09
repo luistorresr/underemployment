@@ -2,7 +2,7 @@
 
 # Load LFS data
 
-load("data/LFS_base.rda")
+load("data/LFS.rda")
 
 
 # Explore variable names
@@ -18,9 +18,12 @@ view_df(aj22, show.id = FALSE)  # SIC 2007 conversion variable IN9207SM and IN92
 table(jm06$IN9207SM) # summary main job
 table(jm08$IN9207SS) # summary second job
 get_labels(jm08$IN9207SM, values = "n")
-class(jm08$IN9207SM)
+class(aj08$FLED9D)
 
 view_df(od09, show.id = FALSE)  
+view_df(aj06, show.id = FALSE)  
+view_df(od10, show.id = FALSE)  
+view_df(od15, show.id = FALSE) 
 view_df(js22, show.id = FALSE)  
 
 table(jm22$INDS07M)
@@ -30,14 +33,14 @@ get_labels(aj22$INDS07M, values = "n")
 ## Occupation
 ### 2005 to 2010,  SC2KMMJ, Major occupation group (main job) and SC2KSMJ	Major occupation group (second job)
 ### 2011 to 2020 SC10MMJ (main job) and  SC10SMJ (second job)
-### 2021 and beyong is NSECMJ20 (main job) and SC20SMJ (second job)
+### 2021 and beyond is NSECMJ20 (main job) and SC20SMJ (second job)
 
 view_df(jm21, show.id = FALSE)
 
 ## Needing further standardization 
 
 ###"FLED10", # Type of agreed work hours arrangement 
-###"JB2T10", # way in which job was not permanent (agency, casua, seasonal, fixed contract, other)
+###"JB2T10", # way in which job was not permanent (agency, casual, seasonal, fixed contract, other)
 ###"LOOKM11", # Reasons for another job (respondent can add up to 3) (filter by ADDJOB = 1)
 ###"UNDY98", # you not looking for a job with longer hours or for an additional job (filter by UNDEMP = 1). Up to 9 options
 
@@ -55,7 +58,8 @@ jm06 <- jm06 %>% mutate(year = 2006, quarter = 1, sequence = 1, PIWT = PIWT14, P
                         higher = HIGHO,
                         degree = DEGREE4,
                         quali = HIQUAL5D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = NA)
 
 aj06 <- aj06 %>% mutate(year = 2006, quarter = 2, sequence = 2, PIWT = PIWT14, PWT = PWT14, 
                         NSEC = NSECMMJ, 
@@ -66,7 +70,8 @@ aj06 <- aj06 %>% mutate(year = 2006, quarter = 2, sequence = 2, PIWT = PIWT14, P
                         higher = HIGHO,
                         degree = DEGREE4,
                         quali = HIQUAL5D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED9D), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~8, 9~-8))
 
 js06 <- js06 %>% mutate(year = 2006, quarter = 3, sequence = 3, PIWT = PIWT14, PWT = PWT14, 
                         NSEC = NSECMMJ, 
@@ -77,7 +82,8 @@ js06 <- js06 %>% mutate(year = 2006, quarter = 3, sequence = 3, PIWT = PIWT14, P
                         higher = HIGHO,
                         degree = DEGREE4,
                         quali = HIQUAL5D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = NA)
 
 od06 <- od06 %>% mutate(year = 2006, quarter = 4, sequence = 4, PIWT = PIWT14, PWT = PWT14, 
                         NSEC = NSECMMJ, 
@@ -88,7 +94,8 @@ od06 <- od06 %>% mutate(year = 2006, quarter = 4, sequence = 4, PIWT = PIWT14, P
                         higher = HIGHO,
                         degree = DEGREE4,
                         quali = HIQUAL5D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED9D), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~8, 9~-8))
 
 jm07 <- jm07 %>% mutate(year = 2007, quarter = 1, sequence = 5, PIWT = PIWT14, PWT = PWT14, 
                         NSEC = NSECMMJ, 
@@ -99,7 +106,8 @@ jm07 <- jm07 %>% mutate(year = 2007, quarter = 1, sequence = 5, PIWT = PIWT14, P
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL5D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = NA)
 
 aj07 <- aj07 %>% mutate(year = 2007, quarter = 2, sequence = 6, PIWT = PIWT14, PWT = PWT14, 
                         NSEC = NSECMMJ, 
@@ -110,7 +118,8 @@ aj07 <- aj07 %>% mutate(year = 2007, quarter = 2, sequence = 6, PIWT = PIWT14, P
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL5D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED9D), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~8, 9~-8))
 
 js07 <- js07 %>% mutate(year = 2007, quarter = 3, sequence = 7, PIWT = PIWT14, PWT = PWT14, 
                         NSEC = NSECMMJ, 
@@ -121,7 +130,8 @@ js07 <- js07 %>% mutate(year = 2007, quarter = 3, sequence = 7, PIWT = PIWT14, P
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL5D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = NA)
 
 od07 <- od07 %>% mutate(year = 2007, quarter = 4, sequence = 8, PIWT = PIWT14, PWT = PWT14, 
                         NSEC = NSECMMJ, 
@@ -132,7 +142,8 @@ od07 <- od07 %>% mutate(year = 2007, quarter = 4, sequence = 8, PIWT = PIWT14, P
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL5D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED9D), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~8, 9~-8))
 
 jm08 <- jm08 %>% mutate(year = 2008, quarter = 1, sequence = 9, PIWT = PIWT14, PWT = PWT14, 
                         NSEC = NSECMMJ, 
@@ -143,7 +154,8 @@ jm08 <- jm08 %>% mutate(year = 2008, quarter = 1, sequence = 9, PIWT = PIWT14, P
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = NA)
 
 aj08 <- aj08 %>% mutate(year = 2008, quarter = 2, sequence = 10, PIWT = PIWT14, PWT = PWT14, 
                         NSEC = NSECMMJ, 
@@ -154,7 +166,8 @@ aj08 <- aj08 %>% mutate(year = 2008, quarter = 2, sequence = 10, PIWT = PIWT14, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED9D), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~8, 9~-8))
 
 js08 <- js08 %>% mutate(year = 2008, quarter = 3, sequence = 11, PIWT = PIWT14, PWT = PWT14, 
                         NSEC = NSECMMJ, 
@@ -165,7 +178,8 @@ js08 <- js08 %>% mutate(year = 2008, quarter = 3, sequence = 11, PIWT = PIWT14, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED9D), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~8, 9~-8))
 
 od08 <- od08 %>% mutate(year = 2008, quarter = 4, sequence = 12, PIWT = PIWT14, PWT = PWT14, 
                         NSEC = NSECMMJ, 
@@ -176,25 +190,29 @@ od08 <- od08 %>% mutate(year = 2008, quarter = 4, sequence = 12, PIWT = PIWT14, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED9D), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~8, 9~-8))
 
 jm09 <- jm09 %>% mutate(year = 2009, quarter = 1, sequence = 13, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = NA)
 
 aj09 <- aj09 %>% mutate(year = 2009, quarter = 2, sequence = 14, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED9D), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~8, 9~-8))
 
 js09 <- js09 %>% mutate(year = 2009, quarter = 3, sequence = 15, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED9D), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~8, 9~-8))
 
 od09 <- od09 %>% mutate(year = 2009, quarter = 4, sequence = 16, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, 
                         ind1 = INDS07M, 
@@ -204,319 +222,372 @@ od09 <- od09 %>% mutate(year = 2009, quarter = 4, sequence = 16, PIWT = PIWT14, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED9D), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~8, 9~-8))
 
 jm10 <- jm10 %>% mutate(year = 2010, quarter = 1, sequence = 17, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = NA)
 
 aj10 <- aj10 %>% mutate(year = 2010, quarter = 2, sequence = 18, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js10 <- js10 %>% mutate(year = 2010, quarter = 3, sequence = 19, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = NA)
 
 od10 <- od10 %>% mutate(year = 2010, quarter = 4, sequence = 20, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMMJ, ind1 = INDS07M, occu1 = SC2KMMJ, ind2 = INDS07S, occu2 = SC2KSMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUAL8D,
-                        ETH = ETHCEN6) 
+                        ETH = ETHCEN6,
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8)) 
 
 jm11 <- jm11 %>% mutate(year = 2011, quarter = 1, sequence = 21, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = ETHCEN6)
+                        ETH = ETHCEN6,
+                        FLED = NA)
 
 aj11 <- aj11 %>% mutate(year = 2011, quarter = 2, sequence = 22, PIWT = PIWT14, PWT = PWT14, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js11 <- js11 %>% mutate(year = 2011, quarter = 3, sequence = 23, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 od11 <- od11 %>% mutate(year = 2011, quarter = 4, sequence = 24, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 jm12 <- jm12 %>% mutate(year = 2012, quarter = 1, sequence = 25, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 aj12 <- aj12 %>% mutate(year = 2012, quarter = 2, sequence = 26, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js12 <- js12 %>% mutate(year = 2012, quarter = 3, sequence = 27, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 od12 <- od12 %>% mutate(year = 2012, quarter = 4, sequence = 28, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 jm13 <- jm13 %>% mutate(year = 2013, quarter = 1, sequence = 29, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 aj13 <- aj13 %>% mutate(year = 2013, quarter = 2, sequence = 30, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js13 <- js13 %>% mutate(year = 2013, quarter = 3, sequence = 31, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 od13 <- od13 %>% mutate(year = 2013, quarter = 4, sequence = 32, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 jm14 <- jm14 %>% mutate(year = 2014, quarter = 1, sequence = 33, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 aj14 <- aj14 %>% mutate(year = 2014, quarter = 3, sequence = 34, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js14 <- js14 %>% mutate(year = 2014, quarter = 4, sequence = 35, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 od14 <- od14 %>% mutate(year = 2014, quarter = 4, sequence = 36, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL11D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 jm15 <- jm15 %>% mutate(year = 2015, quarter = 1, sequence = 37, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 aj15 <- aj15 %>% mutate(year = 2015, quarter = 2, sequence = 38, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js15 <- js15 %>% mutate(year = 2015, quarter = 3, sequence = 39, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 od15 <- od15 %>% mutate(year = 2015, quarter = 4, sequence = 40, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 jm16 <- jm16 %>% mutate(year = 2016, quarter = 1, sequence = 41, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 aj16 <- aj16 %>% mutate(year = 2016, quarter = 2, sequence = 42, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js16 <- js16 %>% mutate(year = 2016, quarter = 3, sequence = 43, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 od16 <- od16 %>% mutate(year = 2016, quarter = 4, sequence = 44, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 jm17 <- jm17 %>% mutate(year = 2017, quarter = 1, sequence = 45, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 aj17 <- aj17 %>% mutate(year = 2017, quarter = 2, sequence = 46, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js17 <- js17 %>% mutate(year = 2017, quarter = 3, sequence = 47, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 od17 <- od17 %>% mutate(year = 2017, quarter = 4, sequence = 48, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 jm18 <- jm18 %>% mutate(year = 2018, quarter = 1, sequence = 49, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 aj18 <- aj18 %>% mutate(year = 2018, quarter = 2, sequence = 50, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js18 <- js18 %>% mutate(year = 2018, quarter = 3, sequence = 51, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 od18 <- od18 %>% mutate(year = 2018, quarter = 4, sequence = 52, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 jm19 <- jm19 %>% mutate(year = 2019, quarter = 1, sequence = 53, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 aj19 <- aj19 %>% mutate(year = 2019, quarter = 2, sequence = 54, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js19 <- js19 %>% mutate(year = 2019, quarter = 3, sequence = 55, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = NA)
 
 od19 <- od19 %>% mutate(year = 2019, quarter = 4, sequence = 56, PIWT = PIWT18, PWT = PWT18, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 jm20 <- jm20 %>% mutate(year = 2020, quarter = 1, sequence = 57, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 aj20 <- aj20 %>% mutate(year = 2020, quarter = 2, sequence = 58, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js20 <- js20 %>% mutate(year = 2020, quarter = 3, sequence = 59, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 od20 <- od20 %>% mutate(year = 2020, quarter = 4, sequence = 60, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ10, ind1 = INDS07M, occu1 = SC10MMJ, ind2 = INDS07S, occu2 = SC10SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 jm21 <- jm21 %>% mutate(year = 2021, quarter = 1, sequence = 61, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 aj21 <- aj21 %>% mutate(year = 2021, quarter = 2, sequence = 62, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 js21 <- js21 %>% mutate(year = 2021, quarter = 3, sequence = 63, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 od21 <- od21 %>% mutate(year = 2021, quarter = 4, sequence = 64, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL15D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = case_match(as.numeric(FLED10), -9~-9, -8~-8, 1~1, 2~2, 3~3, 4~4, 5~5, 6~5, 7~6, 8~7, 9~8, 10~-8))
 
 jm22 <- jm22 %>% mutate(year = 2022, quarter = 1, sequence = 65, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ, 
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL22D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = as.numeric(FLED22))
 
 aj22 <- aj22 %>% mutate(year = 2022, quarter = 2, sequence = 66, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL22D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = as.numeric(FLED22))
 
 js22 <- js22 %>% mutate(year = 2022, quarter = 3, sequence = 67, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL22D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = as.numeric(FLED22))
 
 od22 <- od22 %>% mutate(year = 2022, quarter = 4, sequence = 68, PIWT = PIWT22, PWT = PWT22, NSEC = NSECMJ20, ind1 = INDS07M, occu1 = SC20MMJ, ind2 = INDS07S, occu2 = SC20SMJ,
                         higher = HIGHO,
                         degree = DEGREE71,
                         quali = HIQUL22D,
-                        ETH = case_match(ETHUKEUL, 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6))
+                        ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
+                        FLED = as.numeric(FLED22))
 
 
 # Selecting variables
@@ -563,6 +634,7 @@ variables <- c(
         
         "JOBTYP", # Whether job permanent (1 = permanent / 2 = Not permanent in some way)
         "WHYTMP6", # Reason for the job to be temporary 
+        "FLED", # type of work arrangement 
 
         # SECOND JOB
         
