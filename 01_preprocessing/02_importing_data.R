@@ -97,7 +97,6 @@ od21 <- read_spss("UKDA-8915-spss/spss/spss25/lfsp_od21_eul_pwt22.sav") # Octobe
 jm22 <- read_spss("UKDA-8957-spss/spss/spss25/lfsp_jm22_eul_pwt22.sav") # January to March (wave 1)
 aj22 <- read_spss("UKDA-8999-spss/spss/spss25/lfsp_aj22_eul_pwt22.sav") # April to June (wave 2)
 js22 <- read_spss("UKDA-9027-spss/spss/spss25/lfsp_js22_eul_pwt22.sav") # July to September (wave 3)
-
 od22 <- read_spss("UKDA-9052-spss/spss/spss25/lfsp_od22_eul_pwt22.sav") # October to December (wave 4) 
 
 ## Set the working directory back to where your computer folder where you created the R-Studio project
