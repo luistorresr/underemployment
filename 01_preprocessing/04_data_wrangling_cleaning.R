@@ -193,7 +193,6 @@ LFS_clean$NSEC <- NULL # delete old variable
 
 set_label(LFS_clean$NSEC2) <- "NS-SEC major group" # add variable label
 
-
 # Industry section
 
 LFS_clean$ind1 <- remove_all_labels(LFS_clean$ind1) # main job
@@ -203,19 +202,19 @@ LFS_clean$ind1 <- set_labels(LFS_clean$ind1, labels = c(
                              "Mining and quarrying" = 2,
                              "Manufacturing" = 3,
                              "Electricity, gas, steam and air conditioning supply" = 4,
-                             "Water supply, sewerage, waste management and remediation activities" = 5,
+                             "Water supply, sewerage, waste management and remediation" = 5,
                              "Construction" = 6,
-                             "Wholesale and retail trade; repair of motor vehicles and motorcycles" = 7,
+                             "Wholesale and retail trade" = 7,
                              "Transportation and storage" = 8,
-                             "Accommodation and food service activities" = 9,
+                             "Accommodation and food service" = 9,
                              "Information and communication" = 10,
-                             "Financial and insurance activities" = 11,
-                             "Real estate activities" = 12,
+                             "Finance and insurance" = 11,
+                             "Real estate" = 12,
                              "Professional, scientific and technical activities" = 13,
                              "Administrative and support service activities" = 14,
-                             "Public administration and defence; compulsory social security" = 15,
+                             "Public administration and defence" = 15,
                              "Education" = 16,
-                             "Human health and social work activities" = 17,
+                             "Human health and social work" = 17,
                              "Arts, entertainment and recreation"  = 18,
                              "Other service activities" = 19,
                              "Activities of households as employers; undifferentiated goods- and services producing activities of households for own use" = 20,
@@ -290,17 +289,16 @@ LFS_clean$REGWKR <- set_labels(LFS_clean$REGWKR, labels = c(
   "East Anglia" = 7,
   "Central London" = 8,
   "Inner London" = 9,
-  "No Code 10" = 10,
   "Outer London" = 11,
   "Rest of South East" = 12,
-  "South West" = 13,
+  "South West - England" = 13,
   "West Midlands (met county)" = 14,
   "Rest of West Midlands" = 15,
   "Greater Manchester" = 16,
   "Merseyside" = 17,
   "Rest of North West" = 18,
   "Wales" = 19,
-  "Strathclyde" = 20,
+  "Strathclyde - Scotland" = 20,
   "Rest of Scotland" = 21,
   "Northern Ireland" = 22,
   "Workplace outside UK" = 23))

@@ -11,9 +11,16 @@ load("data/LFS.rda")
 ### Industry section is INDS92M (main) and INDS92S (second) until 2008. From 2009 is INDS07M (main) and INDS07S (second).
 ### This requires standardization before linking databases as the project will analyse in detail two industries (Health & Social Work, Wholesale & Retail Industries)
 
-view_df(jm06, show.id = FALSE)  # SIC 2007 conversion variable IN9207SM and IN9207SS
-view_df(jm07, show.id = FALSE)  # SIC 2007 conversion variable IN9207SM and IN9207SS
-view_df(aj22, show.id = FALSE)  # SIC 2007 conversion variable IN9207SM and IN9207SS
+view_df(jm06, show.id = FALSE)  
+view_df(jm10, show.id = FALSE)  
+view_df(jm22, show.id = FALSE)  
+
+l1 <- get_labels(jm06$SC2KMMJ, values = "n") %>% as.data.frame()
+l2 <- get_labels(jm11$SC10MMJ, values = "n") %>% as.data.frame()
+l3 <- get_labels(jm21$SC20MMJ, values = "n") %>% as.data.frame()
+all.equal(l1, l2, l3)
+
+occu1 <- cbind(l1, l2, l3)
 
 table(jm06$IN9207SM) # summary main job
 table(jm08$IN9207SS) # summary second job
@@ -29,6 +36,9 @@ view_df(js22, show.id = FALSE)
 table(jm22$INDS07M)
 get_labels(aj22$INDS07M, values = "n")
 
+get_labels(aj06$FLED9D, values = "n")
+get_labels(aj10$FLED10, values = "n")
+get_labels(aj22$FLED22, values = "n")
 
 ## Occupation
 ### 2005 to 2010,  SC2KMMJ, Major occupation group (main job) and SC2KSMJ	Major occupation group (second job)
@@ -588,7 +598,6 @@ od22 <- od22 %>% mutate(year = 2022, quarter = 4, sequence = 68, PIWT = PIWT22, 
                         quali = HIQUL22D,
                         ETH = case_match(as.numeric(ETHUKEUL), 1~1, 2~2, 3~3, 4~3, 5~3, 6~5, 7~3, 8~4, 9~6),
                         FLED = as.numeric(FLED22))
-
 
 # Selecting variables
 

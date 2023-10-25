@@ -119,7 +119,9 @@ t_low_earners <- LFS_clean %>% # summary table
   rename(Men = low_earner_men_median,
          Women = low_earner_women_median) %>%
   pivot_longer(c(Men, Women), names_to = "sex", values_to = "total")
-  
+
+
+
 
 ```
 
@@ -182,32 +184,6 @@ p_low_earners  <- t_low_earners %>%
   guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 3)))
 
 p_low_earners
-
-```
-
-
-
-```{r}
-
-set.seed(300, sample.kind="Rounding")
-
-data_ptime <- LFS_clean %>% # summary table
-  filter(AGE >= 18 & AGE <= 64) %>% 
-  filter(ILODEFR == 1) %>% # only people in employment
-  filter(INECAC05 %in% c(1)) %>% #only employees
-  filter(FTPTWK == 2) %>% # only part-timers
-  filter(YPTJOB %in% c(3, 4)) %>%
-  filter(!is.na(YPTJOB)) %>%
-  filter(HOURPAY > 0 & SUMHRS > 0) %>%
-  filter(!is.na(HOURPAY))
-
-
-fit_rtree <- train(factor(YPTJOB) ~ HOURPAY, data = data_ptime,
-                   method = "rpart",
-                   tuneGrid = data.frame(cp = seq(0, 0.05, len = 25)))
-
-ggplot(fit_rtree, highlight = TRUE)
-
 
 ```
 
