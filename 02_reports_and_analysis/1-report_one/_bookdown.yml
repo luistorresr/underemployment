@@ -1,7 +1,0 @@
-book_filename: "trends-underemployment"
-delete_merged_file: true
-language:
-  label:
-    fig: 'FIGURE '
-  ui:
-    chapter_name: ' ' 

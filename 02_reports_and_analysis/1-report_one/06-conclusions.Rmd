@@ -1,8 +1,0 @@
-
-# Conclusions and the way forward {-} 
-
-<p align="justify"> In this first project report we addressed key questions around how we can understand and best measure underemployment. The report examined if and how individual indicators of underemployment overlap and whether they accumulate over time and for whom. We asked about the characteristics of those workers who experience various forms and combinations of underemployment, as well as those with no underemployment at all. We approached underemployment as a complex and multidimensional phenomenon including insufficient hours of employment, low wages, and limited use of skills at work.</p>
-
-<p align="justify"> Our report underlines that different indicators of underemployment provide a different picture. Although most indicators agree on who is most affected (e.g., women, younger workers, qualification level and ethnic minorities), they show different trends and levels. They also show less agreement on regional trends as well as occupational groups more affected (see wage-related underemployment).</p>
-
-<p align="justify"> Our next report will focus on exploring these indicators in combination. This will allow us to understand how indicators overlap regarding the workers that are identified as underemployed. It will also provides a view on the nature of the relationships between indicators (e.g., does wage-related underemployment impact time or skills-related underemployment?). </p> 
