@@ -1,0 +1,112 @@
+
+```{r libraries-0, include=FALSE, echo=FALSE}
+
+#### packages needed
+if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(gridExtra)) install.packages("girdExtra", repos = "http://cran.us.r-project.org")
+if(!require(Hmisc)) install.packages("Hmisc", repos = "http://cran.us.r-project.org")
+if(!require(sjlabelled)) install.packages("sjlabelled", repos = "http://cran.us.r-project.org")
+if(!require(ggthemes)) install.packages("ggthemes", repos = "http://cran.us.r-project.org")
+if(!require(ggtext)) install.packages("ggtext", repos = "http://cran.us.r-project.org")
+if(!require(ggrepel)) install.packages("ggrepel", repos = "http://cran.us.r-project.org")
+if(!require(doBy)) install.packages("doBy", repos = "http://cran.us.r-project.org")
+if(!require(sjmisc)) install.packages("sjmisc", repos = "http://cran.us.r-project.org")
+if(!require(webshot)) install.packages("webshot", repos = "http://cran.us.r-project.org")
+if(!require(scales)) install.packages("scales", repos = "http://cran.us.r-project.org")
+if(!require(ggalt)) install.packages("ggalt", repos = "http://cran.us.r-project.org")
+if(!require(janitor)) install.packages("janitor", repos = "http://cran.us.r-project.org")
+if(!require(bookdown)) install.packages("bookdown", repos = "http://cran.us.r-project.org")
+if(!require(htmlwidgets)) install.packages("htmlwidgets", repos = "http://cran.us.r-project.org")
+if(!require(widgetframe)) install.packages("widgetframe", repos = "http://cran.us.r-project.org")
+if(!require(officer)) install.packages("officer", repos = "http://cran.us.r-project.org")
+if(!require(showtext)) install.packages("showtext", repos = "http://cran.us.r-project.org")
+if(!require(colorspace)) install.packages("colorspace", repos = "http://cran.us.r-project.org")
+if(!require(patchwork)) install.packages("patchwork", repos = "http://cran.us.r-project.org")
+if(!require(ggpubr)) install.packages("ggpubr", repos = "http://cran.us.r-project.org")
+if(!require(gt)) install.packages("gt", repos = "http://cran.us.r-project.org")
+if(!require(htmltools)) install.packages("htmltools", repos = "http://cran.us.r-project.org")
+if(!require(yaml)) install.packages("yaml", repos = "http://cran.us.r-project.org")
+
+library(ggalt) # contingency table
+library(tidyverse) # several tools for data manipulation
+library(haven) # read SPSS, Stata, and SAS data
+library(gridExtra) # arrange multiple grid-based plots on a page
+library(Hmisc) # many functions useful for data analysis
+library(sjmisc) # useful to set Na's
+library(sjlabelled) # get_labels function
+library(ggthemes) # themes for ggplot2
+library(ggtext) # fancy text
+library(ggrepel) # help with the position of the labels on ggplot2 graph
+library(doBy) # 'do' something to data stratified 'by' some variables
+library(scales) # add scale symbols and colour to axis
+library(janitor) # add totals to tables
+library(bookdown) # add totals to tables
+library(htmlwidgets)
+library(widgetframe)
+library(colorspace) # colour blind friendly pallettes 
+library(officer) # to add additional formatting to tables 
+library(patchwork) # to put graphs side by side
+library(ggpubr) # easy-to-use functions for creating and customizing ‘ggplot2’- based publication ready plots.
+library(gt) #  creation of interactive data tables
+library(htmltools) # tools for creating, manipulating, and writing HTML 
+library(webshot)
+library(yaml)
+library(showtext)
+  font_add_google("Lato")
+  showtext_auto()
+
+```
+
+# The data {-} 
+
+<p align="justify">This report maps underemployment trends for employees and self-employed workers in the UK. We use the UK’s largest study on employment circumstances, the Labour Force Survey (LFS), drawing on analysis from the 2006 to 2022 releases (calendar quarters). Our analyses consider only those in employment (employees and self-employed) between 18 and 64 years old. By taking a pseudo-longitudinal approach, analyses allow us to describe long-term trends in prevalence, characteristics of and social inequalities in underemployment, its various dimensions, and interrelations.</p>
+
+<p align="justify">It is important to note the following before moving to our findings:</p>
+-	<p align="justify">We do not use the total active population to calculate the underemployment rate, but only those in in employment.</p>
+-	<p align="justify">Between wave 2 (April-June) of 2020 and wave 1 (January-March) of 2022, sample sizes were significantly affected due to the effects of the Covid-19 pandemic, potentially affecting results from this period.</p>
+-	<p align="justify">From wave 2 (April-June) in 2011, the ethnicity variable was modified in accordance to census data. In this report the variable has been recoded to match all quarters in the dataset.</p>
+-	<p align="justify">The job arrangements have also been recoded to match all quarters in the dataset as this variable has been modified three times during the periods considered in this analysis.</p>
+
+<p align="justify">The report first examines time-related underemployment, followed by wage-related underemployment and skills underutilisation indicators.</p>
+
+```{r sample, include=FALSE, echo=FALSE}
+
+load("../../data/LFS_clean.rda")
+
+N_total <- LFS_clean %>% 
+  group_by(as_factor(year), 
+           as_label(quarter)) %>%
+  summarise(Active = sum(na.omit(PWT[ILODEFR <=2 & AGE >= 18 & AGE <= 64])), # in employment and unemployed between 18 to 64
+            Workers = sum(na.omit(PWT[ILODEFR == 1 & INECAC05 <= 2 & AGE >= 18 & AGE <= 64])),
+            Women_workers = sum(na.omit(PWT[ILODEFR == 1 & INECAC05 <= 2 & SEX == 2 & AGE >= 18 & AGE <= 64])),
+            Men_workers = sum(na.omit(PWT[ILODEFR == 1 & INECAC05 <= 2 & SEX == 1 & AGE >= 18 & AGE <= 64]))) %>% # employee and self-employees
+  mutate(across(c(Active, Workers, Women_workers, Men_workers), comma)) %>%
+  rename(Year = `as_factor(year)`,
+         Quarter = `as_label(quarter)`,
+         "Total active" = Active,
+         "Total in employment" = Workers,
+         "Female workers" = Women_workers,
+         "Male workers" = Men_workers) %>% # Total population estimates
+  group_by(Year)
+
+```
+
+```{r table-html, echo=FALSE}
+
+N_total %>% gt(groupname_col = NULL) %>% 
+   tab_header(
+    title = md("**Calendar quarters from 2006 to 2022**"),
+    subtitle = md("Population weights are used.")) %>% 
+  tab_footnote(footnote = "Active population includes employed and unemployed persons",
+               locations = cells_column_labels(columns = "Total active")) %>%
+  tab_source_note(source_note = 'Source: UK Labour Force Survey.') %>%
+  tab_options(ihtml.active = TRUE,
+              ihtml.use_pagination = TRUE,
+              ihtml.page_size_default = 4,
+              heading.title.font.size = 15,
+              footnotes.multiline = TRUE,
+              source_notes.multiline = TRUE)
+    
+```
+
+
