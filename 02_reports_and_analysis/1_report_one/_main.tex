@@ -1,0 +1,737 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+]{book}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage{booktabs}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{longtable}
+\usepackage{colortbl}
+\usepackage{array}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage[]{natbib}
+\bibliographystyle{plainnat}
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Measuring Underemployment: Time, skills, \& wages},
+  pdfauthor={The Underemployment Project},
+  colorlinks=true,
+  linkcolor={Maroon},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Measuring Underemployment: Time, skills, \& wages}
+\author{The Underemployment Project}
+\date{2023-10-19}
+
+\begin{document}
+\maketitle
+
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\hypertarget{introduction}{%
+\chapter*{Introduction}\label{introduction}}
+
+
+This report examines if and how indicators of underemployment overlap and accumulate over time in the UK. We ask about the characteristics of those workers who experience the various forms and combinations of underemployment, as well as those with no underemployment. We understand underemployment as a complex and multidimensional phenomenon including insufficient hours of employment, low wages, and limited use of skills at work.
+
+Most official measures of underemployment are limited to hours worked. Time-related underemployment exists when the hours of work of an employed person are insufficient in relation to an alternative employment situation in which the person is willing and available to engage. However, this understanding does not provide any information on the adequacy of wages and skills. The limitation of time-related underemployment is evident, for instance, in the case of workers who, although having a full-time job, have low wages or may feel that their skills as underutilised. We consider all these three indicators and their interaction to provide a complete picture of underemployment in the UK.
+
+\hypertarget{the-data}{%
+\chapter*{The data}\label{the-data}}
+
+
+This report aims at mapping underemployment trends for employees and self-employed workers in the UK. We use the UK's largest study on employment circumstances, the Labour Force Survey (LFS), drawing on analysis from the 2006 to 2022 releases (calendar quarters). Our analyses consider only those in employment (employees and self-employed) between 18 and 64 years old. By taking a pseudo-longitudinal approach, analyses allow us to describe long-term trends in prevalence, characteristics of and social inequalities in underemployment, its various dimensions, and interrelations.
+
+In addition, for this report it is important to consider the following:
+
+\begin{itemize}
+\tightlist
+\item
+  We do not use the total active population to calculate the underemployment rate, but only those in in employment.
+\item
+  Between wave 2 (April-June) of 2020 and wave 1 (January-March) of 2022, sample size was significantly affected due to the effects of the covid-19 pandemic, potentially affecting results from this period.
+\item
+  From wave 2 (April-June) in 2011, the ethnicity variable was modified in accordance to census data. In this report the variable has been recoded to match all quarters in the dataset.
+\item
+  The job arrangements has also been recoded to match all quarters in the dataset as this variable has been modified three times during the periods considered in this analysis.
+\end{itemize}
+
+\setlength{\LTpost}{0mm}
+\begin{longtable}{ccrrrr}
+\caption*{
+{\large \textbf{Calendar quarters from 2006 to 2022}} \\ 
+{\small Population weights are used.}
+} \\ 
+\toprule
+Year & Calendar quarter & Total active\textsuperscript{\textit{1}} & Total in employment & Female workers & Male workers \\ 
+\midrule\addlinespace[2.5pt]
+2006 & Jan/Mar & 29,239,473 & 27,681,476 & 12,821,692 & 14,859,784 \\ 
+2006 & Apr/Jun & 29,371,385 & 27,747,666 & 12,835,894 & 14,911,772 \\ 
+2006 & Jul/Sep & 29,645,623 & 27,970,967 & 12,864,870 & 15,106,097 \\ 
+2006 & Oct/Dec & 29,521,041 & 27,909,681 & 12,857,295 & 15,052,386 \\ 
+2007 & Jan/Mar & 29,468,688 & 27,813,369 & 12,827,710 & 14,985,659 \\ 
+2007 & Apr/Jun & 29,566,066 & 27,979,389 & 12,873,256 & 15,106,133 \\ 
+2007 & Jul/Sep & 29,825,269 & 28,213,100 & 12,978,851 & 15,234,249 \\ 
+2007 & Oct/Dec & 29,768,095 & 28,240,403 & 13,017,774 & 15,222,629 \\ 
+2008 & Jan/Mar & 29,824,469 & 28,211,365 & 13,051,041 & 15,160,324 \\ 
+2008 & Apr/Jun & 29,906,241 & 28,279,465 & 13,075,946 & 15,203,519 \\ 
+2008 & Jul/Sep & 30,149,630 & 28,341,057 & 13,114,297 & 15,226,760 \\ 
+2008 & Oct/Dec & 30,118,039 & 28,232,827 & 13,098,562 & 15,134,265 \\ 
+2009 & Jan/Mar & 30,124,386 & 27,954,873 & 13,003,123 & 14,951,750 \\ 
+2009 & Apr/Jun & 30,072,195 & 27,710,078 & 12,936,808 & 14,773,270 \\ 
+2009 & Jul/Sep & 30,300,832 & 27,874,141 & 13,050,591 & 14,823,550 \\ 
+2009 & Oct/Dec & 30,158,925 & 27,825,554 & 13,051,077 & 14,774,477 \\ 
+2010 & Jan/Mar & 30,063,433 & 27,594,657 & 12,975,532 & 14,619,125 \\ 
+2010 & Apr/Jun & 30,166,668 & 27,747,817 & 12,991,727 & 14,756,090 \\ 
+2010 & Jul/Sep & 30,547,846 & 28,069,042 & 13,095,008 & 14,974,034 \\ 
+2010 & Oct/Dec & 30,349,620 & 27,968,186 & 13,034,431 & 14,933,755 \\ 
+2011 & Jan/Mar & 30,359,216 & 27,926,787 & 13,066,321 & 14,860,466 \\ 
+2011 & Apr/Jun & 30,431,882 & 27,993,024 & 13,063,539 & 14,929,485 \\ 
+2011 & Jul/Sep & 30,641,523 & 28,045,411 & 13,125,080 & 14,920,331 \\ 
+2011 & Oct/Dec & 30,546,604 & 27,998,299 & 13,088,326 & 14,909,973 \\ 
+2012 & Jan/Mar & 30,510,778 & 27,920,452 & 13,072,756 & 14,847,696 \\ 
+2012 & Apr/Jun & 30,638,187 & 28,080,603 & 13,109,979 & 14,970,624 \\ 
+2012 & Jul/Sep & 30,907,698 & 28,313,468 & 13,219,581 & 15,093,887 \\ 
+2012 & Oct/Dec & 30,897,088 & 28,407,761 & 13,303,827 & 15,103,934 \\ 
+2013 & Jan/Mar & 30,766,144 & 28,225,158 & 13,303,600 & 14,921,558 \\ 
+2013 & Apr/Jun & 30,802,005 & 28,286,905 & 13,297,060 & 14,989,845 \\ 
+2013 & Jul/Sep & 31,130,078 & 28,560,745 & 13,352,486 & 15,208,259 \\ 
+2013 & Oct/Dec & 31,023,847 & 28,736,842 & 13,476,698 & 15,260,144 \\ 
+2014 & Jan/Mar & 31,032,653 & 28,835,623 & 13,552,486 & 15,283,137 \\ 
+2014 & Apr/Jun & 31,086,831 & 29,037,236 & 13,619,344 & 15,417,892 \\ 
+2014 & Jul/Sep & 31,301,924 & 29,283,929 & 13,704,475 & 15,579,454 \\ 
+2014 & Oct/Dec & 31,164,432 & 29,364,359 & 13,805,039 & 15,559,320 \\ 
+2015 & Jan/Mar & 31,192,860 & 29,367,737 & 13,791,954 & 15,575,783 \\ 
+2015 & Apr/Jun & 31,230,056 & 29,396,377 & 13,823,950 & 15,572,427 \\ 
+2015 & Jul/Sep & 31,512,676 & 29,703,821 & 13,928,264 & 15,775,557 \\ 
+2015 & Oct/Dec & 31,511,648 & 29,880,053 & 13,998,156 & 15,881,897 \\ 
+2016 & Jan/Mar & 31,497,492 & 29,808,870 & 13,987,609 & 15,821,261 \\ 
+2016 & Apr/Jun & 31,605,376 & 29,987,221 & 14,091,456 & 15,895,765 \\ 
+2016 & Jul/Sep & 31,837,950 & 30,175,140 & 14,166,896 & 16,008,244 \\ 
+2016 & Oct/Dec & 31,722,959 & 30,180,283 & 14,214,003 & 15,966,280 \\ 
+2017 & Jan/Mar & 31,709,863 & 30,174,885 & 14,244,930 & 15,929,955 \\ 
+2017 & Apr/Jun & 31,856,173 & 30,386,067 & 14,341,240 & 16,044,827 \\ 
+2017 & Jul/Sep & 31,960,419 & 30,487,231 & 14,397,619 & 16,089,612 \\ 
+2017 & Oct/Dec & 31,967,249 & 30,547,910 & 14,426,221 & 16,121,689 \\ 
+2018 & Jan/Mar & 32,028,097 & 30,632,531 & 14,494,156 & 16,138,375 \\ 
+2018 & Apr/Jun & 31,982,603 & 30,654,148 & 14,477,655 & 16,176,493 \\ 
+2018 & Jul/Sep & 32,236,288 & 30,822,241 & 14,546,336 & 16,275,905 \\ 
+2018 & Oct/Dec & 32,246,195 & 30,937,928 & 14,617,174 & 16,320,754 \\ 
+2019 & Jan/Mar & 32,222,551 & 30,902,685 & 14,666,200 & 16,236,485 \\ 
+2019 & Apr/Jun & 32,264,503 & 30,946,114 & 14,730,895 & 16,215,219 \\ 
+2019 & Jul/Sep & 32,388,135 & 31,030,081 & 14,681,748 & 16,348,333 \\ 
+2019 & Oct/Dec & 32,466,408 & 31,219,321 & 14,802,616 & 16,416,705 \\ 
+2020 & Jan/Mar & 32,455,914 & 31,100,919 & 14,818,571 & 16,282,348 \\ 
+2020 & Apr/Jun & 32,169,627 & 30,837,099 & 14,695,677 & 16,141,422 \\ 
+2020 & Jul/Sep & 32,381,882 & 30,707,941 & 14,705,823 & 16,002,118 \\ 
+2020 & Oct/Dec & 32,315,481 & 30,556,275 & 14,665,129 & 15,891,146 \\ 
+2021 & Jan/Mar & 32,188,928 & 30,552,937 & 14,720,966 & 15,831,971 \\ 
+2021 & Apr/Jun & 32,109,049 & 30,642,233 & 14,742,229 & 15,900,004 \\ 
+2021 & Jul/Sep & 32,286,615 & 30,816,057 & 14,728,552 & 16,087,505 \\ 
+2021 & Oct/Dec & 32,198,053 & 30,834,378 & 14,775,182 & 16,059,196 \\ 
+2022 & Jan/Mar & 32,104,182 & 30,872,831 & 14,819,261 & 16,053,570 \\ 
+2022 & Apr/Jun & 32,049,968 & 30,837,748 & 14,772,770 & 16,064,978 \\ 
+2022 & Jul/Sep & 32,198,846 & 30,956,584 & 14,773,150 & 16,183,434 \\ 
+2022 & Oct/Dec & 32,258,620 & 30,973,657 & 14,842,690 & 16,130,967 \\ 
+\bottomrule
+\end{longtable}
+\begin{minipage}{\linewidth}
+\textsuperscript{\textit{1}}Active population includes employed and unemployed persons\\
+Source: UK Labour Force Survey.\\
+\end{minipage}
+
+\hypertarget{time-related-underemployment}{%
+\chapter{Time-related underemployment}\label{time-related-underemployment}}
+
+Time-related underemployment is broadly defined as a situation where people are working fewer hours than they wish. This is typically measured in terms of the number of people who could not find a full-time job. However, measuring underemployment in this way does not consider the actual number of hours currently worked or the actual number of additional hours desired, and it fails to recognise that full-time workers may also want additional hours. The International Labour Organisation (ILO) furthers this definition by considering as underemployed those wanting to work more hours, available to do so, and currently working a number of hours below a specified threshold. The Office of National Statistics (ONS) in the UK operationalises this by considered as underemployed those who:
+
+\begin{itemize}
+\tightlist
+\item
+  are looking for an additional job or replacement job with longer hours, or who wanted to work longer hours in their current (main) job
+\item
+  were available to start working longer hours within two weeks
+\item
+  whose usual weekly hours were 40 or less for people aged under 18 years or 48 or less for people aged 18 years and over
+\end{itemize}
+
+The underemployment rate is then calculated as the proportion of underemployed people of the total active population.
+
+We follow a similar approach by measuring time-related underemployment using three main indicators:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Part-timers who could not find a full-time job
+\item
+  Workers who would like to work longer hours in current job
+\item
+  Workers seeking replacement job with more hours
+\end{enumerate}
+
+We do not use the total active population to calculate the underemployment rate, but only those in in employment (employees and self-employed).
+
+\hypertarget{involuntary-part-time}{%
+\section{Involuntary part-time}\label{involuntary-part-time}}
+
+People in employment can work on a full-time or a part-time basis. A part-time worker is someone who works fewer hours than a full-time worker. There is no specific number of hours that makes someone full or part-time, but a full-time worker will usually work 35 hours or more a week.In the UK Labour Force Survey, the split between full-time and part-time employment is based on respondents' self-classification. The average hours worked by part-timers, for all the periods included in this analysis, is 20 hours.
+
+Part-time jobs are lower paid than full-time jobs, on the whole, and they bring a range of career penalties. There are various reasons for working on a part-time basis. The Labour Force Survey disaggregates part-time employment by reason as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{those who could not find full-time jobs}
+\item
+  those who did not want full-time jobs
+\item
+  those who were ill or were disabled
+\item
+  those who were students or were at school
+\end{itemize}
+
+\textbf{We focus on those workers who could not find a full-time job} as our first indicator of underemployment.
+
+\hypertarget{male-and-female-workers}{%
+\subsection{Male and female workers}\label{male-and-female-workers}}
+
+Figure \ref{fig:plot-involuntary-part-time-by-sex} shows us the part-timers who could not find a full-time job. We find more female workers in a part-time job in the UK compared to men. As we find more female than male part-timers, it is not surprising that we have more females workers not being able to find a full-time work compared to men (see bottom figure). However, the percentage of those who could not find a full-time job remains much lower (around 10\% in most periods) than for men (between 20\% to 40\%) (top figure). Most female part-timers say they do not want a full-time job, while most male workers wanted one but could not find it. This is because women are invariably working part-time to fit around other roles in their lives.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-involuntary-part-time-by-sex-1} 
+
+}
+
+\caption{Part-time workers who could not find a full-time job}\label{fig:plot-involuntary-part-time-by-sex}
+\end{figure}
+
+\hypertarget{workers-by-age-group}{%
+\subsection{Workers by age group}\label{workers-by-age-group}}
+
+Figure \ref{fig:plot-involuntary-part-time-age} show the workers who could not find full time work divided by age groups. Those workers between 18 to 24 years old find themselves in involuntary part-time. This trend tend to increase after economic recessions. The cost of living crisis has not significantly worsening involuntary part-time for this group for workers. For all other workers the trend is similar but with significantly lower levels of involuntary part-time.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-involuntary-part-time-age-1} 
+
+}
+
+\caption{Young workers struggle the most to find full-time jobs}\label{fig:plot-involuntary-part-time-age}
+\end{figure}
+
+\hypertarget{ethnicity}{%
+\subsection{Ethnicity}\label{ethnicity}}
+
+Figure \ref{fig:plot-involuntary-part-time-ethnicity} shows involuntary part-time for different ethnic groups. White workers follow s stable trend on all periods, with increases after recessions and decreases after economic recovery. However, the trends for ethnic minorities are less steady and much higher than for their white counterparts.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-involuntary-part-time-ethnicity-1} 
+
+}
+
+\caption{Ethnic-minority groups more likely to find themselves in involuntary part-time}\label{fig:plot-involuntary-part-time-ethnicity}
+\end{figure}
+
+\hypertarget{qualification-level}{%
+\subsection{Qualification level}\label{qualification-level}}
+
+Figure \ref{fig:plot-involuntary-part-time-education} shows the trend for workers with different level of qualification and their changes to find themselves in involuntary part-time. Workers with no qualification or lower level qualifications find it more difficult to find full-time employment in all periods.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-involuntary-part-time-education-1} 
+
+}
+
+\caption{Workers with no formal qualification find it difficult to find full-time work}\label{fig:plot-involuntary-part-time-education}
+\end{figure}
+
+\hypertarget{occupational-group}{%
+\subsection{Occupational group}\label{occupational-group}}
+
+Routine (e.g., HGV driver, van driver, cleaner, porter, packer, sewing machinist, messenger, waiter or waitress, or bar staff), semi-routine (e.g., postal worker, machine operative, security guard, caretaker, farm worker, catering assistant, receptionist or sales assistant) and technical (e.g., motor mechanic, fitter, inspector, plumber, printer, tool maker, electrician, gardener or train driver) jobs more likely to be in involuntary part-time as shown in Figure \ref{fig:plot-involuntary-part-time-nsec}. Economic downturns affect these groups and small employers the most.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-involuntary-part-time-nsec-1} 
+
+}
+
+\caption{Routine, semi-routine and technical jobs more likely to be in involuntary part-time }\label{fig:plot-involuntary-part-time-nsec}
+\end{figure}
+
+\hypertarget{zero-hours-contract}{%
+\subsection{Zero hours contract}\label{zero-hours-contract}}
+
+Workers in more precarious contracts find themselves in part-time work because they could not find a full-time job. Figure \ref{fig:plot-involuntary-part-time-fled} confirms this trend. Workers in zero-hours contracts are more likely to work part-time involuntarily.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-involuntary-part-time-fled-1} 
+
+}
+
+\caption{Workers in zero hours contracts struggle more to find full-time work}\label{fig:plot-involuntary-part-time-fled}
+\end{figure}
+
+\hypertarget{regional-trends}{%
+\subsection{Regional trends}\label{regional-trends}}
+
+Figure \ref{fig:plot-involuntary-part-time-region} shows the distribution of workers in involuntary part-time in regions of England and Scotland that are in the scope of this project. For most periods, the North West of England which includes Salford and Scotland show the largest proportion of workers working part-time because they could not find a full-time work. The East Midlands Region (including Nottingham) has experience an increase during 2022.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-involuntary-part-time-region-1} 
+
+}
+
+\caption{Workers in the North West of England and Scotland struggle more to find full-time work}\label{fig:plot-involuntary-part-time-region}
+\end{figure}
+
+\hypertarget{industry-trends}{%
+\subsection{Industry trends}\label{industry-trends}}
+
+Two sectors are of particular interest for this project: Wholesale and retail trade, and Human health and social work. Figure \ref{fig:plot-involuntary-part-time-ind1} shows the distribution of workers in involuntary part-time in six sectors related with the provision of services. Involuntary part-time is particularly concentrated in the Retail as well as Hospitality (accommodation and food service) sectors. Human health and social work activities show lower levels compared to the two sectors mentioned above, and similar rates with sectors such as Education.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-involuntary-part-time-ind1-1} 
+
+}
+
+\caption{Involuntary part-time is concentrated in the Retail and Hospitality sectors}\label{fig:plot-involuntary-part-time-ind1}
+\end{figure}
+
+\hypertarget{wanting-longer-hours}{%
+\section{Wanting longer hours}\label{wanting-longer-hours}}
+
+A frequently reported indicator of underemployment identifies those workers who Would like to work longer hours in their jobs, at current basic rate of pay. The following sections look at this group of workers.
+
+\hypertarget{male-and-female-workers-1}{%
+\subsection{Male and female workers}\label{male-and-female-workers-1}}
+
+Figure \ref{fig:plot-longer-hours-sex} shows the rate and number of workers wishing to work longer hours in their current jobs. The trends for male and female workers follow a similar pattern characterised by periods of increase during and after economic recessions. Female workers are slightly more represented among workers wanting more hours.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-longer-hours-sex-1} 
+
+}
+
+\caption{Women slightly more represented among workers wanting more hours}\label{fig:plot-longer-hours-sex}
+\end{figure}
+
+\hypertarget{workers-by-age-group-1}{%
+\subsection{Workers by age group}\label{workers-by-age-group-1}}
+
+Figure \ref{fig:plot-longer-hours-age} shows that the younger the worker is, the more likely is to want longer hours in their current jobs. As for involuntary part-time, this trend tend to increase after economic recessions.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-longer-hours-age-1} 
+
+}
+
+\caption{Young workers wish to work more hours}\label{fig:plot-longer-hours-age}
+\end{figure}
+
+\hypertarget{ethnicity-1}{%
+\subsection{Ethnicity}\label{ethnicity-1}}
+
+Figure \ref{fig:plot-longer-hours-eth} shows ethnic groups' preferences regarding more hours of work. White workers follow s stable trend on all periods, with increases after recessions and decreases after economic recovery. However, the trends for ethnic minorities are less steady and much higher than for their white counterparts.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-longer-hours-eth-1} 
+
+}
+
+\caption{Ethnic-minority group are up to two times more likely to wish for more hours of work}\label{fig:plot-longer-hours-eth}
+\end{figure}
+
+\hypertarget{qualification-level-1}{%
+\subsection{Qualification level}\label{qualification-level-1}}
+
+Figure \ref{fig:plot-longer-hours-quali} shows the trend for workers with different level of qualification and their preference for more hours in their current jobs. Overall, workers with lower level qualifications and no qualification would like to work more hours in their current jobs.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-longer-hours-quali-1} 
+
+}
+
+\caption{The lower the qualification, the more likely to want more hours}\label{fig:plot-longer-hours-quali}
+\end{figure}
+
+\hypertarget{occupational-group-1}{%
+\subsection{Occupational group}\label{occupational-group-1}}
+
+Workers in routine and semi-routine occupations would like to work more hours in their current jobs as shown in Figure \ref{fig:plot-longer-hours-time-nsec}.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-longer-hours-time-nsec-1} 
+
+}
+
+\caption{Routine and semi-routine workers would like to work more hours in their current jobs}\label{fig:plot-longer-hours-time-nsec}
+\end{figure}
+
+\hypertarget{zero-hours-contracts}{%
+\subsection{Zero hours contracts}\label{zero-hours-contracts}}
+
+Workers in more precarious contracts such as those in job sharing, term work, and zero hours are more likely to want longer hours of work in their current jobs. Figure \ref{fig:plot-longer-hours-fled} shows that this trend is stronger for workers in zero hours contracts.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-longer-hours-fled-1} 
+
+}
+
+\caption{Workers in zero hours contracts more likely to want more hours of work}\label{fig:plot-longer-hours-fled}
+\end{figure}
+
+\hypertarget{part-time-and-full-time}{%
+\subsection{Part-time and full-time}\label{part-time-and-full-time}}
+
+It is expected that those workers who could not find full-time jobs would like to work more hours. However, it is less expected that those in full-time jobs and voluntary part-time also would like more hours. Figure \ref{fig:plot-longer-hours-fp-time} shows that even those who did not want a full-time work would like to work more hours.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-longer-hours-fp-time-1} 
+
+}
+
+\caption{Not only workers in involuntary part-time would like to work more hours}\label{fig:plot-longer-hours-fp-time}
+\end{figure}
+
+As shown on Figure \ref{fig:extra-hours-wanted-plot}, full and part-time workers differ in the number of extra hours they would like to work. While full-time workers would like between 7 to 10 additional hours, those part-times who could not find full-time would like up to 15 extra hours. Those who did not want full-time work would like just around 10 additional hours in all periods.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/extra-hours-wanted-plot-1} 
+
+}
+
+\caption{Extra hours wished to work by part-time and full-time workers}\label{fig:extra-hours-wanted-plot}
+\end{figure}
+
+\hypertarget{regional-trends-1}{%
+\subsection{Regional trends}\label{regional-trends-1}}
+
+Figure \ref{fig:plot-more-hours-region} shows the proportion of workers who would like to work more hours in regions of England and Scotland that are in the scope of this project. The South West region (including Bristol) was slightly higher until the Covid-19 pandemic hit. Then, it normalised to the levels of the other regions. Workers wanting to work more hours in all regions tend to slightly increase after economic recessions.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-more-hours-region-1} 
+
+}
+
+\caption{Slight increase in workers wanting extra hours after economic recessions and in all regions}\label{fig:plot-more-hours-region}
+\end{figure}
+
+\hypertarget{industry-trends-1}{%
+\subsection{Industry trends}\label{industry-trends-1}}
+
+Two sectors are of particular interest for this project: Wholesale and retail trade, and Human health and social work. Figure \ref{fig:plot-more-hours-ind1} shows the proportion of workers wishing to work longer hours in six sectors related with the provision of services. The two sectors with the highest proportion of workers wanting more hours are retail and hospitality (accommodation and food service). Education as well as human health and social work activities show higher levels compared to the financial and information sectors.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-more-hours-ind1-1} 
+
+}
+
+\caption{Involuntary part-time is concentrated in the Retail and Hospitality sectors}\label{fig:plot-more-hours-ind1}
+\end{figure}
+
+\hypertarget{seeking-a-replacement-job}{%
+\section{Seeking a replacement job}\label{seeking-a-replacement-job}}
+
+The last time-related indicator we use in this report identifies those workers who are looking for a replacement job. The Labour Force Survey asks participant whether they are looking for a different or additional paid job. If they answer yes, they are asked to clarify if it is an additional job or a replacement job. Time-related underemployment considers only those who are looking for a replacement job.
+
+\hypertarget{male-and-female-workers-2}{%
+\subsection{Male and female workers}\label{male-and-female-workers-2}}
+
+Figure \ref{fig:plot-seeking-job-sex} shows how many workers have looked for a replacement job since 2006. Overall, more male workers than female workers have sought a replacement job. However, this difference has reduced since the cost of living crisis hit. Also, this difference can be explained by the higher participation of men in the labour market compared to women.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-seeking-job-sex-1} 
+
+}
+
+\caption{More male than female workers are seeking a replacement job}\label{fig:plot-seeking-job-sex}
+\end{figure}
+
+From these workers, between 15\% to 20\% would like to work longer hours in their new job as shown in
+Figure \ref{fig:preferred-hours-replacement-job-sex}.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/preferred-hours-replacement-job-sex-1} 
+
+}
+
+\caption{Preferred working hours in the job being looked for}\label{fig:preferred-hours-replacement-job-sex}
+\end{figure}
+
+\hypertarget{workers-by-age-group-2}{%
+\subsection{Workers by age group}\label{workers-by-age-group-2}}
+
+Figure \ref{fig:plot-seeking-by-age} shows the number of workers looking for a replacement job according to their age group. Younger workers are more likely to look for a replacement job compared to older workers. Particularly, those workers between 25 and 34 years old are slightly more likely to see for a different job.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-seeking-by-age-1} 
+
+}
+
+\caption{Younger workers are more likely to look for a replacement job}\label{fig:plot-seeking-by-age}
+\end{figure}
+
+However, the highest proportion of workers who would like a replacement job with longer hours is concentrated among those between 18 and 24 years old as shown in Figure \ref{fig:preferred-hours-replacement-job-age}.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/preferred-hours-replacement-job-age-1} 
+
+}
+
+\caption{Workers between 18 to 24 years old looking for a replacement job with longer hours}\label{fig:preferred-hours-replacement-job-age}
+\end{figure}
+
+\hypertarget{ethnicity-2}{%
+\subsection{Ethnicity}\label{ethnicity-2}}
+
+Figure \ref{fig:plot-preferred-hours-replacement-job-eth} shows the proportion of workers looking for a replacement job with longer hours according to their ethnicity group. Trends for white workers have remained relatively stable in all periods and below 20\%. On the contrary, ethnic-minority workers have remained over 20\% for most periods until the cost of living crisis started when percentages have dropped to below 20\%.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-preferred-hours-replacement-job-eth-1} 
+
+}
+
+\caption{Ethnic-minority workers more likely to look for replacement jobs with longer hours}\label{fig:plot-preferred-hours-replacement-job-eth}
+\end{figure}
+
+\hypertarget{occupational-group-2}{%
+\subsection{Occupational group}\label{occupational-group-2}}
+
+Figure \ref{fig:plot-preferred-job-hours-in-new-job-nsec} shows the proportion of workers looking for a replacement job with longer hours according to the occupational group they belong to. Worjers in routine and semi-routine occupations are up to three times more likely to look for a replacement job with longer hours compared to management and professional occupations.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-preferred-job-hours-in-new-job-nsec-1} 
+
+}
+
+\caption{Working class workers more likely to seek for a replacement job with longer hours}\label{fig:plot-preferred-job-hours-in-new-job-nsec}
+\end{figure}
+
+\hypertarget{skills-related-underemployment}{%
+\chapter{Skills-related underemployment}\label{skills-related-underemployment}}
+
+Skills-related underemployment, skills underutilisation or overqualification is defined as a situation of mismatch between the skills needed for a job and the skills available in the labour market, in which the skills from individuals surpasses the requirements of a job.skills-related underemployment is measured through a proxy that compares the relation between the highest qualification held by an employee and their current occupation. In national surveys such as the LFS, this can be measured through a normative approach or a statistical approach.
+
+We use the normative approach in this report because it allows to standardise the categories of ``overqualified'', ``matched'' and ``underqualified'' through time. The normative approach can be operationalised as follows:
+
+\begin{itemize}
+\item
+  Employees' highest qualification is categorised according to the first digit of the International Standard Classification of Education (ISCED-97) and then classified into thee categories. Later, ISCED levels 1 and 2 are assigned as ``Low-skilled'', levels 3 and 4 are considered ``Intermediate'', and levels 5 and 6 as ``High-skilled''.
+\item
+  Whilst occupations are classified based on the first digit of the International Standard Classification of Occupations (ISCO-88) and categorised into three groups. In this case, occupations with 9 ISCO code are considered ``low-skilled'', occupations related to ISCO codes 4, 5, 6, 7 and 8 are assigned to ``intermediate'' and occupations coded 1, 2 and 3 as ``high-skilled''.
+\item
+  Then, employees are considered as ``overeducated'' when their educational level is higher to the occupational group of their current job.
+\end{itemize}
+
+\hypertarget{male-and-female-workers-3}{%
+\section{Male and female workers}\label{male-and-female-workers-3}}
+
+Figure \ref{fig:plot-overqualified-employees-sex} shows that the proportion of individuals categorised as skill underemployed has steadily increased between 2006 to 2022. Nonetheless, although between 2006 and 2008 the percentage of overqualified male and female workers was similar, since 2009 to 2022 the gap between women and men has widened.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-overqualified-employees-sex-1} 
+
+}
+
+\caption{Workers who have a qualification above the required for their occupation}\label{fig:plot-overqualified-employees-sex}
+\end{figure}
+
+\hypertarget{workers-by-age-group-3}{%
+\section{Workers by age group}\label{workers-by-age-group-3}}
+
+Figure \ref{fig:plot-overqualified-employees-age} shows that the younger the workers are, the more likely to be overqualified in their current jobs. Particularly, those workers between 18 to 24 are more likely to be overeducated for the job they do.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-overqualified-employees-age-1} 
+
+}
+
+\caption{Younger workers are more likely to be overqualified in their jobs}\label{fig:plot-overqualified-employees-age}
+\end{figure}
+
+\hypertarget{ethnicity-3}{%
+\section{Ethnicity}\label{ethnicity-3}}
+
+Figure \ref{fig:plot-overqualified-employees-eth} the proportion of workers who are overqualified for their current jobs by ethnic group. Ethnic-minority groups more likely to find themselves in jobs for which they are overqualified.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-overqualified-employees-eth-1} 
+
+}
+
+\caption{Ethnic-minority groups are more likely to find themselves in jobs for which they are overqualified}\label{fig:plot-overqualified-employees-eth}
+\end{figure}
+
+\hypertarget{qualification-level-2}{%
+\section{Qualification level}\label{qualification-level-2}}
+
+Figure \ref{fig:plot-overqualified-employees-qualification} highlights that those with a degree or equivalent are more likely to be overqualified for the job they currently do. Furthermore, although the number of overqualified workers that hold a ``Higher education'' and ``GCE, A-level or equivalent'' has not experienced relevant changes in this period, the percentage of overqualified employees with a degree or equaivalent has increased by 5,99\%.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-overqualified-employees-qualification-1} 
+
+}
+
+\caption{Those workers with a degree are more likely to be overqualified for their jobs}\label{fig:plot-overqualified-employees-qualification}
+\end{figure}
+
+\hypertarget{occupational-group-3}{%
+\section{Occupational group}\label{occupational-group-3}}
+
+Figure \ref{fig:plot-overqualified-employees-nsec} shows that those in intermediate occupations (such as secretary, personal assistant, clerical worker, office clerk, call centre agent, nursing auxiliary or nursery nurse) represent the largest proportion of overqualified employees. Between 2006 and 2022 only managerial positions have not experienced a relevant increase of employees that have higher qualifications than those required for their roles.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-overqualified-employees-nsec-1} 
+
+}
+
+\caption{Intermediate occupations represent the largest proportion of overqualified employees}\label{fig:plot-overqualified-employees-nsec}
+\end{figure}
+
+\hypertarget{permanent-and-non-permanent-jobs}{%
+\section{Permanent and non-permanent jobs}\label{permanent-and-non-permanent-jobs}}
+
+Figure \ref{fig:plot-overqualified-employees-JOBTYP} shows that the proportion of overqualified employees is larger among those in a non-permanent job than those with a permanent contract.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-overqualified-employees-JOBTYP-1} 
+
+}
+
+\caption{Workers in non-permanent jobs liketly to be overqualified }\label{fig:plot-overqualified-employees-JOBTYP}
+\end{figure}
+
+\hypertarget{zero-hours-contracts-1}{%
+\section{Zero-hours contracts}\label{zero-hours-contracts-1}}
+
+Figure \ref{fig:plot-overqualified-fled} shows that workers in zero-hours contracts are more likely to be overqualified for the job they do. This trend has intensified during the cost of living crisis as workers may be accepting more precarious working arrangements.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-overqualified-fled-1} 
+
+}
+
+\caption{Zero-hours workers are more likely to be overqualified}\label{fig:plot-overqualified-fled}
+\end{figure}
+
+\hypertarget{regional-trends-2}{%
+\section{Regional trends}\label{regional-trends-2}}
+
+Figure \ref{fig:plot-skills-overqualified-employees-region} shows that the mismatch between skills and job requirements have increased steady in all regions. Scotland show a slightly higher proportion of overqualified workers in most periods between 2006 and 2022.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-skills-overqualified-employees-region-1} 
+
+}
+
+\caption{The mismatch between skills and job requirements have increased steady in all regions}\label{fig:plot-skills-overqualified-employees-region}
+\end{figure}
+
+\hypertarget{industry-trends-2}{%
+\subsection{Industry trends}\label{industry-trends-2}}
+
+Finally, figure \ref{fig:plot-overqualification-ind1} shows that the percentage of overqualified employees has been higher in the Hospitality (accommodation and food service) and Retail sectors.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot-overqualification-ind1-1} 
+
+}
+
+\caption{Involuntary part-time is concentrated in the Retail and Hospitality sectors}\label{fig:plot-overqualification-ind1}
+\end{figure}
+
+  \bibliography{book.bib,packages.bib}
+
+\end{document}
