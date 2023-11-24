@@ -1,5 +1,5 @@
 --- 
-title: 'Underemployment Trends and Levels: Time, skills, & wages'
+title: 'Underemployment Levels and Trends: Time, skills, & wages'
 author: "The Underemployment Project"
 date: "November 2023"
 site: bookdown::bookdown_site
@@ -22,4 +22,4 @@ github-repo: luistorresr/underemployment
 For more information visit [underemployment.info](https://underemployment.info)
 
 <p align="justify">**How to cite this report**:</p>
-- </p>Torres, L., Munoz, M., Warren, T., Kamerāde, D., Beck, V. Fuertes, V., Magnus, L., & Morris, C. (2023). Underemployment Trends and Levels: Time, skills, & wages. The Underemployment Project. Available at: https://trends.underemployment.info/</p>
+- </p>Torres, L., Munoz, M., Warren, T., Kamerāde, D., Beck, V. Fuertes, V., Magnus, L., & Morris, C. (2023). Underemployment Levels and Trends: Time, Skills, & Wages. The Underemployment Project. Available at:  https://trends.underemployment.info/</p>

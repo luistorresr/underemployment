@@ -1,8 +1,3 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 
 ```{r setup-3, include=FALSE}
 knitr::opts_chunk$set(
@@ -48,7 +43,9 @@ if(!require(yaml)) install.packages("yaml", repos = "http://cran.us.r-project.or
 if(!require(grid)) install.packages("grid", repos = "http://cran.us.r-project.org")
 if(!require(sjstats)) install.packages("sjstats", repos = "http://cran.us.r-project.org")
 if(!require(RColorBrewer)) install.packages("RColorBrewer", repos = "http://cran.us.r-project.org")
+if(!require(see)) install.packages("see", repos = "http://cran.us.r-project.org")
 
+library(see) # colorblind-friendly ‘Okabe-Ito’ palette
 library(ggalt) # contingency table
 library(tidyverse) # several tools for data manipulation
 library(haven) # read SPSS, Stata, and SAS data
@@ -105,75 +102,12 @@ copyright3 = grobTree(textGrob("(c) The Underemployment Project\n      underempl
 
 # Wage-related underemployment
 
-<p align="justify">Most underemployment indicators are calculated based only on working less than a threshold related to working time (time-related underemployment). Wage-related underemployment is not typically reported in national statistics, and, as such, there is no one standard method for its estimation.</p> 
-
-<p align="justify">@Feldman1996 suggests that wage-related underemployment can me measured by looking at those workers who earn wages 20% or less than in the previous job or, for new graduates, wages 20% or less than average of graduating cohort in same major or occupational track. In @Clogg1986 low-income measures are identified as indicators of wage underemployment. Two measures are here underlined: poverty workers and inequitable pay. The 'poverty workers' measure is calculated based on the previous year earning compared to a normative weekly wage defined as 1.25 times the poverty threshold. The 'inequitable pay' measure is based on a regression equation predicting "fair pay" taking white males earning as the standard. @Frances2011 refer to pay/hierarchical underemployment. This concept represents workers who are underpaid or at a lower hierarchical status compared with their previous job  (for workers made redundant) or than similarly skilled employees.</p> 
-
-<p align="justify"> Based on these definitions, we measure wage-related underemployment based on employees who are underpaid in the same occupational track. An underpaid employee is here considered as anyone receiving wages 20% lower than the median in the occupational category. Our measure is based on:</p>
-- <p align="justify">only employees as the LFS does not include wage information for self-employed workers.</p>
-- <p align="justify">only current earnings instead of past earning in previous jobs because this allows us to provide an overall updated picture of income underemployment in the UK.</p> 
-- <p align="justify">the median instead of the average because the average is sensitive to outliers (abnormally low or high values), while the median is much less affected by them.</p>
-- <p align="justify">the gross hourly pay.</p>
-
-<p align="justify">The table below summarises the baseline data we use in our analysis. We consider nine main occupational tracks (main jobs only) and calculate an "underpaid median wage" based on the 20% and less of the median wage per hour. Then, we estimate the number of underpaid employees and its proportion considering all employees in the occupational track (underpaid rate). Following this procedure, we are able to estimate the underpaid rate for each period included in this analysis.</p> 
+<p align="justify">Wage-related underemployment occurs when workers are underpaid for the work that they are doing. This is a complex notion. It is not typically reported in national statistics, and there is no one standard method for its estimation. We measure wage-related underemployment as being underpaid in comparison to other employees in the same occupation. An underpaid employee is defined as someone earning wages at least 20% lower than the median in their occupational category (See [Technical Appendix 4: Wage-related underemployment] for details).</p> 
 
 
-```{r underpaid-general-table, include=FALSE}
+## Wage-related underemployment by sex
 
-options(digits = 3)
-
-t_underpaid_occu <- LFS_clean %>% # summary table
-  filter(AGE >= 18 & AGE <= 64) %>% 
-  filter(ILODEFR == 1) %>% # only people in employment
-  filter(INECAC05 %in% c("1")) %>% #only employees
-  filter(HOURPAY > 0 & HOURPAY < 100) %>% # Average gross hourly pay
-  filter(!is.na(occu1)) %>%
-  group_by(year, quarter, occu1) %>%
-  summarise(median_pay_total = weighted_median(HOURPAY, weights = PIWT),
-            median_underpaid_total = (weighted_median(HOURPAY, weights = PIWT))*0.8,
-            count_total = sum(PIWT),
-            count_underpaid_total = sum(PIWT[HOURPAY <= median_underpaid_total]),
-            percentage = percent(count_underpaid_total/count_total, accuracy=1)
-            ) %>%
-   rename(Year = year,
-         Quarter = quarter,
-         "Occupational track (main job)" = occu1, 
-         "Median wage" = median_pay_total,
-         "Underpaid median wage" = median_underpaid_total,
-         "Underpaid employees" = count_underpaid_total,
-         "Underpaid rate" = percentage) %>% # Total population estimates
-  select(!count_total)  %>%
-  as_label(.)
-
-```
-
-
-```{r table-underpaid-html, echo=FALSE}
-
-t_underpaid_occu %>% gt(groupname_col = NULL) %>%
-   fmt_number(columns = "Underpaid employees", sep_mark = ",", decimals = 0) %>%
-   cols_label("Occupational track (main job)" = "Occupational track (main job)") %>%  
-   tab_header(
-      title = md("**Underpaid employees baseline data**"),
-      subtitle = md("Values based on gross hourly pay")) %>% 
-  tab_source_note(source_note = 'Source: UK Labour Force Survey.') %>%
-  tab_options(ihtml.active = TRUE,
-              ihtml.use_pagination = TRUE,
-              ihtml.page_size_default = 9,
-              heading.title.font.size = 15,
-              footnotes.multiline = TRUE,
-              source_notes.multiline = TRUE,
-              ihtml.use_sorting = TRUE,
-              ihtml.use_search = FALSE,
-              ihtml.use_filters = TRUE,
-              ihtml.use_highlight = TRUE)
-```
-
-
-
-## Male and female employees
-
-<p align="justify"> Figure \@ref(fig:plot-underpaid-sex) shows the underpaid rate and totals for male and female employees. Female employees are the most affected by lower wages. Up to 32% of women were underpaid in April/June 2020, while the highest level for men was reached in April/June 2010 with an all high 24%. This rate represents a difference of up to 960,516 more underpaid female employees compared with male employees. Levels have remained just above 20% for men and just below 30% for women in most periods.</p> 
+<p align="justify">Female employees are more likely to be underpaid than are male. Figure \@ref(fig:plot-underpaid-sex) shows the underpayment rate and totals for women and men: underpayment levels stood at just above 20% for men and just below 30% for women in most time periods. However, almost a third (32%) of women were underpaid in April/June 2020. The highest wage-underemployment level for men reached 24% (in April/June 2010). This rate represented a difference of up to 960,516 more underpaid female than male employees in the UK.</p> 
 
 ```{r underpaid-sex-table, include=FALSE}
 
@@ -244,7 +178,8 @@ p_underpaid_sex_rate <- t_underpaid_sex %>%
   geom_vline(xintercept = 64.5, color = "gray80") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,1, 0.1), limits = c(0, 1), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "top",
@@ -311,7 +246,8 @@ p_underpaid_sex_total <- t_underpaid_sex %>%
   geom_vline(xintercept = 64.5, color = "gray80") + # gridline 2021
 
   # scale and colour
-  scale_fill_discrete_qualitative(palette = "Dark 3") +
+  #scale_fill_discrete_qualitative(palette = "Dark 3") +
+  scale_fill_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,5000000, 500000), limits = c(0, 5000000), labels = comma, expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68),
                      labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
@@ -360,9 +296,9 @@ p_underpaid_sex_rate / p_underpaid_sex_total
 ```
 
 
-## Employees by age group
+## Wage-related underemployment by age group
 
-<p align="justify">Figure \@ref(fig:plot-underpaid-age) shows that employees between 18 to 34 years old are the most affected by wage underemployment. This is particularly the case for employees between 18 to 24 with rates above 50% in some periods. Underpaid employees are also high in other age groups where levels have remained around 20% for all periods.</p>
+<p align="justify">Figure \@ref(fig:plot-underpaid-age) shows that younger employees are by far the most affected by wage-related underemployment. This is particularly the case for employees between 18 to 24 who experience rates approaching and even above 50% in some periods. Yet other age groups are not fully protected against being underpaid either: levels of a fifth or more of wage-underemployment persist among the older workforce.</p>
 
 ```{r underpaid-by-age-table, include=FALSE}
 
@@ -438,7 +374,7 @@ rm(t_underpaid_age1, t_underpaid_age2)
 ```
 
 
-```{r plot-underpaid-age, fig.width = 7, fig.asp = 0.5, out.width = '100%', fig.fullwidth = TRUE, out.width = '100%', fig.cap= "Young employees are the most underpaid"}
+```{r plot-underpaid-age, fig.width = 7, fig.asp = 0.5, out.width = '100%', fig.fullwidth = TRUE, out.width = '100%', fig.cap= "Employees ages under 25 are more likely to be underpaid"}
 
 p_underpaid_age  <- t_underpaid_age  %>% 
   ggplot(aes(x = sequence, y = percentage, colour = factor(AGE_cat))) + 
@@ -462,7 +398,8 @@ p_underpaid_age  <- t_underpaid_age  %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,1, 0.1), limits = c(0, 1), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "bottom",
@@ -512,9 +449,9 @@ p_underpaid_age
 ```
 
 
-## Ethnicity
+## Wage-related underemployment by ethnic group
 
-<p align="justify">Figure \@ref(fig:plot-underpaid-ethnicity) shows the rate of underpaid employees according to their ethnicity group. Overall, the proportion of underpaid minority-ethnic employees is higher than the white majority employees for most periods. However, the differences have reduced since the Covid-19 pandemic hit. The third quarter of 2020 saw a reduction in the rate of minority-ethnic employees below white employees. This trend remained for seven quarters until the second quarter of 2022.</p> 
+<p align="justify">Figure \@ref(fig:plot-underpaid-ethnicity) shows the rate of underpayment among employees according to their ethnic group. Overall, the gap is not large, though the proportion of underpaid minority-ethnic employees is slightly higher than the white majority employees for most periods. Even the small differences reduced after the Covid-19 pandemic hit.</p> 
 
 
 ```{r underpaid-ethnicity-table, include=FALSE}
@@ -575,7 +512,7 @@ rm(t_underpaid_eth1, t_underpaid_eth2)
 ```
 
 
-```{r plot-underpaid-ethnicity, fig.width = 7, fig.asp = 0.5, out.width = '100%', fig.fullwidth = TRUE, out.width = '100%', fig.cap= "The proportion of underpaid minority-ethnic employees is slightly higher than their white counterparts for most periods"}
+```{r plot-underpaid-ethnicity, fig.width = 7, fig.asp = 0.5, out.width = '100%', fig.fullwidth = TRUE, out.width = '100%', fig.cap= "The proportion of underpaid minority-ethnic employees is slightly higher than their white counterparts"}
 
 p_underpaid_eth  <- t_underpaid_eth  %>% 
   ggplot(aes(x = sequence, y = percentage, colour = ETH)) + 
@@ -599,7 +536,8 @@ p_underpaid_eth  <- t_underpaid_eth  %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,1, 0.1), limits = c(0, 1), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "bottom",
@@ -650,9 +588,10 @@ p_underpaid_eth
 ```
 
 
-## Qualification level
+## Wage-related underemployment by qualification level
 
-<p align="justify"> Employees with a degree and higher education qualifications are less affected by wage underemployment than those without a qualification, as Figure \@ref(fig:plot-underpaid-education) show. Levels have dropped for those employees without a qualification during 2022, but show again an increase in its last quarter.</p>
+<p align="justify">Employees with a degree and higher education qualifications are less affected by wage underemployment than are those without a qualification, as Figure \@ref(fig:plot-underpaid-education) shows. Levels for those employees without a qualification during 2022, but show again an increase in its last quarter.</p>
+
 
 ```{r underpaid-table-education, include=FALSE}
 
@@ -747,7 +686,8 @@ p_underpaid_quali <- t_underpaid_quali %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,1, 0.1), limits = c(0, 1), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), 
@@ -797,9 +737,9 @@ p_underpaid_quali
 ```
 
 
-## Occupational group 
+## Wage-related underemployment by occupational group
 
-<p align="justify"> As Figure \@ref(fig:plot-underpaid-nsec) show, employees in management and professional occupations are more likely to experience wage-related underemployment. Although routine and semi-routine occupations are also affected, this trend is different from time and skills-related underemployment where this occupations group was more impacted.</p>
+<p align="justify">As Figure \@ref(fig:plot-underpaid-nsec) show, employees in managerial and professional occupations are more likely to experience wage-related underemployment than are other workers. Routine and semi-routine occupations are also affected, but this dimension of underemployment standards apart from time- and skills-related underemployment where levels were highest among this occupational group.</p>
 
 
 ```{r underpaid-table-nsec, include=FALSE}
@@ -889,7 +829,8 @@ p_underpaid_nsec <- t_underpaid_nsec %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dynamic") +
+  #scale_color_discrete_qualitative(palette = "Dynamic") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,1, 0.1), limits = c(0, 1), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), 
@@ -940,9 +881,10 @@ p_underpaid_nsec
 ```
 
 
-## Regional trends
+## Wage-related underemployment by region
 
-<p align="justify"> As Figure \@ref(fig:plot-underpaid-region) show, wage-related underemployment is present in high levels in all regions included in this analysis. While Scotland shows slightly lower levels than other regions, East Midlands, North West and South West concentrate the highest levels. However, trends are not stable and tend to fluctuate greatly in all periods.</p>
+<p align="justify">Wage-related underemployment is high across all UK regions, especially the East Midlands, North West and South West (Figure \@ref(fig:plot-underpaid-region)). Scotland shows slightly lower levels. These regional levels fluctuate greatly over time.</p>
+
 
 ```{r underpaid-table-region, include=FALSE}
 
@@ -1059,7 +1001,8 @@ p_underpaid_region <- t_underpaid_region %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dynamic") +
+  #scale_color_discrete_qualitative(palette = "Dynamic") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.5, 0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), 
@@ -1109,9 +1052,9 @@ p_underpaid_region
 ```
 
 
-## Industry trends
+## Wage-related underemployment by industry
 
-<p align="justify"> As Figure \@ref(fig:plot-underpaid-ind) show, wage underemployment is pervasive in the accommodation and food service sector. Employees in education, retail  and human health and social work are also affected.</p>
+<p align="justify"> As Figure \@ref(fig:plot-underpaid-ind) shows, wage underemployment is most pervasive in the accommodation and food service sector where, in most years, over a third of workers are underpaid (earning at least 20% lower than the median in their occupational category). Employees in education, retail and human health and social work are also affected while the finance and insurance industry group stand out again with the lowest levels of underemployment.</p>
 
 ```{r underpaid-table-ind, include=FALSE}
 
@@ -1216,7 +1159,8 @@ p_underpaid_ind <- t_underpaid_ind %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,1, 0.1), limits = c(0, 1), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), 
@@ -1266,6 +1210,7 @@ p_underpaid_ind
 ```
 
 
+##	Summary: Wage-related underemployment 
 
-
+<p align="justify">The wage-related underemployed are workers who are underpaid for what they do. In this report, we compare the wages of workers with others in their occupational grouping: we define being underpaid as earning wages that are at least 20% lower than the median for that occupation. We show that wage-underemployment is prevalent in the UK affecting over a fifth of working men and almost a third of working women, with levels persistent over time. It impacts most heavily on younger workers, people working in accommodation and food service industries, and, perhaps surprisingly, managers and professionals.</p>
 

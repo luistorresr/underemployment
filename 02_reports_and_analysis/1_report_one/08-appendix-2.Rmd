@@ -1,0 +1,16 @@
+
+# Technical Appendix 2: Time-related underemployment {-} 
+
+<p align="justify">Time-related underemployment is broadly defined  as a situation where people are working fewer hours than they wish [@Wang2018; @Bell2013]. Time-related underemployment is often measured in terms of the number of people who could not find a full-time job, in other words, people involuntarily working part-time hours. However this approach overlooks the current hours worked or the desired additional hours and it fails to recognise that full-time workers may also want additional hours. The International Labour Organisation [@ILO2013] improves upon this definition by considering as underemployed those wanting to work more hours, are available to do so, and are currently working a number of hours below a specified threshold. The Office of National Statistics [@ONS2022] in the UK draws upon this approach and considers as underemployed those who:</p>
+-	<p align="justify">are looking for an additional job or replacement job with longer hours, or who wanted to work longer hours in their current (main) job.</p>
+-	<p align="justify">were available to start working longer hours within two weeks.</p>
+-	<p align="justify">whose usual weekly hours were 40 or less for people aged under 18 years or 48 or less for people aged 18 years and over.</p>
+
+<p align="justify">The official underemployment rate is then calculated as the proportion of underemployed people among the total active population.</p>
+
+<p align="justify">We follow a similar approach to the ONS by measuring time-related underemployment using three main indicators:</p>
+1.	<p align="justify">Part-timers who work part-time because they could not find a full-time job.</p>
+2.	<p align="justify">Workers who would like to work longer hours in their current job.</p>
+3.	<p align="justify">Workers seeking a replacement job with more hours.</p>
+
+<p align="justify">We calculate the underemployment rate based on individuals who are employed (both employees and self-employed) rather than considering the entire active population.</p>

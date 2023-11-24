@@ -41,7 +41,9 @@ if(!require(gt)) install.packages("gt", repos = "http://cran.us.r-project.org")
 if(!require(htmltools)) install.packages("htmltools", repos = "http://cran.us.r-project.org")
 if(!require(yaml)) install.packages("yaml", repos = "http://cran.us.r-project.org")
 if(!require(grid)) install.packages("grid", repos = "http://cran.us.r-project.org")
+if(!require(see)) install.packages("see", repos = "http://cran.us.r-project.org")
 
+library(see) # colorblind-friendly ‘Okabe-Ito’ palette
 library(ggalt) # contingency table
 library(tidyverse) # several tools for data manipulation
 library(haven) # read SPSS, Stata, and SAS data
@@ -96,17 +98,21 @@ copyright3 = grobTree(textGrob("(c) The Underemployment Project\n      underempl
 
 # Skills-related underemployment
 
-<p align="justify">Skills-related underemployment, skills underutilisation or overqualification is defined  as a situation of mismatch between the skills needed for a job and the skills available in the labour market, in which skills from individuals surpasses the requirements of a job [@Rafferty2020]. Skills-related underemployment is measured through a proxy that compares the relation between the highest qualification held by an employee and their current occupation [@Green2016]. In national surveys such as the LFS, this can be measured through a normative approach or a statistical approach [@ILO2014].</p>
+<p align="justify">Our second dimension of underemployment is skills-related underemployment. We examine levels and trends over time in the number of workers who have skills that are greater than those required in their current job. We measure skills-related underemployment via one indicator we construct as follows:</p>
 
-<p align="justify"> We use the normative approach in this report because it allows to standardise the categories of “overqualified”, “matched” and “underqualified” through time. The normative approach is operationalised as follows:</p>
+- <p align="justify">Using education level data, we first group employees into those who have High, Intermediate and Low skill levels.</p>
+- <p align="justify">We group occupations into three skill levels: those that demand High, Intermediate and Low skills.</p>
+- <p align="justify">We consider employees as being skills-related underemployed when their education level is higher than the skill level required in their current occupation.</p> 
 
-- <p align="justify">Employees' highest qualification is categorised according to the first digit of the International Standard Classification of Education (ISCED-97) and then classified into thee categories. Later, ISCED levels 1 and 2 are assigned as "Low-skilled", levels 3 and 4 are considered "Intermediate", and levels 5 and 6 as "High-skilled".</p>
-- <p align="justify">Whilst occupations are classified based on the first digit of the International Standard Classification of Occupations (ISCO-88) and categorised into three groups. In this case, occupations with 9 ISCO code are considered "low-skilled", occupations related to ISCO codes 4, 5, 6, 7 and 8 are assigned to "intermediate" and occupations coded 1, 2 and 3 as "high-skilled".</p>
-- <p align="justify">Then, employees are considered as "overeducated" when their educational level is higher to the occupational group of their current job.</p> 
+(See [Technical Appendix 3: Skills-related underemployment] for full details).
 
-## Male and female workers
 
-<p align="justify"> Figure \@ref(fig:plot-overqualified-employees-sex) shows that the proportion of individuals categorised as skill underemployed has steadily increased between 2006 to 2022. In this regard, from the start of the period and until 2008 the percentage of overqualified male and female workers was similar, however since 2009 the gap between women and men has widened.</p>   
+## Skills-related underemployment by sex
+
+<p align="justify"> Figure \@ref(fig:plot-overqualified-employees-sex) shows that the proportion of individuals categorised as underemployed in terms of their skills steadily increased between 2006 and 2022. From 2006 to 2008 the percentage of overqualified male and female workers was similar, however since 2009 the gap between women and men has widened.</p>
+
+<p align="justify"> In the quarter from January to March 2022 the LFS questionnaire had changes related to education variables. This implies that values from previous waves were not brought forward to this period, and explain the sudden fall in this and all the figures presented in this section [@ONS2022b].</p>
+
 
 ```{r overqualification-by-men-and-women-table, include=FALSE}
 
@@ -127,7 +133,7 @@ n_skills <- LFS_clean %>% # summary table
 ```
 
 
-```{r plot-overqualified-employees-sex, fig.width = 7.5, fig.asp = 0.7, out.width = '100%', fig.cap= "Workers who have a qualification above the required for their occupation"}
+```{r plot-overqualified-employees-sex, fig.width = 7.5, fig.asp = 0.7, out.width = '100%', fig.cap= "Workers with qualifications exceeding the requirements for their occupation"}
 
 p_nskills <- n_skills %>% 
   ggplot(aes(x = sequence, y = percentage, colour = factor(SEX))) + 
@@ -151,7 +157,8 @@ p_nskills <- n_skills %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.3, 0.05), limits = c(0, 0.3), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "top",
@@ -217,7 +224,8 @@ pskills_total <- n_skills %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_fill_discrete_qualitative(palette = "Dark 3") +
+  #scale_fill_discrete_qualitative(palette = "Dark 3") +
+  scale_fill_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,3000000, 250000), limits = c(0,3000000), labels = comma, expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68),
                      labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
@@ -269,9 +277,9 @@ p_nskills / pskills_total
 ```
 
 
-## Workers by age group
+## Skills-related underemployment by age group
 
-<p align="justify"> Similarly to time-related underemployment, Figure \@ref(fig:plot-overqualified-employees-age) shows that the younger the workers are, the more likely to be overqualified in their current jobs. Particularly, the age group between 18 to 24 years old has a higher proportion of workers holding a qualification above than the one required at their jobs.</p>  
+<p align="justify">Figure \@ref(fig:plot-overqualified-employees-age) shows that the younger the worker, the more likely they are to be overqualified in their current jobs. The age group between 18 to 24 years old has a particularly higher proportion of workers holding a qualification above the one required at their jobs.</p>  
 
 ```{r overqualification-by-age-table, include=FALSE}
 
@@ -322,7 +330,8 @@ p_nskills_age <- n_skills_age %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.5, 0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "bottom",
@@ -372,9 +381,9 @@ p_nskills_age
 ```
 
 
-## Ethnicity
+## Skills-related underemployment by ethnic group
 
-<p align="justify">In addition, Figure \@ref(fig:plot-overqualified-employees-eth) shows ethnic-minority groups are more likely to find themselves in jobs for which they are overqualified. Furthermore, after the great recession the percentage of overqualified ethnic-minority groups sharply increased and has remained steady since then, while the proportion of white groups has constantly increased since 2010.</p>
+<p align="justify">Figure \@ref(fig:plot-overqualified-employees-eth) shows workers from ethnic-minority groups are more likely to find themselves in jobs for which they are overqualified than are white workers. Furthermore, after the great recession underemployment grew among ethnic-minority groups: the percentage overqualified increased and then remained steady at a higher level. Underemployment among white workers rose steadily from 2010.</p>
 
 
 ```{r overqualification-by-ethnicity-table, include=FALSE}
@@ -430,7 +439,8 @@ p_nskills_eth <- n_skills_eth %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.5,0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "bottom",
@@ -481,9 +491,9 @@ p_nskills_eth
 ```
 
 
-## Qualification level
+## Skills-related underemployment by qualification level
 
-<p align="justify">In terms of educational level, Figure \@ref(fig:plot-overqualified-employees-qualification) highlights that those with a degree or equivalent are more likely to be overqualified for their current job. Furthermore, although the number of overqualified workers that hold a “Higher education” and “GCE, A-level or equivalent” has not experienced relevant changes in this period, the percentage of overqualified employees with a degree or equivalent experienced an important growth after the great recession and has not gone back to pre-crisis levels.</p>
+<p align="justify">Workers with a degree or equivalent level of education are substantially more likely to be overqualified for their current job than are other workers (Figure \@ref(fig:plot-overqualified-employees-qualification)). Their underemployment grew after the great recession and it has not returned to pre-2008 levels. The percentage of overqualified workers among those with a “Higher education” and “GCE, A-level or equivalent” did not change in the period under study.</p>
 
 ```{r overqualification-by-educational-level-table, include=FALSE}
 
@@ -505,7 +515,7 @@ n_skills_quali <- LFS_clean %>% # summary table
 ```
 
 
-```{r plot-overqualified-employees-qualification, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Those workers with a degree are more likely to be overqualified for their jobs"}
+```{r plot-overqualified-employees-qualification, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Workers with a university degree are more likely to be overqualified for their jobs"}
 
 p_nskills_quali <- n_skills_quali %>% 
   ggplot() + 
@@ -529,7 +539,8 @@ p_nskills_quali <- n_skills_quali %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.5,0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "bottom",
@@ -578,9 +589,9 @@ p_nskills_quali
 
 ```
 
-## Occupational group
+## Skills-related underemployment by occupational group
 
-<p align="justify">In contrast to the indicators reviewed in the previous section, Figure \@ref(fig:plot-overqualified-employees-nsec) shows that intermediate occupations (such as secretary, personal assistant, clerical worker, office clerk, call centre agent, nursing auxiliary or nursery nurse) have a larger proportion of overqualified employees than those in a routine and semi-routine occupations. However, in 2022 the proportion of workers in both categories is matched. Nonetheless, between 2006 and 2022 only managerial positions have not experienced a relevant increase of employees that have higher qualifications than those required for their roles.</p>
+<p align="justify">Figure \@ref(fig:plot-overqualified-employees-nsec) shows that the female-dominated ‘intermediate’ occupational group (covering such occupations as secretary, personal assistant, clerical worker, office clerk, call centre agent, nursing auxiliary or nursery nurse) have a larger proportion of overqualified employees than do other occupations. Between 2006 and 2022, all occupations saw an increase in skills-related underemployment. The exception here is managers/professionals among whom skills-related underemployment is negligible. </p>
 
 ```{r overqualification-by-occupational-category-table, include=FALSE}
 
@@ -601,7 +612,7 @@ n_skills_nsec <- LFS_clean %>% # summary table
 
 ```
 
-```{r plot-overqualified-employees-nsec, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Intermediate occupations represent the largest proportion of overqualified employees"}
+```{r plot-overqualified-employees-nsec, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Intermediate occupations have the largest proportion of overqualified employees"}
 
 p_nskills_nsec <- n_skills_nsec %>% 
   ggplot() + 
@@ -625,7 +636,8 @@ p_nskills_nsec <- n_skills_nsec %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dynamic") +
+  #scale_color_discrete_qualitative(palette = "Dynamic") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.5,0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "bottom",
@@ -674,9 +686,9 @@ p_nskills_nsec
 
 ```
 
-##  Permanent and non-permanent jobs  
+##  Skills-related underemployment by contract type 
 
-<p align="justify">As Figure \@ref(fig:plot-overqualified-employees-JOBTYP) shows, the proportion of overqualified employees is larger among those in a non-permanent job than those with a permanent contract. Nonetheless, in both work arrangements the proportion of overqualified workers has significantly increased during this period.</p>   
+<p align="justify">As Figure \@ref(fig:plot-overqualified-employees-JOBTYP) shows, workers in a non-permanent job are more likely to be over-qualified for their jobs than are permanent workers. The proportion of overqualified workers increased over time for both groups.</p>   
 
 ```{r overqualification-by-work-arrangement-table, include=FALSE}
 
@@ -698,7 +710,7 @@ t_skills_temp <- LFS_clean %>% # summary table
 ```
 
 
-```{r plot-overqualified-employees-JOBTYP, fig.width = 7, fig.asp = 0.5, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Workers in non-permanent jobs liketly to be overqualified "}
+```{r plot-overqualified-employees-JOBTYP, fig.width = 7, fig.asp = 0.5, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Workers in non-permanent jobs likely to be overqualified"}
 
 p_nskills_temp <- t_skills_temp %>% 
   ggplot() + 
@@ -722,7 +734,8 @@ p_nskills_temp <- t_skills_temp %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.5,0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "bottom",
@@ -773,9 +786,8 @@ p_nskills_temp
 
 ```
 
-## Zero-hours contracts
 
-<p align="justify">Economic crisis could lead employees working in positions that require lower qualifications than those they have and accept more precarious working arrangements to avoid unemployment. As Figure \@ref(fig:plot-overqualified-fled) show, un the UK this can be observed in the increase of flexible employment arrangements, in which the proportion of overqualified workers with zero-hours contracts has significantly increased during the cost-of-living crisis.</p>
+<p align="justify">In times of economic unrest, more employees might enter into jobs that require lower qualifications than they possess and they might accept more precarious working arrangements to avoid unemployment. As Figure \@ref(fig:plot-overqualified-fled) shows, this can be observed in the increase in flexible employment arrangements over time. The proportion of overqualified workers with zero-hours contracts in particular increased substantially during the cost-of-living crisis.</p>
 
 ```{r overqualified-table-fled, include=FALSE}
 
@@ -835,7 +847,8 @@ p_nskills_fled <- t_nskills_fled %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dynamic") +
+  #scale_color_discrete_qualitative(palette = "Dynamic") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,1, 0.1), limits = c(0, 1), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), 
@@ -899,9 +912,10 @@ p_nskills_fled
 ```
 
 
-## Regional trends
+## Skills-related underemployment by region
 
-<p align="justify">Figure \@ref(fig:plot-skills-overqualified-employees-region) shows that the mismatch between skills and job requirements have increased steady in all regions. Scotland (including Glasgow) shows a slightly higher proportion of overqualified workers in most periods between 2006 and 2022 while the East Midlands (including Nottingham) currently has one of the lowest levels of skills-related underemployment in the UK.</p>   
+<p align="justify">Figure \@ref(fig:plot-skills-overqualified-employees-region) shows that the mismatch between the skills held by workers and the requirements of their jobs increased steadily in all regions. Scotland (including Glasgow) shows a slightly higher proportion of overqualified workers in most periods between 2006 and 2022 while the East Midlands (including Nottingham) currently has one of the lowest levels of skills-related underemployment in the UK, but the regional gap is narrow.</p>   
+
 
 ```{r overqualification-by-region-table, include=FALSE}
 
@@ -948,7 +962,7 @@ t_skills_region <- LFS_clean %>% # summary table
 ```
 
 
-```{r plot-skills-overqualified-employees-region, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "The mismatch between skills and job requirements have increased steady in all regions"}
+```{r plot-skills-overqualified-employees-region, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "The mismatch between skills and job requirements has increased steadily in all regions"}
 
 p_nskills_region <- t_skills_region %>% 
   ggplot() + 
@@ -972,7 +986,8 @@ p_nskills_region <- t_skills_region %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.30,0.02), limits = c(0, 0.30), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "top",
@@ -1022,10 +1037,9 @@ p_nskills_region
 ```
 
 
-## Industry trends 
+## Skills-related underemployment by industry
 
-<p align="justify"> During this period, the proportion of overqualified employees has steadily increased in the six industries related to the provision of services. In this regard, the Hospitality (accommodation and food service) has been the industry with the highest increase of employees with a qualification higher than the one required in their jobs (Figure \@ref(fig:plot-overqualification-ind1)).</p> 
-
+<p align="justify">Hospitality (accommodation and food service activities) stands out as the sector with most skills-related underemployment and the highest growth over time (Figure \@ref(fig:plot-overqualification-ind1)). The proportion of overqualified employees steadily increased in the six industries related to the provision of services.</p>
 
 ```{r overqualification-by-industry-sector-table, include=FALSE}
 
@@ -1047,7 +1061,7 @@ t_skills_ind1 <- LFS_clean %>% # summary table
 ```
 
 
-```{r plot-overqualification-ind1, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Involuntary part-time is concentrated in the Retail and Hospitality sectors"}
+```{r plot-overqualification-ind1, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Skills-related underemployment is concentrated in the Retail and Hospitality sectors"}
 
 p_skills_ind1 <- t_skills_ind1 %>% 
   ggplot(aes(x = sequence, y = percentage, colour = factor(ind1))) + 
@@ -1071,7 +1085,8 @@ p_skills_ind1 <- t_skills_ind1 %>%
   geom_vline(xintercept = 64.5, color = "#c9c9c9") + # gridline 2021
 
   # scale and colour
-  scale_color_discrete_qualitative(palette = "Dark 3") +
+  #scale_color_discrete_qualitative(palette = "Dark 3") +
+  scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,1, 0.1), limits = c(0, 1), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), 
@@ -1119,4 +1134,9 @@ p_skills_ind1 <- t_skills_ind1 %>%
 p_skills_ind1
 
 ```
+
+
+## Summary: Skills-related underemployment
+
+<p align="justify">The skills-related underemployed are workers who possess higher levels of skills than their current job requires. Younger workers, minority ethnic workers, precarious workers, those with degrees, and people employed in intermediate occupations or in hospitality, alongside slightly more women than men, were more likely to have skills greater than their jobs needs. We next discuss wage-related underemployment.</p>
 

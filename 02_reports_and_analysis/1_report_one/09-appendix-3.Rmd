@@ -1,0 +1,9 @@
+
+# Technical Appendix 3: Skills-related underemployment {-} 
+
+<p align="justify">Researchers have defined skills-related underemployment (or skills underutilisation or overqualification) as a situation of mismatch between the skills needed for a job and the skills available in the labour market, in which the skills an individual possesses surpasses the requirements of a job [@Rafferty2020].Skills-related underemployment is measured by comparing the highest qualification held by an employee with their current occupation [@Green2016]. In national surveys such as the LFS, this can be measured through a so-called normative approach or a statistical approach [@ILO2014].</p>
+
+<p align="justify">We use the normative approach because it allows us to standardise the categories of “overqualified”, “matched” and “underqualified” through time. The normative approach is operationalised as follows:</p>
+-	<p align="justify">Employees’ highest qualification is categorised according to the first digit of the International Standard Classification of Education (ISCED-97) and then classified into three categories. Later, ISCED levels 1 and 2 are assigned as “Low-skilled”, levels 3 and 4 are considered “Intermediate”, and levels 5 and 6 as “High-skilled”.</p>
+-	<p align="justify">Occupations are classified based on the first digit of the International Standard Classification of Occupations (ISCO-88) and categorised into three groups. In this case, occupations with 9 ISCO code are considered “low-skilled”, occupations related to ISCO codes 4, 5, 6, 7 and 8 are assigned to “intermediate” and occupations coded 1, 2 and 3 as “high-skilled”.</p>
+-	<p align="justify">Then, employees are considered as “overeducated” when their educational level is higher to the occupational group of their current job.</p>
