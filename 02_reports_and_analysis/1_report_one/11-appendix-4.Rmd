@@ -1,0 +1,111 @@
+
+```{r libraries-A4, include=FALSE, echo=FALSE}
+
+#### packages needed
+if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(gridExtra)) install.packages("girdExtra", repos = "http://cran.us.r-project.org")
+if(!require(Hmisc)) install.packages("Hmisc", repos = "http://cran.us.r-project.org")
+if(!require(sjlabelled)) install.packages("sjlabelled", repos = "http://cran.us.r-project.org")
+if(!require(doBy)) install.packages("doBy", repos = "http://cran.us.r-project.org")
+if(!require(sjmisc)) install.packages("sjmisc", repos = "http://cran.us.r-project.org")
+if(!require(webshot)) install.packages("webshot", repos = "http://cran.us.r-project.org")
+if(!require(scales)) install.packages("scales", repos = "http://cran.us.r-project.org")
+if(!require(ggalt)) install.packages("ggalt", repos = "http://cran.us.r-project.org")
+if(!require(janitor)) install.packages("janitor", repos = "http://cran.us.r-project.org")
+if(!require(bookdown)) install.packages("bookdown", repos = "http://cran.us.r-project.org")
+if(!require(htmlwidgets)) install.packages("htmlwidgets", repos = "http://cran.us.r-project.org")
+if(!require(widgetframe)) install.packages("widgetframe", repos = "http://cran.us.r-project.org")
+if(!require(officer)) install.packages("officer", repos = "http://cran.us.r-project.org")
+if(!require(showtext)) install.packages("showtext", repos = "http://cran.us.r-project.org")
+if(!require(gt)) install.packages("gt", repos = "http://cran.us.r-project.org")
+if(!require(htmltools)) install.packages("htmltools", repos = "http://cran.us.r-project.org")
+if(!require(yaml)) install.packages("yaml", repos = "http://cran.us.r-project.org")
+
+library(ggalt) # contingency table
+library(tidyverse) # several tools for data manipulation
+library(haven) # read SPSS, Stata, and SAS data
+library(gridExtra) # arrange multiple grid-based plots on a page
+library(Hmisc) # many functions useful for data analysis
+library(sjmisc) # useful to set Na's
+library(sjlabelled) # get_labels function
+library(doBy) # 'do' something to data stratified 'by' some variables
+library(scales) # add scale symbols and colour to axis
+library(janitor) # add totals to tables
+library(bookdown) # add totals to tables
+library(htmlwidgets)
+library(widgetframe)
+library(officer) # to add additional formatting to tables 
+library(gt) #  creation of interactive data tables
+library(htmltools) # tools for creating, manipulating, and writing HTML 
+library(webshot)
+library(yaml)
+library(showtext)
+  font_add_google("Lato")
+  showtext_auto()
+
+```
+
+# Technical Appendix 4: Wage-related underemployment {-} 
+
+<p align="justify">A range of approaches to wage-related underemployment have been developed. @Feldman1996, for example, suggests that wage-related underemployment can be measured by looking at those workers who earn wages 20% or less than they did in their previous job. For new graduates/school-leavers who have not yet been employed, he argues that we might use wages 20% or less than average of their graduating cohort in same major occupation track. @Clogg1986 propose instead that low-income measures can be used as indicators of wage underemployment. They discuss two measures: what they term ‘poverty workers’ and ‘inequitable pay’. The poverty workers measure is calculated based on the previous year earning compared to a normative weekly wage defined as 1.25 times the poverty threshold. The ‘inequitable pay’ measure is based on a regression equation predicting “fair pay” taking white males earning as the standard. In contract, @Frances2011 refer to pay/hierarchical underemployment. This concept represents workers who are underpaid or at a lower hierarchical status compared with their previous job (for workers made redundant) or than similarly skilled employees.</p> 
+
+<p align="justify">We measure wage-related underemployment as being underpaid in comparison to other employees in the same occupation. An underpaid employee is defined as someone earning wages at least 20% lower than the median in their occupational category. Our measure is based on:</p> 
+-	<p align="justify">only employees as the LFS does not include wage information for self-employed workers.</p> 
+-	<p align="justify">only current earnings instead of past earning in previous jobs because this allows us to provide an overall updated picture of income underemployment in the UK.</p> 
+-	<p align="justify">the median instead of the average because the average is sensitive to outliers (extremely low or high values), while the median is much less affected by them.</p> 
+-	<p align="justify">the gross (before tax) hourly pay.</p> 
+
+<p align="justify"> Table 2 summarises the baseline data we use in our analysis. We consider nine main occupational tracks (main jobs only) and calculate an “underpaid median wage” based on the 20% and less of the median wage per hour. Then, we estimate the number of underpaid employees and its proportion considering all employees in the occupational track (underpaid rate). Following this procedure, we are able to estimate the underpaid rate for each period.</p> 
+
+
+```{r underpaid-general-table, include=FALSE}
+
+options(digits = 3)
+
+t_underpaid_occu <- LFS_clean %>% # summary table
+  filter(AGE >= 18 & AGE <= 64) %>% 
+  filter(ILODEFR == 1) %>% # only people in employment
+  filter(INECAC05 %in% c("1")) %>% #only employees
+  filter(HOURPAY > 0 & HOURPAY < 100) %>% # Average gross hourly pay
+  filter(!is.na(occu1)) %>%
+  group_by(year, quarter, occu1) %>%
+  summarise(median_pay_total = weighted_median(HOURPAY, weights = PIWT),
+            median_underpaid_total = (weighted_median(HOURPAY, weights = PIWT))*0.8,
+            count_total = sum(PIWT),
+            count_underpaid_total = sum(PIWT[HOURPAY <= median_underpaid_total]),
+            percentage = percent(count_underpaid_total/count_total, accuracy=1)
+            ) %>%
+   rename(Year = year,
+         Quarter = quarter,
+         "Occupational track (main job)" = occu1, 
+         "Median wage" = median_pay_total,
+         "Underpaid median wage" = median_underpaid_total,
+         "Underpaid employees" = count_underpaid_total,
+         "Underpaid rate" = percentage) %>% # Total population estimates
+  select(!count_total)  %>%
+  as_label(.)
+
+```
+
+
+```{r table-underpaid-html, echo=FALSE}
+
+t_underpaid_occu %>% gt(groupname_col = NULL) %>%
+   fmt_number(columns = "Underpaid employees", sep_mark = ",", decimals = 0) %>%
+   cols_label("Occupational track (main job)" = "Occupational track (main job)") %>%  
+   tab_header(
+      title = md("**Table 2: Underpaid employees baseline data**"),
+      subtitle = md("Values based on gross hourly pay")) %>% 
+  tab_source_note(source_note = 'Source: UK Labour Force Survey.') %>%
+  tab_options(ihtml.active = TRUE,
+              ihtml.use_pagination = TRUE,
+              ihtml.page_size_default = 9,
+              heading.title.font.size = 15,
+              footnotes.multiline = TRUE,
+              source_notes.multiline = TRUE,
+              ihtml.use_sorting = TRUE,
+              ihtml.use_search = FALSE,
+              ihtml.use_filters = TRUE,
+              ihtml.use_highlight = TRUE)
+```
+

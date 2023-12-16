@@ -1,0 +1,32 @@
+
+# Executive Summary {-}
+
+**Background** 
+
+<p align="justify">Underemployment has become a topic of significant interest among policy makers and researchers in recent years. Despite its widespread prevalence and significant economic and social consequences, measuring underemployment has proven to be a challenging task due to its multidimensional nature and the interdisciplinary nature of research on this topic.</p>  
+
+<p align="justify">In this first project report we address key questions around how we can measure underemployment and track it over time. The report examines trends in the levels of various forms of underemployment for employees and self-employed workers aged 18 to 64 in the UK since 2006. We use the UK’s largest study on employment circumstances, the Labour Force Survey (LFS), describing long-term trends in the prevalence, characteristics of and social inequalities in underemployment and its various dimensions.</p>  
+
+**Our approach** 
+
+<p align="justify">We approach underemployment as a complex and multidimensional phenomenon including insufficient hours of employment, limited use of skills at work and/or low wages as follows:</p> 
+
+- <p align="justify">Time-related underemployment: The time-related underemployed work fewer hours than they desire. In this report, we count as time-underemployed those part-timers who work part-time because they could not find a full-time job, workers (part- and full-timers) who would like to work longer hours in their current job, and workers seeking a replacement job with more hours.</p> 
+
+- <p align="justify">Skills-related underemployment: The skills-related underemployed are workers who possess higher levels of skills than their current job requires. In this report, we measure skills-related underemployment via one indicator we construct using education level data where we first group employees into those who have high, intermediate, and low skill levels. Then, we group occupations into three skill levels: those that demand High, Intermediate and Low skills. Finally, employees are considered as skills underemployed when their educational level is higher to the occupational group of their current job.</p> 
+
+- <p align="justify">Wage-related underemployment: The wage-related underemployed are workers who are underpaid for what they do. In this report, we compare the wages of workers with others in their occupational grouping. We define being underpaid as earning wages that are at least 20% lower than the median for that occupation.</p>  
+
+**Findings** 
+
+- <p align="justify">The groups facing higher levels of time-related underemployment include younger workers and workers from minority ethnic groups, as well as people employed in routine/semi-routine occupations and on precarious contracts.</p> 
+
+- <p align="justify">Younger workers, minority ethnic workers, precarious workers, those with degrees, and people employed in intermediate occupations or in hospitality, alongside slightly more women than men, were more likely to have skills greater than their jobs need.</p> 
+
+- <p align="justify">Wage-underemployment is prevalent in the UK affecting over a fifth of working men and almost a third of working women, with levels persistent over time. It impacts most heavily on younger workers, people working in accommodation and food service industries, and, perhaps surprisingly, managers and professionals.</p> 
+
+**Conclusions** 
+
+<p align="justify">Our findings show which groups face higher levels of underemployment and who is better protected from it. Overall, women, younger workers, workers with lower qualification levels and those from ethnic minorities are most affected by underemployment in all three dimensions. Yet the different measures of underemployment can provide quite different pictures. Although they mostly agree on who is most affected by underemployment, they do show some different trends and levels. The varying indicators match less on regional trends, for example, and on which occupational groups are more affected by underemployment.</p> 
+
+<p align="justify">These first findings raise fascinating questions about the most appropriate indicators to use to capture underemployment as a whole. Our second report will focus on exploring these indicators in combination.</p> 
