@@ -1,8 +1,0 @@
-
-# Conclusions and the way forward {-} 
-
-<p align="justify"> *The Underemployment Project* approaches underemployment as a complex and multidimensional phenomenon including insufficient hours of employment, limited use of skills at work and/or low wages. This first project report examines trends in the levels of these three forms of underemployment in the UK since 2006. We explore gender, age, ethnic, occupational, qualification, regional and industry disparities in levels of underemployment and trends over time.</p> 
-
-<p align="justify"> Our findings show that women, younger workers, workers with lower qualification levels and those from ethnic minorities are most affected by underemployment. Yet our report also shows that the different indicators of underemployment can provide quite different pictures. Although they mostly agree on who is most affected by underemployment, they do show some different trends and levels. The varying indicators match less on regional trends, for example, and on which occupational groups are more affected by underemployment.</p> 
-
-<p align="justify"> These first findings from *The Underemployment Project* raise fascinating questions about the most appropriate indicators to use in order to capture underemployment as a whole. Our second report will focus on exploring these indicators in combination. This will allow us to understand if and how the three dimensions of underemployment accumulate and whether our indicators overlap regarding the workers that are identified as underemployed. It will also provide a view on the nature of the relationships between indicators, for instance, does wage-related underemployment impact time or skills-related underemployment?</p>
