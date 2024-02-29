@@ -1,7 +1,7 @@
 --- 
 title: 'Underemployment Levels and Trends: Time, skills, & wages'
 author: "The Underemployment Project"
-date: "December 2023"
+date: "Publication: December 2023 -  | Update: February 2024"
 site: bookdown::bookdown_site
 documentclass: book
 colorlinks: yes
@@ -22,4 +22,11 @@ github-repo: luistorresr/underemployment
 For more information visit [underemployment.info](https://underemployment.info)
 
 <p align="justify">**How to cite this report**:</p>
-- </p>Torres, L., Munoz, M., Warren, T., Kamerāde, D., Beck, V. Fuertes, V., Magnus, L., & Morris, C. (2023). Underemployment Levels and Trends: Time, Skills, & Wages. The Underemployment Project. Available at:  https://trends.underemployment.info/</p>
+- <p>Torres, L., Munoz, M., Warren, T., Kamerāde, D., Beck, V. Fuertes, V., Magnus, L., & Morris, C. (2023). Underemployment Levels and Trends: Time, Skills, & Wages. The Underemployment Project. Available at:  https://trends.underemployment.info/</p>
+
+# Updates {-}
+
+- <p>**28 February 2024**:</p> 
+    1. <p align="justify">We have removed the quarter from January to March 2022 in the skills related-underemployment section. The Labour Force Survey had changes related to education variables affecting the analysis in this section.</p>
+    2. <p align="justify">We have corrected the values in Figure \@ref(fig:plot-seeking-job-sex) and Figure \@ref(fig:plot-seeking-by-age). The variable including 'longer hours' was missing (PREFHR), and it has now been added.</p> 
+

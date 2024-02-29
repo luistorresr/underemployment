@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 
 ```{r setup-1, include=FALSE}
 knitr::opts_chunk$set(
@@ -2300,7 +2305,7 @@ p_seeking_hours
 
 ### Seeking a replacement job with more hours by sex
 
-<p align="justify">Figure \@ref(fig:plot-seeking-job-sex) shows that between the period of 2006 to 2022 in absolute terms more male than female workers sought a replacement job with more hours, although such differences reduced after the start of the cost of living crisis. This difference can be explained by the higher participation of men in the labour market compared to women. </p>
+<p align="justify">Figure \@ref(fig:plot-seeking-job-sex) shows that between the period of 2006 to 2022 slightly more male than female workers sought a replacement job with more hours. Such differences reduced after the start of the cost of living crisis when female workers were more likely to look for a replacement job with more hours. This difference can be explained by the higher participation of men in the labour market compared to women, and the effects of the cost of living on female workers. </p>
 
 ```{r table-seeking-job-sex, include=FALSE}
 
@@ -2312,13 +2317,13 @@ t_seeking <- LFS_clean %>% # summary table
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
   filter(DIFJOB == 1) %>% # Whether looking for different or additional paid job or business = (1) Yes
-  group_by(year, sequence, quarter, SEX, ADDJOB) %>% 
+  filter(ADDJOB == 1) %>% # replacement job 
+  group_by(year, sequence, quarter, SEX, PREFHR) %>% 
   summarise(count = sum(PWT)) %>% 
   group_by(year, sequence, quarter, SEX) %>% 
   # percentage part-time per quarter
   mutate(percentage = count/sum(count)) %>% 
-  filter(!is.na(ADDJOB)) %>%
-  filter(ADDJOB == 1) %>% # Whether seeking replacement or additional job = (1) A new job to replace your present (main) job
+  filter(PREFHR == 1) %>% # more hours
   as_label(.)
 
 ```
@@ -2348,7 +2353,7 @@ p_seeking_total <- t_seeking %>%
   # scale and colour
   #scale_fill_discrete_qualitative(palette = "Dark 3") +
   scale_fill_okabeito(palette = "full") + 
-  scale_y_continuous(breaks = seq(0,1500000, 250000), limits = c(0, 1500000), labels = comma, expand = c(0,0)) +
+  scale_y_continuous(breaks = seq(0,500000, 50000), limits = c(0, 500000), labels = comma, expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "bottom", 
                      labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
                             "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
@@ -2362,14 +2367,14 @@ p_seeking_total <- t_seeking %>%
        #subtitle  = "T ",
        caption = c("Note: Applies to all workers seeking a new job to replace their present (main) job")
        ) +
-  annotate('rect', xmin=10, xmax=14, ymin=0, ymax=1500000, alpha=.2, fill='brown1') + # Great Recession
-  annotate(geom = "text", x = 10, y = 1300000, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
-  annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=1500000, alpha=.2, fill='darkgreen') + # back to pre-recession
-  annotate(geom = "text", x = 31.2, y = 1300000, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
-  annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=1500000, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 1300000, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=1500000, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 1300000, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate('rect', xmin=10, xmax=14, ymin=0, ymax=500000, alpha=.2, fill='brown1') + # Great Recession
+  annotate(geom = "text", x = 10, y = 300000, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
+  annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=500000, alpha=.2, fill='darkgreen') + # back to pre-recession
+  annotate(geom = "text", x = 31.2, y = 300000, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
+  annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=500000, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 56.5, y = 300000, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=500000, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 63, y = 300000, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
   annotation_custom(copyright) +
   
   # theme
@@ -2398,7 +2403,7 @@ p_seeking_total
 
 ### Seeking a replacement job with more hours by age group
 
-<p align="justify">Considering the trends in the three indicators of time-related underemployment, younger workers could be considered more at risk of falling under this category than older workers. Specifically, Figure \@ref(fig:plot-seeking-by-age) shows that the majority of workers looking to replace their jobs are between 25 and 34 year old, followed by those between 18 to 24 years old.</p>
+<p align="justify">Considering the trends in the three indicators of time-related underemployment, younger workers could be considered more at risk of falling under this category than older workers. Specifically, Figure \@ref(fig:plot-seeking-by-age) shows that the majority of workers looking to replace their jobs are between 18 to 24 year old, followed by those between 25 to 34 years old.</p>
 
 ```{r seeking-by-age-table, include=FALSE}
 
@@ -2416,13 +2421,13 @@ t_seeking_age <- LFS_clean %>% # summary table
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
   filter(DIFJOB == 1) %>% # Whether looking for different or additional paid job or business = (1) Yes
-  group_by(year, sequence, quarter, AGE_cat, ADDJOB) %>% 
+  filter(ADDJOB == 1) %>% # replacement job 
+  group_by(year, sequence, quarter, AGE_cat, PREFHR) %>% 
   summarise(count = sum(PWT)) %>% 
   group_by(year, sequence, quarter, AGE_cat) %>% # calculate % per group
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
-  filter(!is.na(ADDJOB)) %>%
-  filter(ADDJOB == 1) %>% # Whether seeking replacement or additional job = (1) A new job to replace your present (main) job
+  filter(PREFHR == 1) %>% # more hours
   as_label(.)
 
 ```
@@ -2453,7 +2458,7 @@ p_seeking_age  <- t_seeking_age  %>%
   # scale and colour
   #scale_fill_discrete_qualitative(palette = "Dynamic") +
   scale_fill_okabeito(palette = "full") + 
-  scale_y_continuous(breaks = seq(0,3000000, 200000), limits = c(0, 3000000), labels = comma, expand = c(0,0)) +
+  scale_y_continuous(breaks = seq(0,500000, 50000), limits = c(0, 500000), labels = comma, expand = c(0,0)) +
   scale_x_continuous(breaks=c(1:68), position = "bottom", 
                      labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
                             "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
@@ -2467,14 +2472,14 @@ p_seeking_age  <- t_seeking_age  %>%
        #subtitle  = " ",
        caption = c("Note: Applies to all workers seeking a new job to replace their present (main) job")
        ) +
-  annotate('rect', xmin=10, xmax=14, ymin=0, ymax=3000000, alpha=.2, fill='brown1') + # Great Recession
-  annotate(geom = "text", x = 10, y = 2500000, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
-  annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=3000000, alpha=.2, fill='darkgreen') + # back to pre-recession
-  annotate(geom = "text", x = 31.2, y = 2500000, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
-  annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=3000000, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 2500000, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=3000000, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 2500000, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate('rect', xmin=10, xmax=14, ymin=0, ymax=500000, alpha=.2, fill='brown1') + # Great Recession
+  annotate(geom = "text", x = 10, y = 450000, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
+  annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=500000, alpha=.2, fill='darkgreen') + # back to pre-recession
+  annotate(geom = "text", x = 31.2, y = 450000, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
+  annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=500000, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 56.5, y = 450000, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=500000, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 63, y = 450000, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
   annotation_custom(copyright) +
   
   # theme
@@ -2497,7 +2502,6 @@ p_seeking_age  <- t_seeking_age  %>%
  guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 6)))
 
 p_seeking_age
-
 ```
 
 

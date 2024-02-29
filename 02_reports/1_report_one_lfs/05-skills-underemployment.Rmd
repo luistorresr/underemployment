@@ -1,3 +1,10 @@
+---
+output:
+  html_document: default
+  word_document: default
+editor_options:
+  chunk_output_type: console
+---
 
 ```{r setup-2, include=FALSE}
 knitr::opts_chunk$set(
@@ -79,6 +86,15 @@ library(showtext)
 
 load("../../data/LFS_clean.rda")
 
+LFS_clean_skills <- LFS_clean %>% 
+  filter(sequence != 65) %>%  
+  mutate(sequence2 = case_when(
+  sequence == 66 ~ 65,
+  sequence == 67 ~ 66,
+  sequence == 68 ~ 67,
+  TRUE ~ sequence
+))
+
 ```
 
 
@@ -111,20 +127,20 @@ copyright3 = grobTree(textGrob("(c) The Underemployment Project\n      underempl
 
 <p align="justify"> Figure \@ref(fig:plot-overqualified-employees-sex) shows that the proportion of individuals categorised as underemployed in terms of their skills steadily increased between 2006 and 2022. Skills related underemployment considerably increased since 2006. The number of overqualified employees increased from over 1.5 million in 2006, to over 3.7 million in 2022. From 2006 to 2008 the percentage of overqualified male and female workers was similar, however since 2009 the gap between women and men has widened.</p>
 
-<p align="justify"> In the quarter from January to March 2022 the LFS questionnaire had changes related to education variables. This implies that values from previous waves were not brought forward to this period, and explain the sudden fall in this and all the figures presented in this section [@ONS2022b].</p>
+<p align="justify"> In the quarter from January to March 2022 the LFS questionnaire had changes related to education variables. This implies that values from previous waves were not brought forward to this period [@ONS2022b]. Therefore, we have removed the quarter from January to March 2022 in this section.</p>
 
 
 ```{r overqualification-by-men-and-women-table, include=FALSE}
 
 options(digits = 3)
 
-n_skills <- LFS_clean %>% # summary table
+n_skills <- LFS_clean_skills %>% # summary table
   filter(AGE >= 18 & AGE <= 64) %>% 
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
-  group_by(year, sequence, quarter, SEX, sk_mm) %>% 
+  group_by(year, sequence2, quarter, SEX, sk_mm) %>% 
   summarise(count = sum(PWT)) %>% 
-  group_by(year, sequence, quarter, SEX) %>% 
+  group_by(year, sequence2, quarter, SEX) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(sk_mm == 1) %>%  #filtering by overqualified
@@ -136,7 +152,7 @@ n_skills <- LFS_clean %>% # summary table
 ```{r plot-overqualified-employees-sex, fig.width = 7.5, fig.asp = 0.7, out.width = '100%', fig.cap= "Workers with qualifications exceeding the requirements for their occupation"}
 
 p_nskills <- n_skills %>% 
-  ggplot(aes(x = sequence, y = percentage, colour = factor(SEX))) + 
+  ggplot(aes(x = sequence2, y = percentage, colour = factor(SEX))) + 
   geom_line(linewidth = 0.7, show.legend = FALSE) +  
   geom_point(shape = 20, show.legend = TRUE) +
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
@@ -161,12 +177,13 @@ p_nskills <- n_skills %>%
   scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.3, 0.05), limits = c(0, 0.3), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
-  scale_x_continuous(breaks=c(1:68), position = "top",
-                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
-                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
-                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
-                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
-                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_x_continuous(breaks=c(1:67), position = "top",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "","", 
+                              "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", 
+                            "", "2016", "", "", "", "2017", "", "", "", "2018", "", "", 
+                            "", "2019", "", "", "", "2020", "", "", "", "2021", "", "", "", "2022",""), 
+                     expand = c(0,0)) +
   # annotation
   labs(x = "", 
        y = "Percentage", 
@@ -175,18 +192,18 @@ p_nskills <- n_skills %>%
        caption = ""
        ) +
   annotate('rect', xmin=10, xmax=14, ymin=0, ymax=0.3, alpha=.2, fill='brown1') + # Great Recession
-  annotate(geom = "text", x = 10, y = 0.25, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
+  annotate(geom = "text", x = 9, y = 0.25, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
   annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=0.3, alpha=.2, fill='darkgreen') + # back to pre-recession
-  annotate(geom = "text", x = 31.2, y = 0.25, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .6) +
+  annotate(geom = "text", x = 30, y = 0.25, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .6) +
   annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=0.3, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 0.25, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .6) +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=0.3, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 0.25, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .6) +
+  annotate(geom = "text", x = 55, y = 0.25, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .6) +
+  annotate('rect', xmin=63, xmax=67, ymin=0, ymax=0.3, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 62, y = 0.25, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .6) +
   annotation_custom(copyright) +
 
   # theme
   theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
-  theme(plot.margin = unit(c(0, 0, 0, 0.3), "cm"),
+  theme(plot.margin = unit(c(0, 0.5, 0, 0.3), "cm"),
         plot.title = element_text(size = 15, margin = ggplot2::margin(0, 0, 0, 0)),
         plot.subtitle = element_text(size = 13, hjust = 0, margin = ggplot2::margin(0, 0, 0, 0), colour = "gray50"),
         plot.caption = element_text(size = 12, hjust = 1, margin = ggplot2::margin(4, 0, 5, 0), colour = "gray50"),
@@ -204,7 +221,7 @@ p_nskills <- n_skills %>%
   guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 5)))
 
 pskills_total <- n_skills %>% 
-  ggplot(aes(x = sequence, y = count, fill = factor(SEX))) + 
+  ggplot(aes(x = sequence2, y = count, fill = factor(SEX))) + 
   geom_bar(stat = "identity", position = "dodge", width=0.8) +   
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
   geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
@@ -227,12 +244,13 @@ pskills_total <- n_skills %>%
   #scale_fill_discrete_qualitative(palette = "Dark 3") +
   scale_fill_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,3000000, 250000), limits = c(0,3000000), labels = comma, expand = c(0,0)) +
-  scale_x_continuous(breaks=c(1:68),
-                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
-                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
-                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
-                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
-                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_x_continuous(breaks=c(1:67),
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "","", 
+                              "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", 
+                            "", "2016", "", "", "", "2017", "", "", "", "2018", "", "", 
+                            "", "2019", "", "", "", "2020", "", "", "", "2021", "", "", "", "2022", ""), 
+                     expand = c(0,0)) +
 
   
   # annotation
@@ -243,13 +261,13 @@ pskills_total <- n_skills %>%
        #caption = c("Note: People in employment (employees and self-employed) between 2006 and 2022")
        ) +
   annotate('rect', xmin=10, xmax=14, ymin=0, ymax=3000000, alpha=.2, fill='brown1') + # Great Recession
-  annotate(geom = "text", x = 10, y = 2300000, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
+  annotate(geom = "text", x = 9, y = 2300000, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
   annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=3000000, alpha=.2, fill='darkgreen') + # back to pre-recession
-  annotate(geom = "text", x = 31.2, y = 2300000, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
+  annotate(geom = "text", x = 30, y = 2300000, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
   annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=3000000, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 2300000, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=3000000, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 2300000, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate(geom = "text", x = 55, y = 2300000, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate('rect', xmin=63, xmax=67, ymin=0, ymax=3000000, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 62, y = 2300000, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
   annotation_custom(copyright) +
 
   # theme
@@ -285,7 +303,7 @@ p_nskills / pskills_total
 
 options(digits = 3)
 
-n_skills_age <- LFS_clean %>% # summary table
+n_skills_age <- LFS_clean_skills %>% # summary table
   filter(AGE >= 18 & AGE <= 64) %>% 
   #creating age categories
   mutate(AGE_cat = case_when(AGE %in% 18:24 ~ "Between 18 and 24",
@@ -296,9 +314,9 @@ n_skills_age <- LFS_clean %>% # summary table
                              is.na(AGE) ~ NA)) %>%
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
-  group_by(year, sequence, quarter, AGE_cat, sk_mm) %>% 
+  group_by(year, sequence2, quarter, AGE_cat, sk_mm) %>% 
   summarise(count = sum(PWT)) %>% 
-  group_by(year, sequence, quarter, AGE_cat) %>% 
+  group_by(year, sequence2, quarter, AGE_cat) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(sk_mm == 1) %>%  #filtering by overqualified
@@ -309,7 +327,7 @@ n_skills_age <- LFS_clean %>% # summary table
 ```{r plot-overqualified-employees-age, fig.width = 7, fig.asp = 0.5, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Younger workers are more likely to be overqualified in their jobs"}
 
 p_nskills_age <- n_skills_age %>% 
-  ggplot(aes(x = sequence, y = percentage, colour = factor(AGE_cat))) + 
+  ggplot(aes(x = sequence2, y = percentage, colour = factor(AGE_cat))) + 
   geom_line(linewidth = 0.7, show.legend = FALSE) +  
   geom_point(shape = 20, show.legend = TRUE) +
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
@@ -334,12 +352,13 @@ p_nskills_age <- n_skills_age %>%
   scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.5, 0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
-  scale_x_continuous(breaks=c(1:68), position = "bottom",
-                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
-                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
-                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
-                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
-                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_x_continuous(breaks=c(1:67), position = "bottom",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "","", 
+                              "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", 
+                            "", "2016", "", "", "", "2017", "", "", "", "2018", "", "", 
+                            "", "2019", "", "", "", "2020", "", "", "", "2021", "", "", "", "2022",""), 
+                     expand = c(0,0)) +
   # annotation
   labs(x = "", 
        y = "Percentage", 
@@ -352,14 +371,14 @@ p_nskills_age <- n_skills_age %>%
   annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=0.5, alpha=.2, fill='darkgreen') + # back to pre-recession
   annotate(geom = "text", x = 31.2, y = 0.40, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
   annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=0.5, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 0.40, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=0.5, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 0.40, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate(geom = "text", x = 55, y = 0.40, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate('rect', xmin=63, xmax=67, ymin=0, ymax=0.5, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 62, y = 0.40, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
   annotation_custom(copyright) +
 
   # theme
   theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
-  theme(plot.margin = unit(c(0, 0, 0, 0.3), "cm"),
+  theme(plot.margin = unit(c(0, 0.5, 0, 0.3), "cm"),
         plot.title = element_text(size = 15, margin = ggplot2::margin(0, 0, 0, 0)),
         plot.subtitle = element_text(size = 13, hjust = 1, margin = ggplot2::margin(0, 0, 4, 0), colour = "gray50"),
         plot.caption = element_text(size = 12, hjust = 1, margin = ggplot2::margin(0, 0, 2, 0), colour = "gray50"),
@@ -388,7 +407,7 @@ p_nskills_age
 
 ```{r overqualification-by-ethnicity-table, include=FALSE}
 
-LFS_clean <- LFS_clean %>% mutate(ETH2 = case_match(ETH, 
+LFS_clean_skills <- LFS_clean_skills %>% mutate(ETH2 = case_match(ETH, 
                                         1 ~ "White",
                                         2 ~ "Minority-ethnic", 
                                         3 ~ "Minority-ethnic", 
@@ -399,13 +418,13 @@ LFS_clean <- LFS_clean %>% mutate(ETH2 = case_match(ETH,
 
 options(digits = 3)
 
-n_skills_eth <- LFS_clean %>% # summary table
+n_skills_eth <- LFS_clean_skills %>% # summary table
   filter(AGE >= 18 & AGE <= 64) %>% 
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
-  group_by(year, sequence, quarter, ETH2, sk_mm) %>% 
+  group_by(year, sequence2, quarter, ETH2, sk_mm) %>% 
   summarise(count = sum(PWT)) %>% 
-  group_by(year, sequence, quarter, ETH2) %>% 
+  group_by(year, sequence2, quarter, ETH2) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(sk_mm == 1) %>%  #filtering by overqualified
@@ -418,7 +437,7 @@ n_skills_eth <- LFS_clean %>% # summary table
 ```{r plot-overqualified-employees-eth, fig.width = 7, fig.asp = 0.5, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Ethnic-minority groups are more likely to find themselves in jobs for which they are overqualified"}
 
 p_nskills_eth <- n_skills_eth %>% 
-  ggplot(aes(x = sequence, y = percentage, colour = factor(ETH2))) + 
+  ggplot(aes(x = sequence2, y = percentage, colour = factor(ETH2))) + 
   geom_line(linewidth = 0.7, show.legend = FALSE) +  
   geom_point(shape = 20, show.legend = TRUE) +
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
@@ -443,12 +462,13 @@ p_nskills_eth <- n_skills_eth %>%
   scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.5,0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
-  scale_x_continuous(breaks=c(1:68), position = "bottom",
-                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
-                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
-                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
-                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
-                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_x_continuous(breaks=c(1:67), position = "bottom",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "","", 
+                              "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", 
+                            "", "2016", "", "", "", "2017", "", "", "", "2018", "", "", 
+                            "", "2019", "", "", "", "2020", "", "", "", "2021", "", "", "", "2022",""), 
+                     expand = c(0,0)) +
   # annotation
   labs(x = " ", 
        y = "Percentage", 
@@ -461,14 +481,14 @@ p_nskills_eth <- n_skills_eth %>%
   annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=0.50, alpha=.2, fill='darkgreen') + # back to pre-recession
   annotate(geom = "text", x = 31.2, y = 0.35, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
   annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=0.50, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 0.35, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=0.50, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 0.35, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate(geom = "text", x = 55, y = 0.35, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate('rect', xmin=63, xmax=67, ymin=0, ymax=0.50, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 62, y = 0.35, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
   annotation_custom(copyright) +
 
   # theme
   theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
-  theme(plot.margin = unit(c(0, 0, 0, 0.3), "cm"),
+  theme(plot.margin = unit(c(0, 0.5, 0, 0.3), "cm"),
         plot.title = element_text(size = 15, margin = ggplot2::margin(0, 0, 0, 0)),
         plot.subtitle = element_text(size = 13, hjust = 1, margin = ggplot2::margin(0, 0, 4, 0), colour = "gray50"),
         plot.caption = element_text(size = 12, hjust = 1, margin = ggplot2::margin(0, 0, 2, 0), colour = "gray50"),
@@ -493,19 +513,19 @@ p_nskills_eth
 
 ## Skills-related underemployment by qualification level
 
-<p align="justify">Workers with a degree or equivalent level of education are substantially more likely to be overqualified for their current job than are other workers (Figure \@ref(fig:plot-overqualified-employees-qualification)). Their underemployment grew after the great recession and it has not returned to pre-2008 levels. The percentage of overqualified workers among those with a “Higher education” and “GCE, A-level or equivalent” did not change in the period under study.</p>
+<p align="justify">Workers with a degree or equivalent level of education are substantially more likely to be overqualified for their current job than are other workers (Figure \@ref(fig:plot-overqualified-employees-by-education)). Their underemployment grew after the great recession and it has not returned to pre-2008 levels. The percentage of overqualified workers among those with a “Higher education” and “GCE, A-level or equivalent” did not change in the period under study.</p>
 
 ```{r overqualification-by-educational-level-table, include=FALSE}
 
 options(digits = 3)
 
-n_skills_quali <- LFS_clean %>% # summary table
+n_skills_quali <- LFS_clean_skills %>% # summary table
   filter(AGE >= 18 & AGE <= 64) %>% 
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
-  group_by(year, sequence, quarter, quali, sk_mm) %>% 
+  group_by(year, sequence2, quarter, quali, sk_mm) %>% 
   summarise(count = sum(PWT)) %>% 
-  group_by(year, sequence, quarter, quali) %>% 
+  group_by(year, sequence2, quarter, quali) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(!is.na(quali) & !quali %in% c("7")) %>% 
@@ -515,12 +535,12 @@ n_skills_quali <- LFS_clean %>% # summary table
 ```
 
 
-```{r plot-overqualified-employees-qualification, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Workers with a university degree are more likely to be overqualified for their jobs"}
+```{r plot-overqualified-employees-by-education, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Workers with a university degree are more likely to be overqualified for their jobs"}
 
 p_nskills_quali <- n_skills_quali %>% 
-  ggplot() + 
-  geom_line(aes(x = sequence, y = percentage, colour = factor(quali)), linewidth = 0.7, show.legend = FALSE) +  
-  geom_point(aes(x = sequence, y = percentage, colour = factor(quali)), shape = 20, show.legend = TRUE) +
+  ggplot(aes(x = sequence2, y = percentage, colour = factor(quali))) + 
+  geom_line(linewidth = 0.7, show.legend = FALSE) +  
+  geom_point(shape = 20, show.legend = TRUE) +
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
   geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
   geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
@@ -543,32 +563,33 @@ p_nskills_quali <- n_skills_quali %>%
   scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.5,0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
-  scale_x_continuous(breaks=c(1:68), position = "bottom",
-                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
-                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
-                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
-                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
-                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_x_continuous(breaks=c(1:67), position = "bottom",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "","", 
+                              "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", 
+                            "", "2016", "", "", "", "2017", "", "", "", "2018", "", "", 
+                            "", "2019", "", "", "", "2020", "", "", "", "2021", "", "", "", "2022",""), 
+                     expand = c(0,0)) +
   # annotation
-  labs(x = "", 
+  labs(x = " ", 
        y = "Percentage", 
-       #title ="Figure 4. Overqualified workers by educational level (percentages and totals)",
+       #title =",
        #subtitle  = "",
        #caption = ""
        ) +
-  annotate('rect', xmin=10, xmax=14, ymin=0, ymax=0.5, alpha=.2, fill='brown1') + # Great Recession
-  annotate(geom = "text", x = 10, y = 0.40, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
-  annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=0.5, alpha=.2, fill='darkgreen') + # back to pre-recession
-  annotate(geom = "text", x = 31.2, y = 0.40, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
-  annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=0.5, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 0.40, label = "Covid-19", hjust = 0, size = 5, colour = "darkred") +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=0.5, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 0.40, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate('rect', xmin=10, xmax=14, ymin=0, ymax=0.50, alpha=.2, fill='brown1') + # Great Recession
+  annotate(geom = "text", x = 10, y = 0.35, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
+  annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=0.50, alpha=.2, fill='darkgreen') + # back to pre-recession
+  annotate(geom = "text", x = 31.2, y = 0.35, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
+  annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=0.50, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 55, y = 0.35, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate('rect', xmin=63, xmax=67, ymin=0, ymax=0.50, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 62, y = 0.35, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
   annotation_custom(copyright) +
 
   # theme
   theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
-  theme(plot.margin = unit(c(0, 0, 0, 0.3), "cm"),
+  theme(plot.margin = unit(c(0, 0.5, 0.2, 0.3), "cm"),
         plot.title = element_text(size = 15, margin = ggplot2::margin(0, 0, 0, 0)),
         plot.subtitle = element_text(size = 13, hjust = 1, margin = ggplot2::margin(0, 0, 4, 0), colour = "gray50"),
         plot.caption = element_text(size = 12, hjust = 1, margin = ggplot2::margin(0, 0, 2, 0), colour = "gray50"),
@@ -581,11 +602,14 @@ p_nskills_quali <- n_skills_quali %>%
         legend.position = "top", 
         legend.title = element_blank(),
         legend.text = element_text(size = 15),
-        panel.spacing = unit(.2, "cm"),
-        panel.grid.major = element_line(color = "gray90", linewidth = .06)) +
- guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 6)))
+        #panel.spacing = unit(.2, "cm"),
+        panel.grid.major = element_line(color = "gray90", linewidth = .06),
+        legend.spacing = unit(0.2, 'cm')) +
+  guides(col = guide_legend(nrow = 1, byrow = TRUE, override.aes = list(size = 6)))
 
 p_nskills_quali
+
+
 
 ```
 
@@ -597,13 +621,13 @@ p_nskills_quali
 
 options(digits = 3)
 
-n_skills_nsec <- LFS_clean %>% # summary table
+n_skills_nsec <- LFS_clean_skills %>% # summary table
   filter(AGE >= 18 & AGE <= 64) %>% 
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
-  group_by(year, sequence, quarter, NSEC2,sk_mm) %>% 
+  group_by(year, sequence2, quarter, NSEC2,sk_mm) %>% 
   summarise(count = sum(PWT)) %>% 
-  group_by(year, sequence, quarter, NSEC2) %>% 
+  group_by(year, sequence2, quarter, NSEC2) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(!is.na(NSEC2) & !NSEC2 %in% c(3,6)) %>%  # omit no answers and no apply
@@ -615,9 +639,9 @@ n_skills_nsec <- LFS_clean %>% # summary table
 ```{r plot-overqualified-employees-nsec, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Intermediate occupations have the largest proportion of overqualified employees"}
 
 p_nskills_nsec <- n_skills_nsec %>% 
-  ggplot() + 
-  geom_line(aes(x = sequence, y = percentage, colour = factor(NSEC2)), linewidth = 0.7, show.legend = FALSE) +  
-  geom_point(aes(x = sequence, y = percentage, colour = factor(NSEC2)), shape = 20, show.legend = TRUE) +
+  ggplot(aes(x = sequence2, y = percentage, colour = factor(NSEC2))) + 
+  geom_line(linewidth = 0.7, show.legend = FALSE) +  
+  geom_point(shape = 20, show.legend = TRUE) +
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
   geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
   geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
@@ -640,12 +664,13 @@ p_nskills_nsec <- n_skills_nsec %>%
   scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.5,0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
-  scale_x_continuous(breaks=c(1:68), position = "bottom",
-                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
-                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
-                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
-                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
-                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_x_continuous(breaks=c(1:67), position = "bottom",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "","", 
+                              "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", 
+                            "", "2016", "", "", "", "2017", "", "", "", "2018", "", "", 
+                            "", "2019", "", "", "", "2020", "", "", "", "2021", "", "", "", "2022",""), 
+                     expand = c(0,0)) +
   # annotation
   labs(x = "Year", 
        y = "Percentage", 
@@ -658,14 +683,14 @@ p_nskills_nsec <- n_skills_nsec %>%
   annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=0.5, alpha=.2, fill='darkgreen') + # back to pre-recession
   annotate(geom = "text", x = 31.2, y = 0.40, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
   annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=0.5, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 0.40, label = "Covid-19", hjust = 0, size = 5, colour = "darkred") +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=0.5, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 0.40, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate(geom = "text", x = 55, y = 0.40, label = "Covid-19", hjust = 0, size = 5, colour = "darkred") +
+  annotate('rect', xmin=63, xmax=67, ymin=0, ymax=0.5, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 62, y = 0.40, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
   annotation_custom(copyright) +
 
   # theme
   theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
-  theme(plot.margin = unit(c(0, 0, 0, 0.3), "cm"),
+  theme(plot.margin = unit(c(0, 0.5, 0, 0.3), "cm"),
         plot.title = element_text(size = 15, margin = ggplot2::margin(0, 0, 0, 0)),
         plot.subtitle = element_text(size = 13, hjust = 1, margin = ggplot2::margin(0, 0, 4, 0), colour = "gray50"),
         plot.caption = element_text(size = 12, hjust = 1, margin = ggplot2::margin(0, 0, 2, 0), colour = "gray50"),
@@ -694,13 +719,13 @@ p_nskills_nsec
 
 options(digits = 3)
 
-t_skills_temp <- LFS_clean %>% # summary table
+t_skills_temp <- LFS_clean_skills %>% # summary table
   filter(AGE >= 18 & AGE <= 64) %>% 
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
-  group_by(year, sequence, quarter, JOBTYP,sk_mm) %>% 
+  group_by(year, sequence2, quarter, JOBTYP,sk_mm) %>% 
   summarise(count = sum(PWT)) %>% 
-  group_by(year, sequence, quarter, JOBTYP) %>% 
+  group_by(year, sequence2, quarter, JOBTYP) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(!is.na(JOBTYP)) %>%  # omit no answers and no apply
@@ -713,9 +738,9 @@ t_skills_temp <- LFS_clean %>% # summary table
 ```{r plot-overqualified-employees-JOBTYP, fig.width = 7, fig.asp = 0.5, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Workers in non-permanent jobs likely to be overqualified"}
 
 p_nskills_temp <- t_skills_temp %>% 
-  ggplot() + 
-  geom_line(aes(x = sequence, y = percentage, colour = factor(JOBTYP)), size = 0.7, show.legend = FALSE) +  
-  geom_point(aes(x = sequence, y = percentage, colour = factor(JOBTYP)), shape = 20, show.legend = TRUE) +
+  ggplot(aes(x = sequence2, y = percentage, colour = factor(JOBTYP))) + 
+  geom_line(linewidth = 0.7, show.legend = FALSE) +  
+  geom_point(shape = 20, show.legend = TRUE) +
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
   geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
   geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
@@ -738,12 +763,13 @@ p_nskills_temp <- t_skills_temp %>%
   scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,0.5,0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
-  scale_x_continuous(breaks=c(1:68), position = "bottom",
-                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
-                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
-                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
-                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
-                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_x_continuous(breaks=c(1:67), position = "bottom",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "","", 
+                              "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", 
+                            "", "2016", "", "", "", "2017", "", "", "", "2018", "", "", 
+                            "", "2019", "", "", "", "2020", "", "", "", "2021", "", "", "", "2022",""), 
+                     expand = c(0,0)) +
   # annotation
   labs(x = "", 
        y = "Percentage", 
@@ -758,14 +784,14 @@ p_nskills_temp <- t_skills_temp %>%
   annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=0.5, alpha=.2, fill='darkgreen') + # back to pre-recession
   annotate(geom = "text", x = 31.2, y = 0.40, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
   annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=0.5, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 0.40, label = "Covid-19", hjust = 0, size = 5, colour = "darkred") +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=0.5, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 0.40, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate(geom = "text", x = 55, y = 0.40, label = "Covid-19", hjust = 0, size = 5, colour = "darkred") +
+  annotate('rect', xmin=63, xmax=67, ymin=0, ymax=0.5, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 62, y = 0.40, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
   annotation_custom(copyright) +
 
   # theme
   theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
-  theme(plot.margin = unit(c(0, 0, 0, 0.3), "cm"),
+  theme(plot.margin = unit(c(0, 0.5, 0, 0.3), "cm"),
         plot.title = element_text(size = 15, margin = ggplot2::margin(0, 0, 0, 0)),
         plot.subtitle = element_text(size = 13, hjust = 1, margin = ggplot2::margin(0, 0, 4, 0), colour = "gray50"),
         plot.caption = element_text(size = 12, hjust = 1, margin = ggplot2::margin(0, 0, 2, 0), colour = "gray50"),
@@ -804,7 +830,7 @@ p_nskills_temp
 
 options(digits = 3)
 
-t_nskills_fled <- LFS_clean %>% # summary table
+t_nskills_fled <- LFS_clean_skills %>% # summary table
   filter(!sequence %in% c(1, 3, 5, 7, 9, 13, 17, 19, 21, 23, 
                         25, 27, 31, 33, 35, 37, 39, 41, 43,
                         45, 47, 49, 51, 53, 55)) %>%
@@ -812,9 +838,9 @@ t_nskills_fled <- LFS_clean %>% # summary table
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
   filter(FTPTWK == 2) %>% # only part-timers
-  group_by(year, sequence, quarter, FLED, sk_mm) %>% 
+  group_by(year, sequence2, quarter, FLED, sk_mm) %>% 
   summarise(count = sum(PWT)) %>% 
-  group_by(year, sequence, quarter, FLED) %>% 
+  group_by(year, sequence2, quarter, FLED) %>% 
   # percentage part-time per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(!is.na(FLED) & !FLED %in% c(5, 7, 8)) %>%  # omit compressed, none, and on call
@@ -826,7 +852,7 @@ t_nskills_fled <- LFS_clean %>% # summary table
 ```{r plot-overqualified-fled, fig.width = 7, fig.asp = 0.5, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Zero-hours workers are more likely to be overqualified"}
 
 p_nskills_fled <- t_nskills_fled %>% 
-  ggplot(aes(x = sequence, y = percentage, colour = factor(FLED))) + 
+  ggplot(aes(x = sequence2, y = percentage, colour = factor(FLED))) + 
   geom_line(linewidth = 0.7, show.legend = FALSE) +  
   geom_point(size = 1, shape = 20, show.legend = TRUE) +
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
@@ -851,7 +877,7 @@ p_nskills_fled <- t_nskills_fled %>%
   scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,1, 0.1), limits = c(0, 1), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
-  scale_x_continuous(breaks=c(1:68), 
+  scale_x_continuous(breaks=c(1:67), 
                      labels=c("","","2006","",
                               "","2007","","",
                               "","2008","","",
@@ -868,7 +894,7 @@ p_nskills_fled <- t_nskills_fled %>%
                               "","2019","","",
                               "","2020","","",
                               "","2021","","",
-                              "","2022","",""),
+                              "","2022",""),
                      expand = c(0,0)) +
 
    # annotation
@@ -883,14 +909,14 @@ p_nskills_fled <- t_nskills_fled %>%
   annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=1, alpha=.2, fill='darkgreen') + # back to pre-recession
   annotate(geom = "text", x = 31.2, y = 0.80, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
   annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=1, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 0.80, label = "Covid-19", hjust = 0, size = 5, colour = "darkred") +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=1, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 0.80, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate(geom = "text", x = 55, y = 0.80, label = "Covid-19", hjust = 0, size = 5, colour = "darkred") +
+  annotate('rect', xmin=63, xmax=67, ymin=0, ymax=1, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 62, y = 0.80, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
   annotation_custom(copyright) +
 
   # theme
   theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
-  theme(plot.margin = unit(c(0, 0, 0, 0.3), "cm"),
+  theme(plot.margin = unit(c(0, 0.5, 0, 0.3), "cm"),
         plot.title = element_text(size = 15, margin = ggplot2::margin(0, 0, 0, 0)),
         plot.subtitle = element_text(size = 13, hjust = 1, margin = ggplot2::margin(0, 0, 4, 0), colour = "gray50"),
         plot.caption = element_text(size = 12, hjust = 1, margin = ggplot2::margin(0, 0, 2, 0), colour = "gray50"),
@@ -914,12 +940,12 @@ p_nskills_fled
 
 ## Skills-related underemployment by region
 
-<p align="justify">Figure \@ref(fig:plot-skills-overqualified-employees-region) shows that the mismatch between the skills held by workers and the requirements of their jobs increased steadily in all regions. Scotland (including Glasgow) shows a slightly higher proportion of overqualified workers in most periods between 2006 and 2022 while the East Midlands (including Nottingham) currently has one of the lowest levels of skills-related underemployment in the UK, but the regional gap is narrow.</p>   
+<p align="justify">Figure \@ref(fig:plot-skills-by-region) shows that the mismatch between the skills held by workers and the requirements of their jobs increased steadily in all regions. Scotland (including Glasgow) shows a slightly higher proportion of overqualified workers in most periods between 2006 and 2022 while the East Midlands (including Nottingham) currently has one of the lowest levels of skills-related underemployment in the UK, but the regional gap is narrow.</p>   
 
 
 ```{r overqualification-by-region-table, include=FALSE}
 
-LFS_clean <- LFS_clean %>% mutate(GOVTOF3 = case_match(GOVTOF2, 
+LFS_clean_skills <- LFS_clean_skills %>% mutate(GOVTOF3 = case_match(GOVTOF2, 
                                             1 ~ "Rest of England",
                                             2 ~ "North West", 
                                             4 ~ "Rest of England",
@@ -934,7 +960,7 @@ LFS_clean <- LFS_clean %>% mutate(GOVTOF3 = case_match(GOVTOF2,
                                             13 ~ "Northern Ireland")) %>% 
                                                 as_numeric(., keep.labels = TRUE)
 
-LFS_clean$GOVTOF3 <- set_labels(LFS_clean$GOVTOF3, labels = c(
+LFS_clean_skills$GOVTOF3 <- set_labels(LFS_clean_skills$GOVTOF3, labels = c(
                                                       "East Midlands (incl. Nottingham)" = 1,
                                                       "North West (incl. Salford)" = 2, 
                                                       "Northern Ireland" = 3,
@@ -946,13 +972,13 @@ LFS_clean$GOVTOF3 <- set_labels(LFS_clean$GOVTOF3, labels = c(
 
 options(digits = 3)
 
-t_skills_region <- LFS_clean %>% # summary table
+t_skills_region <- LFS_clean_skills %>% # summary table
   filter(AGE >= 18 & AGE <= 64) %>% 
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
-  group_by(year, sequence, quarter, GOVTOF3,sk_mm) %>% 
+  group_by(year, sequence2, quarter, GOVTOF3, sk_mm) %>% 
   summarise(count = sum(PWT)) %>% 
-  group_by(year, sequence, quarter, GOVTOF3) %>% 
+  group_by(year, sequence2, quarter, GOVTOF3) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(!is.na(GOVTOF3)) %>%  # omit no answers and no apply
@@ -962,12 +988,13 @@ t_skills_region <- LFS_clean %>% # summary table
 ```
 
 
-```{r plot-skills-overqualified-employees-region, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "The mismatch between skills and job requirements has increased steadily in all regions"}
+```{r plot-skills-by-region, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "The mismatch between skills and job requirements has increased steadily in all regions"}
+
 
 p_nskills_region <- t_skills_region %>% 
-  ggplot() + 
-  geom_line(aes(x = sequence, y = percentage, colour = factor(GOVTOF3)), size = 0.7, show.legend = FALSE) +  
-  geom_point(aes(x = sequence, y = percentage, colour = factor(GOVTOF3)), shape = 20, show.legend = TRUE) +
+  ggplot(aes(x = sequence2, y = percentage, colour = factor(GOVTOF3))) + 
+  geom_line(linewidth = 0.7, show.legend = FALSE) +  
+  geom_point(shape = 20, show.legend = TRUE) +
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
   geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
   geom_vline(xintercept = 12.5, color = "#c9c9c9") + # gridline 2008
@@ -988,37 +1015,38 @@ p_nskills_region <- t_skills_region %>%
   # scale and colour
   #scale_color_discrete_qualitative(palette = "Dark 3") +
   scale_colour_okabeito(palette = "full") + 
-  scale_y_continuous(breaks = seq(0,0.30,0.02), limits = c(0, 0.30), labels =
+  scale_y_continuous(breaks = seq(0,0.5,0.05), limits = c(0, 0.5), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
-  scale_x_continuous(breaks=c(1:68), position = "top",
-                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
-                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
-                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
-                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
-                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_x_continuous(breaks=c(1:67), position = "bottom",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "","", 
+                              "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", 
+                            "", "2016", "", "", "", "2017", "", "", "", "2018", "", "", 
+                            "", "2019", "", "", "", "2020", "", "", "", "2021", "", "", "", "2022",""), 
+                     expand = c(0,0)) +
   # annotation
-  labs(x = "", 
+  labs(x = " ", 
        y = "Percentage", 
-       #title ="Figure 8. Overqualified workers by region (percentages and totals)",
+       #title ="Figure 3. Overqualified workers by ethnic groups (percentages and totals)",
        #subtitle  = "",
        #caption = ""
        ) +
-  annotate('rect', xmin=10, xmax=14, ymin=0, ymax=0.3, alpha=.2, fill='brown1') + # Great Recession
-  annotate(geom = "text", x = 10, y = 0.22, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
-  annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=0.3, alpha=.2, fill='darkgreen') + # back to pre-recession
-  annotate(geom = "text", x = 31.2, y = 0.22, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
-  annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=0.3, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 0.22, label = "Covid-19", hjust = 0, size = 5, colour = "darkred") +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=0.3, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 0.22, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate('rect', xmin=10, xmax=14, ymin=0, ymax=0.50, alpha=.2, fill='brown1') + # Great Recession
+  annotate(geom = "text", x = 10, y = 0.35, label = "Great Recession", hjust = 0, size = 5, colour = "darkred") +
+  annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=0.50, alpha=.2, fill='darkgreen') + # back to pre-recession
+  annotate(geom = "text", x = 31.2, y = 0.35, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
+  annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=0.50, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 55, y = 0.35, label = "Covid-19\nrecession", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate('rect', xmin=63, xmax=67, ymin=0, ymax=0.50, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 62, y = 0.35, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
   annotation_custom(copyright) +
 
   # theme
   theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
-  theme(plot.margin = unit(c(0, 0, 0, 0.3), "cm"),
+  theme(plot.margin = unit(c(0, 0.5, 0, 0.3), "cm"),
         plot.title = element_text(size = 15, margin = ggplot2::margin(0, 0, 0, 0)),
-        plot.subtitle = element_text(size = 13, hjust = 1, margin = ggplot2::margin(0, 0, 0, 0), colour = "gray50"),
-        plot.caption = element_text(size = 12, hjust = 1, margin = ggplot2::margin(0, 0, 4, 0), colour = "gray50"),
+        plot.subtitle = element_text(size = 13, hjust = 1, margin = ggplot2::margin(0, 0, 4, 0), colour = "gray50"),
+        plot.caption = element_text(size = 12, hjust = 1, margin = ggplot2::margin(0, 0, 2, 0), colour = "gray50"),
         axis.title.x = element_text(margin = ggplot2::margin(t = 10), size = 13),
         axis.title.y = element_text(margin = ggplot2::margin(r = 5), size = 13),
         axis.text.x = element_text(size = 14, margin = margin(t = 2)),
@@ -1029,7 +1057,8 @@ p_nskills_region <- t_skills_region %>%
         legend.title = element_blank(),
         legend.text = element_text(size = 15),
         panel.spacing = unit(.2, "cm"),
-        panel.grid.major = element_line(color = "gray90", linewidth = .06)) +
+        panel.grid.major = element_line(color = "gray90", linewidth = .06),
+        legend.spacing = unit(0.2, 'cm')) +
   guides(col = guide_legend(nrow = 2, byrow = TRUE, override.aes = list(size = 6)))
 
 p_nskills_region
@@ -1045,13 +1074,13 @@ p_nskills_region
 
 options(digits = 3)
 
-t_skills_ind1 <- LFS_clean %>% # summary table
+t_skills_ind1 <- LFS_clean_skills %>% # summary table
   filter(AGE >= 18 & AGE <= 64) %>% 
   filter(ILODEFR == 1) %>% # only people in employment
   filter(INECAC05 %in% c(1, 2)) %>% #only employees and self-employed
-  group_by(year, sequence, quarter, ind1,sk_mm) %>% 
+  group_by(year, sequence2, quarter, ind1,sk_mm) %>% 
   summarise(count = sum(PWT)) %>% 
-  group_by(year, sequence, quarter, ind1) %>% 
+  group_by(year, sequence2, quarter, ind1) %>% 
   # percentage per quarter
   mutate(percentage = count/sum(count)) %>% 
   filter(!is.na(ind1) & ind1 %in% c(7, 17, 11, 16, 10, 9)) %>%  # omit no answers and no apply
@@ -1064,8 +1093,8 @@ t_skills_ind1 <- LFS_clean %>% # summary table
 ```{r plot-overqualification-ind1, fig.width = 7.5, fig.asp = 0.6, out.width = '100%', fig.fullwidth = TRUE, fig.cap= "Skills-related underemployment is concentrated in the Retail and Hospitality sectors"}
 
 p_skills_ind1 <- t_skills_ind1 %>% 
-  ggplot(aes(x = sequence, y = percentage, colour = factor(ind1))) + 
-  geom_line(size = 0.7, show.legend = FALSE) +  
+  ggplot(aes(x = sequence2, y = percentage, colour = factor(ind1))) + 
+  geom_line(linewidth = 0.7, show.legend = FALSE) +  
   geom_point(size = 1, shape = 20, show.legend = TRUE) +
   geom_vline(xintercept = 4.5, color = "#c9c9c9") + # gridline 2006
   geom_vline(xintercept = 8.5, color = "#c9c9c9") + # gridline 2007
@@ -1089,12 +1118,13 @@ p_skills_ind1 <- t_skills_ind1 %>%
   scale_colour_okabeito(palette = "full") + 
   scale_y_continuous(breaks = seq(0,1, 0.1), limits = c(0, 1), labels =
                        scales::percent_format(accuracy = 1L), expand = c(0,0)) +
-  scale_x_continuous(breaks=c(1:68), 
-                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "", 
-                            "", "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
-                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", "", 
-                            "2016", "", "", "", "2017", "", "", "", "2018", "", "", "", "2019", "",
-                            "", "", "2020", "", "", "", "2021", "", "", "", "2022", "", ""), expand = c(0,0)) +
+  scale_x_continuous(breaks=c(1:67), position = "bottom",
+                     labels=c("","2006","", "", "", "2007", "", "", "", "2008", "", "", "", "2009", "","", 
+                              "", "2010", "", "", "", "2011", "", "", "", "2012", "", "", 
+                            "", "2013", "", "", "", "2014", "", "", "", "2015", "", "", 
+                            "", "2016", "", "", "", "2017", "", "", "", "2018", "", "", 
+                            "", "2019", "", "", "", "2020", "", "", "", "2021", "", "", "", "2022",""), 
+                     expand = c(0,0)) +
   # annotation
   labs(x = "", 
        y = "Percentage", 
@@ -1107,14 +1137,14 @@ p_skills_ind1 <- t_skills_ind1 %>%
   annotate('rect', xmin=30.5, xmax=31.5, ymin=0, ymax=1, alpha=.2, fill='darkgreen') + # back to pre-recession
   annotate(geom = "text", x = 31.2, y = 0.80, label = "UK economy gets back\nto pre-downturn size", hjust = 0, size = 5, colour = "darkgreen", lineheight = .7) +
   annotate('rect', xmin=56.5, xmax=58, ymin=0, ymax=1, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 56.5, y = 0.80, label = "Covid-19", hjust = 0, size = 5, colour = "darkred") +
-  annotate('rect', xmin=63, xmax=68, ymin=0, ymax=1, alpha=.2, fill='brown1') +
-  annotate(geom = "text", x = 63, y = 0.80, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
+  annotate(geom = "text", x = 55, y = 0.80, label = "Covid-19", hjust = 0, size = 5, colour = "darkred") +
+  annotate('rect', xmin=63, xmax=67, ymin=0, ymax=1, alpha=.2, fill='brown1') +
+  annotate(geom = "text", x = 62, y = 0.80, label = "Cost of\nliving crisis", hjust = 0, size = 5, colour = "darkred", lineheight = .7) +
   annotation_custom(copyright) +
 
   # theme
   theme_economist_white(gray_bg = FALSE, base_family = "Lato") +
-  theme(plot.margin = unit(c(0, 0, 0, 0.3), "cm"),
+  theme(plot.margin = unit(c(0, 0.5, 0, 0.3), "cm"),
         plot.title = element_text(size = 15, margin = ggplot2::margin(0, 0, 0, 0)),
         plot.subtitle = element_text(size = 13, hjust = 1, margin = ggplot2::margin(0, 0, 4, 0), colour = "gray50"),
         plot.caption = element_text(size = 12, hjust = 1, margin = ggplot2::margin(0, 0, 2, 0), colour = "gray50"),
